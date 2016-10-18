@@ -1,0 +1,37 @@
+user
+  CREATE_ADVERTISEMENT
+  EDIT_ADVERTISEMENT
+  CREATE_REVIEW
+  EDIT_REVIEW
+  REPORT_ADVERTISEMENT
+  
+--------------------------------------------------------------------------------
+company_user (user) 
+  CREATE_COMPANY_ADVERTISEMENT
+  EDIT_COMPANY_ADVERTISEMENT
+
+--------------------------------------------------------------------------------
+company_admin (company_user)
+  APPROVE_COMPANY_USER
+  REMOVE_USER_FROM_COMPANY
+  EDIT_COMPANY
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+verifier (user)
+  VERIFY_ADVERTISEMENT
+
+--------------------------------------------------------------------------------
+system_admin (verifier, company_admin)
+  CREATE_COMPANY
+  CREATE_COMPANY_ADMIN
+  CREATE_VERIFIER
+  BAN_USER
+  DELETE_REVIEW
+
+
+
+
+
+--------------------------------------------------------------------------------
+APPLY_FOR_COMPANY i LEAVE_COMPANY - videti sta cemo s time
