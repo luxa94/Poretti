@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Owner {
+public abstract class Owner {
 
     @Id
     @GeneratedValue

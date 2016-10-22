@@ -1,6 +1,9 @@
 package com.bdzjn.poretti.model.enumeration;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Role {
     USER(new Permission[]{Permission.CREATE_ADVERTISEMENT,
             Permission.EDIT_ADVERTISEMENT,
@@ -57,8 +60,8 @@ public enum Role {
         this.permissions = permissions;
     }
 
-    public Permission[] getPermissions() {
-        return permissions.clone();
+    public List<Permission> getPermissions() {
+        return Arrays.asList(permissions);
     }
 
 }
