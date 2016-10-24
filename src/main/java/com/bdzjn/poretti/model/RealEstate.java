@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.model;
 
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -32,7 +33,7 @@ public class RealEstate {
     private Image image;
 
     @NotNull
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private RealEstateType type;
 
     @NotNull
