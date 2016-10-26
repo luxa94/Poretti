@@ -17,4 +17,20 @@ public class Company extends Owner {
     @OneToMany(mappedBy = "company")
     private List<Membership> memberships = new ArrayList<>();
 
+    public String getPib() {
+        return pib;
+    }
+
+    public void setPib(String pib) {
+        this.pib = pib;
+    }
+
+    public List<Membership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<Membership> memberships) {
+        this.memberships = memberships;
+    }
+
 }

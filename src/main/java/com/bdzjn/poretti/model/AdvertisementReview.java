@@ -11,5 +11,13 @@ public class AdvertisementReview extends Review {
     @ManyToOne
     private Advertisement target;
 
+    public Advertisement getTarget() {
+        return target;
+    }
+
+    public void setTarget(Advertisement target) {
+        this.target = target;
+    }
+
 }
 

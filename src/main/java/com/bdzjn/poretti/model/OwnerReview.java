@@ -9,4 +9,11 @@ public class OwnerReview extends Review {
     @ManyToOne
     private Owner target;
 
+    public Owner getTarget() {
+        return target;
+    }
+
+    public void setTarget(Owner target) {
+        this.target = target;
+    }
 }

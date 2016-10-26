@@ -61,4 +61,117 @@ public class Advertisement {
     @OneToMany(mappedBy = "target")
     private List<AdvertisementReview> reviews = new ArrayList<>();
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getAnnouncedOn() {
+        return announcedOn;
+    }
+
+    public void setAnnouncedOn(Date announcedOn) {
+        this.announcedOn = announcedOn;
+    }
+
+    public Date getEditedOn() {
+        return editedOn;
+    }
+
+    public void setEditedOn(Date editedOn) {
+        this.editedOn = editedOn;
+    }
+
+    public Date getEndsOn() {
+        return endsOn;
+    }
+
+    public void setEndsOn(Date endsOn) {
+        this.endsOn = endsOn;
+    }
+
+    public Owner getAdvertiser() {
+        return advertiser;
+    }
+
+    public void setAdvertiser(Owner advertiser) {
+        this.advertiser = advertiser;
+    }
+
+    public AdvertisementStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AdvertisementStatus status) {
+        this.status = status;
+    }
+
+    public AdvertisementType getType() {
+        return type;
+    }
+
+    public void setType(AdvertisementType type) {
+        this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public RealEstate getRealEstate() {
+        return realEstate;
+    }
+
+    public void setRealEstate(RealEstate realEstate) {
+        this.realEstate = realEstate;
+    }
+
+    public User getVerifier() {
+        return verifier;
+    }
+
+    public void setVerifier(User verifier) {
+        this.verifier = verifier;
+    }
+
+    public List<ImproperAdvertisementReport> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<ImproperAdvertisementReport> reports) {
+        this.reports = reports;
+    }
+
+    public List<AdvertisementReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<AdvertisementReview> reviews) {
+        this.reviews = reviews;
+    }
+
+
 }
