@@ -15,6 +15,6 @@ public class Company extends Owner {
     private String pib;
 
     @OneToMany(mappedBy = "company")
-    private List<User> employees = new ArrayList<>();
+    private List<Membership> memberships = new ArrayList<>();
 
 }

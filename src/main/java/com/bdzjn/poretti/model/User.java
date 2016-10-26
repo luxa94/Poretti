@@ -31,8 +31,8 @@ public class User extends Owner {
     @NotNull
     private boolean registrationConfirmed;
 
-    @ManyToOne
-    private Company company;
+    @OneToMany(mappedBy = "member")
+    private List<Membership> memberships = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "UserPermission", joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"))
