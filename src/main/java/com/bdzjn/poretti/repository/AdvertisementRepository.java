@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
+public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>, AdvertisementRepositoryCustom {
 
     Optional<Advertisement> findById(long id);
 

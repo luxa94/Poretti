@@ -16,4 +16,5 @@ Mora postojati lokalna MySQL baza podataka sa korisnikom **root** koji ima šifr
 CREATE SCHEMA `poretti` DEFAULT CHARACTER SET utf8 ;
 ```
 
-Projekat uvući u Intellij IDEA-u, napraviti Spring Boot konfiguraciju i pokrenuti.
+Projekat uvući u Intellij IDEA-u, omogućiti __Annotation processing__ u podešavanjima projekta, napraviti Spring Boot konfiguraciju i pokrenuti.
+

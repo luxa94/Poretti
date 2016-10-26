@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ImproperAdvertisementReportRepository extends JpaRepository<ImproperAdvertisementReport, Long> {
+public interface ImproperAdvertisementReportRepository extends JpaRepository<ImproperAdvertisementReport, Long>,
+                                                               ImproperAdvertisementReportRepositoryCustom {
 
     Optional<ImproperAdvertisementReport> findById(long id);
 

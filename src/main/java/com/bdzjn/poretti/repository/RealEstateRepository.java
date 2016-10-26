@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
+public interface RealEstateRepository extends JpaRepository<RealEstate, Long>, RealEstateRepositoryCustom {
 
     Optional<RealEstate> findById(long id);
 
