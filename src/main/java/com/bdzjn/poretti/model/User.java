@@ -40,6 +40,38 @@ public class User extends Owner {
     @Enumerated(EnumType.STRING)
     private List<Permission> permissions = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+
+        User user = (User) o;
+
+        if (!getUsername().equals(user.getUsername())) return false;
+        return getEmail().equals(user.getEmail());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getUsername().hashCode();
+        result = 31 * result + getEmail().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", registrationConfirmed=" + registrationConfirmed +
+                '}';
+    }
+
     public String getUsername() {
         return username;
     }

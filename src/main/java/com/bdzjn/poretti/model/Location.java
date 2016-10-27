@@ -30,6 +30,60 @@ public class Location {
     @Column(nullable = true)
     private boolean hasLatLong;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Location)) return false;
+
+        Location location = (Location) o;
+
+        if (Double.compare(location.getLatitude(), getLatitude()) != 0) return false;
+        if (Double.compare(location.getLongitude(), getLongitude()) != 0) return false;
+        if (!getCity().equals(location.getCity())) return false;
+        if (getCityArea() != null ? !getCityArea().equals(location.getCityArea()) : location.getCityArea() != null)
+            return false;
+        if (getStreet() != null ? !getStreet().equals(location.getStreet()) : location.getStreet() != null)
+            return false;
+        if (getStreetNumber() != null ? !getStreetNumber().equals(location.getStreetNumber()) : location.getStreetNumber() != null)
+            return false;
+        if (getState() != null ? !getState().equals(location.getState()) : location.getState() != null) return false;
+        return getZipCode() != null ? getZipCode().equals(location.getZipCode()) : location.getZipCode() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getCity().hashCode();
+        result = 31 * result + (getCityArea() != null ? getCityArea().hashCode() : 0);
+        result = 31 * result + (getStreet() != null ? getStreet().hashCode() : 0);
+        result = 31 * result + (getStreetNumber() != null ? getStreetNumber().hashCode() : 0);
+        result = 31 * result + (getState() != null ? getState().hashCode() : 0);
+        result = 31 * result + (getZipCode() != null ? getZipCode().hashCode() : 0);
+        temp = Double.doubleToLongBits(getLatitude());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getLongitude());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", cityArea='" + cityArea + '\'' +
+                ", street='" + street + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", state='" + state + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", hasLatLong=" + hasLatLong +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

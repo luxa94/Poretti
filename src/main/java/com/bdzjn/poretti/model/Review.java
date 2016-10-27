@@ -25,6 +25,38 @@ public abstract class Review {
     @ManyToOne
     private User author;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Review)) return false;
+
+        Review review = (Review) o;
+
+        if (getRating() != review.getRating()) return false;
+        if (!getEditedOn().equals(review.getEditedOn())) return false;
+        return getAuthor().equals(review.getAuthor());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getRating();
+        result = 31 * result + getEditedOn().hashCode();
+        result = 31 * result + getAuthor().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", rating=" + rating +
+                ", comment='" + comment + '\'' +
+                ", editedOn=" + editedOn +
+                ", author=" + author +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

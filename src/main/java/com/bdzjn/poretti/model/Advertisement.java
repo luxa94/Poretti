@@ -61,6 +61,49 @@ public class Advertisement {
     @OneToMany(mappedBy = "target")
     private List<AdvertisementReview> reviews = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Advertisement)) return false;
+
+        Advertisement that = (Advertisement) o;
+
+        if (!getAnnouncedOn().equals(that.getAnnouncedOn())) return false;
+        if (!getAdvertiser().equals(that.getAdvertiser())) return false;
+        if (getType() != that.getType()) return false;
+        if (!getRealEstate().equals(that.getRealEstate())) return false;
+        return getVerifier() != null ? getVerifier().equals(that.getVerifier()) : that.getVerifier() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAnnouncedOn().hashCode();
+        result = 31 * result + getAdvertiser().hashCode();
+        result = 31 * result + getType().hashCode();
+        result = 31 * result + getRealEstate().hashCode();
+        result = 31 * result + (getVerifier() != null ? getVerifier().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Advertisement{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", announcedOn=" + announcedOn +
+                ", editedOn=" + editedOn +
+                ", endsOn=" + endsOn +
+                ", advertiser=" + advertiser +
+                ", status=" + status +
+                ", type=" + type +
+                ", price=" + price +
+                ", currency=" + currency +
+                ", realEstate=" + realEstate +
+                ", verifier=" + verifier +
+                '}';
+    }
+
     public long getId() {
         return id;
     }
@@ -172,6 +215,4 @@ public class Advertisement {
     public void setReviews(List<AdvertisementReview> reviews) {
         this.reviews = reviews;
     }
-
-
 }

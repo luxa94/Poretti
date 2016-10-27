@@ -49,6 +49,40 @@ public class RealEstate {
     @OneToMany(mappedBy = "realEstate")
     private List<Advertisement> advertisements = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RealEstate)) return false;
+
+        RealEstate that = (RealEstate) o;
+
+        if (!getLocation().equals(that.getLocation())) return false;
+        if (getType() != that.getType()) return false;
+        return getOwner() != null ? getOwner().equals(that.getOwner()) : that.getOwner() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getLocation().hashCode();
+        result = 31 * result + getType().hashCode();
+        result = 31 * result + (getOwner() != null ? getOwner().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "RealEstate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", area=" + area +
+                ", description='" + description + '\'' +
+                ", location=" + location +
+                ", type=" + type +
+                ", owner=" + owner +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

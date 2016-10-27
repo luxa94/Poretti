@@ -17,6 +17,32 @@ public class Company extends Owner {
     @OneToMany(mappedBy = "company")
     private List<Membership> memberships = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Company)) return false;
+        if (!super.equals(o)) return false;
+
+        Company company = (Company) o;
+
+        return getPib().equals(company.getPib());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getPib().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "pib='" + pib + '\'' +
+                '}';
+    }
+
     public String getPib() {
         return pib;
     }
@@ -32,5 +58,4 @@ public class Company extends Owner {
     public void setMemberships(List<Membership> memberships) {
         this.memberships = memberships;
     }
-
 }

@@ -44,6 +44,35 @@ public abstract class Owner {
     @OneToMany(mappedBy = "target")
     private List<OwnerReview> reviews = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Owner)) return false;
+
+        Owner owner = (Owner) o;
+
+        if (!getName().equals(owner.getName())) return false;
+        return getLocation().equals(owner.getLocation());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName().hashCode();
+        result = 31 * result + getLocation().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Owner{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                ", location=" + location +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

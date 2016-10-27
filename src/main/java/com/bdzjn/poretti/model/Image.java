@@ -17,6 +17,31 @@ public class Image {
     @Column(unique = true)
     private String url;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Image)) return false;
+
+        Image image = (Image) o;
+
+        if (getId() != image.getId()) return false;
+        return getUrl().equals(image.getUrl());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getUrl().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

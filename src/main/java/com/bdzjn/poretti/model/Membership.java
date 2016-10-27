@@ -27,6 +27,38 @@ public class Membership {
     @ManyToOne
     private User approvedBy;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Membership)) return false;
+
+        Membership that = (Membership) o;
+
+        if (!getCompany().equals(that.getCompany())) return false;
+        if (!getMember().equals(that.getMember())) return false;
+        return getApprovedBy() != null ? getApprovedBy().equals(that.getApprovedBy()) : that.getApprovedBy() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCompany().hashCode();
+        result = 31 * result + getMember().hashCode();
+        result = 31 * result + (getApprovedBy() != null ? getApprovedBy().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Membership{" +
+                "id=" + id +
+                ", company=" + company +
+                ", member=" + member +
+                ", confirmed=" + confirmed +
+                ", approvedBy=" + approvedBy +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

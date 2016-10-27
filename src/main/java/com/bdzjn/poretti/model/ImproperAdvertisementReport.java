@@ -31,6 +31,41 @@ public class ImproperAdvertisementReport {
     @NotNull
     private Date editedOn;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ImproperAdvertisementReport)) return false;
+
+        ImproperAdvertisementReport that = (ImproperAdvertisementReport) o;
+
+        if (getReason() != that.getReason()) return false;
+        if (!getAuthor().equals(that.getAuthor())) return false;
+        if (!getAdvertisement().equals(that.getAdvertisement())) return false;
+        return getEditedOn().equals(that.getEditedOn());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getReason().hashCode();
+        result = 31 * result + getAuthor().hashCode();
+        result = 31 * result + getAdvertisement().hashCode();
+        result = 31 * result + getEditedOn().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ImproperAdvertisementReport{" +
+                "id=" + id +
+                ", reason=" + reason +
+                ", description='" + description + '\'' +
+                ", author=" + author +
+                ", advertisement=" + advertisement +
+                ", editedOn=" + editedOn +
+                '}';
+    }
+
     public long getId() {
         return id;
     }
