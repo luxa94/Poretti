@@ -28,6 +28,7 @@ public enum Role {
             Permission.REPORT_ADVERTISEMENT,
             Permission.CHANGE_ADVERTISEMENT_STATUS}),
 
+    // If you change this, update resources/import.sql as well!
     SYSTEM_ADMIN(new Permission[]{Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
             Permission.EDIT_REVIEW,
