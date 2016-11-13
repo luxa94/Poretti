@@ -34,7 +34,7 @@ public class User extends Owner {
     @OneToMany(mappedBy = "member")
     private List<Membership> memberships = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "UserPermission", joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"))
     @Column(name = "permission", nullable = false)
     @Enumerated(EnumType.STRING)
