@@ -8,7 +8,6 @@ public enum Role {
     USER(new Permission[]{Permission.CREATE_ADVERTISEMENT,
             Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
-            Permission.EDIT_REVIEW,
             Permission.REPORT_ADVERTISEMENT,
             Permission.CREATE_COMPANY_ADVERTISEMENT,
             Permission.EDIT_COMPANY_ADVERTISEMENT,
@@ -18,22 +17,16 @@ public enum Role {
 
     VERIFIER(new Permission[]{
             Permission.CREATE_REVIEW,
-            Permission.EDIT_REVIEW,
             Permission.REPORT_ADVERTISEMENT,
             Permission.CHANGE_ADVERTISEMENT_STATUS}),
 
     // If you change this, update resources/import.sql as well!
     SYSTEM_ADMIN(new Permission[]{Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
-            Permission.EDIT_REVIEW,
             Permission.REPORT_ADVERTISEMENT,
-            Permission.EDIT_COMPANY_ADVERTISEMENT,
-            Permission.APPROVE_COMPANY_USER,
-            Permission.REMOVE_USER_FROM_COMPANY,
             Permission.EDIT_COMPANY,
-            Permission.CHANGE_ADVERTISEMENT_STATUS,
             Permission.CREATE_COMPANY,
-            Permission.CREATE_COMPANY_ADMIN,
+            Permission.CREATE_SYSTEM_ADMIN,
             Permission.CREATE_VERIFIER,
             Permission.BAN_USER,
             Permission.DELETE_REVIEW});
