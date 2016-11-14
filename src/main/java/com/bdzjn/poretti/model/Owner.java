@@ -18,11 +18,11 @@ public abstract class Owner {
     private String name;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Location location;
 
     @ElementCollection

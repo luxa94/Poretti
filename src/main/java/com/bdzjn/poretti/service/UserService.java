@@ -1,16 +1,25 @@
 package com.bdzjn.poretti.service;
 
+import com.bdzjn.poretti.controller.dto.LoginDTO;
+import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.model.User;
-import com.bdzjn.poretti.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 public interface UserService {
 
     Optional<User> findById(long id);
-    Optional<User> findByUsernameAndPassword(String username, String password);
-    Optional<User> findByEmailAndPassword(String email, String password);
+
+    boolean areUsernameOrEmailTaken(String username, String email);
+
+    User register(RegisterDTO registerDTO);
+
+    User createUser(RegisterDTO registerDTO);
+
+    User createVerifier(RegisterDTO registerDTO);
+
+    User createAdmin(RegisterDTO registerDTO);
+
+    User login(LoginDTO loginDTO);
 
 }

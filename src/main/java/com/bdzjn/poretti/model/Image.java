@@ -17,6 +17,13 @@ public class Image {
     @Column(unique = true)
     private String url;
 
+    public Image() {
+    }
+
+    public Image(String url) {
+        this.url = url;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -9,12 +9,6 @@ public enum Role {
             Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
             Permission.EDIT_REVIEW,
-            Permission.REPORT_ADVERTISEMENT}),
-
-    COMPANY_USER(new Permission[]{Permission.CREATE_ADVERTISEMENT,
-            Permission.EDIT_ADVERTISEMENT,
-            Permission.CREATE_REVIEW,
-            Permission.EDIT_REVIEW,
             Permission.REPORT_ADVERTISEMENT,
             Permission.CREATE_COMPANY_ADVERTISEMENT,
             Permission.EDIT_COMPANY_ADVERTISEMENT,

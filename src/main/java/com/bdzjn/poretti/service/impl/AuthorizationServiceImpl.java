@@ -29,11 +29,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @param user that is trying to log in.
      * @return created {@link com.bdzjn.poretti.model.Authorization}.
      */
+    @Override
     public Authorization createFor(User user) {
         final Authorization authorization = new Authorization();
         authorization.setUser(user);
-        authorizationRepository.save(authorization);
 
-        return authorization;
+        return authorizationRepository.save(authorization);
     }
 }
