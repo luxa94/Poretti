@@ -22,6 +22,8 @@ public class RegisterDTO {
 
     private List<String> contactEmails;
 
+    private long companyId;
+
     @Override
     public String toString() {
         return "RegisterDTO{" +
@@ -33,6 +35,7 @@ public class RegisterDTO {
                 ", imageId=" + imageId +
                 ", phoneNumbers=" + phoneNumbers +
                 ", contactEmails=" + contactEmails +
+                ", companyId=" + companyId +
                 '}';
     }
 
@@ -98,5 +101,13 @@ public class RegisterDTO {
 
     public void setImageId(long imageId) {
         this.imageId = imageId;
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
     }
 }

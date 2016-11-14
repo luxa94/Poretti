@@ -12,9 +12,13 @@ public interface UserService {
 
     boolean areUsernameOrEmailTaken(String username, String email);
 
-    User create(User user);
-
     User register(RegisterDTO registerDTO);
+
+    User createUser(RegisterDTO registerDTO);
+
+    User createVerifier(RegisterDTO registerDTO);
+
+    User createAdmin(RegisterDTO registerDTO);
 
     User login(LoginDTO loginDTO);
 

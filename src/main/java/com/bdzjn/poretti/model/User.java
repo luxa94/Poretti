@@ -31,7 +31,7 @@ public class User extends Owner {
     @NotNull
     private boolean registrationConfirmed;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private List<Membership> memberships = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -118,6 +118,10 @@ public class User extends Owner {
 
     public void setMemberships(List<Membership> memberships) {
         this.memberships = memberships;
+    }
+
+    public void addMembership(Membership membership) {
+        memberships.add(membership);
     }
 
     public List<Permission> getPermissions() {
