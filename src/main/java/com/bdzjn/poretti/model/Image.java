@@ -14,7 +14,7 @@ public class Image {
     private long id;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String url;
 
     public Image() {
