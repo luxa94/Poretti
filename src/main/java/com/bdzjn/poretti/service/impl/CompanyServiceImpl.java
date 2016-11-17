@@ -25,6 +25,7 @@ public class CompanyServiceImpl implements CompanyService {
         company.setPib(companyDTO.getPib());
         company.setName(companyDTO.getName());
         company.setImageUrl(companyDTO.getImageUrl());
+        company.setLocation(companyDTO.getLocation());
         company.setPhoneNumbers(companyDTO.getPhoneNumbers());
         company.setContactEmails(companyDTO.getContactEmails());
 
