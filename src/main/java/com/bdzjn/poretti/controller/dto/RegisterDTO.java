@@ -16,7 +16,7 @@ public class RegisterDTO {
 
     private Location location;
 
-    private long imageId;
+    private String imageUrl;
 
     private List<String> phoneNumbers;
 
@@ -32,7 +32,7 @@ public class RegisterDTO {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", location=" + location +
-                ", imageId=" + imageId +
+                ", imageId=" + imageUrl +
                 ", phoneNumbers=" + phoneNumbers +
                 ", contactEmails=" + contactEmails +
                 ", companyId=" + companyId +
@@ -95,12 +95,12 @@ public class RegisterDTO {
         this.contactEmails = contactEmails;
     }
 
-    public long getImageId() {
-        return imageId;
+    public String getImageUrl() {
+        return imageUrl != null ? imageUrl : "/images/defaultUser.jpg";
     }
 
-    public void setImageId(long imageId) {
-        this.imageId = imageId;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public long getCompanyId() {

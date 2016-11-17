@@ -18,12 +18,7 @@ public abstract class Owner {
     private String name;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    private Image image;
-
-    @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    private Location location;
+    private String imageUrl;
 
     @ElementCollection
     @CollectionTable(name = "PhoneNumber", joinColumns = @JoinColumn(name = "owner", referencedColumnName = "id"))
@@ -51,15 +46,14 @@ public abstract class Owner {
 
         Owner owner = (Owner) o;
 
-        if (!getName().equals(owner.getName())) return false;
-        return getLocation().equals(owner.getLocation());
-
+        if (!name.equals(owner.name)) return false;
+        return imageUrl.equals(owner.imageUrl);
     }
 
     @Override
     public int hashCode() {
-        int result = getName().hashCode();
-        result = 31 * result + getLocation().hashCode();
+        int result = name.hashCode();
+        result = 31 * result + imageUrl.hashCode();
         return result;
     }
 
@@ -68,8 +62,7 @@ public abstract class Owner {
         return "Owner{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", image=" + image +
-                ", location=" + location +
+                ", image=" + imageUrl +
                 '}';
     }
 
@@ -89,20 +82,12 @@ public abstract class Owner {
         this.name = name;
     }
 
-    public Image getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<String> getPhoneNumbers() {

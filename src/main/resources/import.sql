@@ -1,18 +1,6 @@
-LOCK TABLES `image` WRITE;
-/*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` (`id`, `url`) VALUES (1,'/image/defaultUser.jpg');
-/*!40000 ALTER TABLE `image` ENABLE KEYS */;
-UNLOCK TABLES;
-
-LOCK TABLES `location` WRITE;
-/*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` (`id`, `city`, `city_area`, `has_lat_long`, `latitude`, `longitude`, `state`, `street`, `street_number`, `zip_code`) VALUES (1,'Admin town',NULL,'\0',0,0,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `location` ENABLE KEYS */;
-UNLOCK TABLES;
-
 LOCK TABLES `owner` WRITE;
 /*!40000 ALTER TABLE `owner` DISABLE KEYS */;
-INSERT INTO `owner` (`id`, `name`, `image_id`, `location_id`) VALUES (1,'Jacadmin Facadmin',1,1);
+INSERT INTO `owner` (`id`, `image_url`, `name`) VALUES (1,'/images/defaultUser.jpg','Jacadmin Facadmin');
 /*!40000 ALTER TABLE `owner` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -30,6 +18,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `authorization` WRITE;
 /*!40000 ALTER TABLE `authorization` DISABLE KEYS */;
-INSERT INTO `authorization` VALUES (1,'102da414-847d-4602-8b2d-edca26ab26d7',1);
+INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (1,'102da414-847d-4602-8b2d-edca26ab26d7',1);
 /*!40000 ALTER TABLE `authorization` ENABLE KEYS */;
 UNLOCK TABLES;

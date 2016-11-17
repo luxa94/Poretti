@@ -29,8 +29,7 @@ public class RealEstate {
     private Location location;
 
     @NotNull
-    @OneToOne
-    private Image image;
+    private String imageUrl;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -123,12 +122,12 @@ public class RealEstate {
         this.location = location;
     }
 
-    public Image getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public RealEstateType getType() {

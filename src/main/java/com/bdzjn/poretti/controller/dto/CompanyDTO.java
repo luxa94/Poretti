@@ -12,7 +12,7 @@ public class CompanyDTO {
 
     private Location location;
 
-    private long imageId;
+    private String imageUrl;
 
     private List<String> phoneNumbers;
 
@@ -42,12 +42,12 @@ public class CompanyDTO {
         this.location = location;
     }
 
-    public long getImageId() {
-        return imageId;
+    public String getImageUrl() {
+        return imageUrl != null ? imageUrl : "/images/defaultCompany.jpg";
     }
 
-    public void setImageId(long imageId) {
-        this.imageId = imageId;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<String> getPhoneNumbers() {
