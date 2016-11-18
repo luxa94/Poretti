@@ -3,12 +3,10 @@ package com.bdzjn.poretti.service.impl;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.exception.AuthenticationException;
-import com.bdzjn.poretti.model.Image;
 import com.bdzjn.poretti.model.Membership;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.model.enumeration.Role;
 import com.bdzjn.poretti.repository.CompanyRepository;
-import com.bdzjn.poretti.repository.ImageRepository;
 import com.bdzjn.poretti.repository.UserRepository;
 import com.bdzjn.poretti.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +19,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
     private final CompanyRepository companyRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ImageRepository imageRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.imageRepository = imageRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -81,12 +77,11 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setName(registerDTO.getName());
-        user.setImage(imageRepository.findById(registerDTO.getImageId()).orElse(new Image("/images/defaultUser.jpg")));
+        user.setImageUrl(registerDTO.getImageUrl());
         user.setPhoneNumbers(registerDTO.getPhoneNumbers());
         user.setContactEmails(registerDTO.getContactEmails());
         user.setRole(role);
         user.setPermissions(role.getPermissions()); // TODO: Set permissions when email is confirmed.
-        user.setLocation(registerDTO.getLocation());
         return user;
     }
 
