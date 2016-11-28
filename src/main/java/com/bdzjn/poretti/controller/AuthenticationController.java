@@ -1,5 +1,7 @@
 package com.bdzjn.poretti.controller;
 
+import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
+import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.model.Authorization;
@@ -43,8 +45,8 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
         final User user = userService.login(loginDTO);
-        final Authorization authorization = authorizationService.createFor(user);
-        return new ResponseEntity<>(authorization.getToken(), HttpStatus.OK);
+        final AuthorizationDTO authorization = authorizationService.createFor(user);
+        return new ResponseEntity<>(authorization, HttpStatus.OK);
     }
 
 }

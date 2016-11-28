@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.service.impl;
 
+import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.model.Authorization;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.repository.AuthorizationRepository;
@@ -30,10 +31,18 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @return created {@link com.bdzjn.poretti.model.Authorization}.
      */
     @Override
-    public Authorization createFor(User user) {
+    public AuthorizationDTO createFor(User user) {
         final Authorization authorization = new Authorization();
         authorization.setUser(user);
 
-        return authorizationRepository.save(authorization);
+        authorizationRepository.save(authorization);
+        final AuthorizationDTO authorizationDTO = new AuthorizationDTO();
+        authorizationDTO.setToken(authorization.getToken());
+        authorizationDTO.setId(user.getId());
+        authorizationDTO.setRole(user.getRole());
+        authorizationDTO.setPermissions(user.getPermissions());
+        authorizationDTO.setVerified(user.isRegistrationConfirmed());
+
+        return authorizationDTO;
     }
 }

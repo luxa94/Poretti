@@ -1,7 +1,6 @@
 package com.bdzjn.poretti.controller.dto;
 
-import com.bdzjn.poretti.model.Location;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterDTO {
@@ -14,13 +13,11 @@ public class RegisterDTO {
 
     private String name;
 
-    private Location location;
-
     private String imageUrl;
 
-    private List<String> phoneNumbers;
+    private List<String> phoneNumbers = new ArrayList<>();
 
-    private List<String> contactEmails;
+    private List<String> contactEmails = new ArrayList<>();
 
     private long companyId;
 
@@ -31,7 +28,6 @@ public class RegisterDTO {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
-                ", location=" + location +
                 ", imageId=" + imageUrl +
                 ", phoneNumbers=" + phoneNumbers +
                 ", contactEmails=" + contactEmails +
@@ -69,14 +65,6 @@ public class RegisterDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public List<String> getPhoneNumbers() {
