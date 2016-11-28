@@ -1,8 +1,8 @@
 package com.bdzjn.poretti.controller;
 
 import com.bdzjn.poretti.controller.dto.CompanyDTO;
-import com.bdzjn.poretti.controller.dto.RegisterCompanyDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
+import com.bdzjn.poretti.controller.dto.RegisterCompanyDTO;
 import com.bdzjn.poretti.model.Company;
 import com.bdzjn.poretti.model.Membership;
 import com.bdzjn.poretti.model.User;

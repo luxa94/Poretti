@@ -16,7 +16,7 @@ spring:
         database: H2
         show_sql: true
         hibernate:
-            ddl-auto: none
+            ddl-auto: update
             naming:
               strategy: org.hibernate.cfg.ImprovedNamingStrategy
               physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
