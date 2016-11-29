@@ -7,7 +7,7 @@ spring:
         username:
         password:
     datasource:
-        url: jdbc:h2:mem:test
+        url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
         driverClassName: org.h2.Driver
         username: sa
         password:
@@ -16,7 +16,7 @@ spring:
         database: H2
         show_sql: true
         hibernate:
-            ddl-auto: update
+            ddl-auto: create-drop
             naming:
               strategy: org.hibernate.cfg.ImprovedNamingStrategy
               physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
