@@ -34,12 +34,12 @@ public class UserControllerIntegrationTest {
    @Transactional
    public void createAdminShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception{
        final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
-       final RegisterDTO testAdmin = testEntityForCreateAdmin();
+       final RegisterDTO testEntity = testEntity();
 
        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
                .header(AUTHORIZATION, TOKEN_VALUE)
                .contentType(MediaType.APPLICATION_JSON)
-               .content(TestUtil.json(testAdmin)))
+               .content(TestUtil.json(testEntity)))
                .andExpect(status().isCreated());
    }
 
@@ -48,13 +48,13 @@ public class UserControllerIntegrationTest {
     public void createAdminShouldReturnWhenUnprocessableWhenUsernameIsTaken() throws Exception{
         final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
 
-        final RegisterDTO testAdminWithExistingUsername = testEntityForCreateAdmin();
-        testAdminWithExistingUsername.setUsername("admin");
+        final RegisterDTO testEntityWithExistingUsername = testEntity();
+        testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
                 .header(AUTHORIZATION, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.json(testAdminWithExistingUsername)))
+                .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("Username or email taken."));
     }
@@ -64,25 +64,69 @@ public class UserControllerIntegrationTest {
     public void createAdminShouldReturnWhenUnprecessableWhenEmailIsTaken() throws Exception{
         final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
 
-        final RegisterDTO testAdminWithExistingEmail = testEntityForCreateAdmin();
-        testAdminWithExistingEmail.setEmail("ja");
+        final RegisterDTO testEntityWithExistingEmail = testEntity();
+        testEntityWithExistingEmail.setEmail("admin@admin.com");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
                 .header(AUTHORIZATION, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.json(testAdminWithExistingEmail)))
+                .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("Username or email taken."));
     }
 
-    private RegisterDTO testEntityForCreateAdmin(){
-       final RegisterDTO registerAdmin = new RegisterDTO();
-       registerAdmin.setEmail("newadmin@admin.com");
-       registerAdmin.setName("Admin Senior");
-       registerAdmin.setUsername("admin_senior");
-       registerAdmin.setPassword("admin_senior");
+    @Test
+    @Transactional
+    public void createVerifierShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception{
+        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
+        final RegisterDTO testVerifier = testEntity();
 
-       return registerAdmin;
+        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+                .header(AUTHORIZATION, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testVerifier)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Transactional
+    public void createVerifierShouldReturnWhenUnprocessableWhenUsernameIsTaken() throws Exception{
+        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
+        final RegisterDTO testEntityWithExistingUsername = testEntity();
+        testEntityWithExistingUsername.setUsername("admin");
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+                .header(AUTHORIZATION, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntityWithExistingUsername)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string("Username or email taken."));
+    }
+
+    @Test
+    @Transactional
+    public void createVerifierShouldReturnWhenUnprecessableWhenEmailIsTaken() throws Exception{
+        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
+        final RegisterDTO testEntityWithExistingEmail = testEntity();
+        testEntityWithExistingEmail.setEmail("admin@admin.com");
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+                .header(AUTHORIZATION, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntityWithExistingEmail)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string("Username or email taken."));
+    }
+
+
+    private RegisterDTO testEntity(){
+        final RegisterDTO testEntity = new RegisterDTO();
+        testEntity.setEmail("test@entity.com");
+        testEntity.setName("Test Entity");
+        testEntity.setUsername("test_entity");
+        testEntity.setPassword("test_entity");
+
+       return testEntity;
    }
 
 }
