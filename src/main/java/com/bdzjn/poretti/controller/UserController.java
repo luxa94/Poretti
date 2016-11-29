@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/createSysAdmin")
-   // @PreAuthorize("hasAuthority('CREATE_SYSTEM_ADMIN')")
+    @PreAuthorize("hasAuthority('CREATE_SYSTEM_ADMIN')")
     public ResponseEntity crateAdmin(@RequestBody RegisterDTO registerDTO){
         if (userService.areUsernameOrEmailTaken(registerDTO.getUsername(), registerDTO.getEmail())){
             return new ResponseEntity<>("Username or email taken.", HttpStatus.UNPROCESSABLE_ENTITY);
