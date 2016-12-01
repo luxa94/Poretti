@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.integration;
 
+import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.util.TestUtil;
 import org.junit.Test;
@@ -79,18 +80,18 @@ public class UserControllerIntegrationTest {
     @Transactional
     public void createVerifierShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception{
         final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
-        final RegisterDTO testVerifier = testEntity();
+        final RegisterDTO testEntity = testEntity();
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
                 .header(AUTHORIZATION, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.json(testVerifier)))
+                .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated());
     }
 
     @Test
     @Transactional
-    public void createVerifierShouldReturnWhenUnprocessableWhenUsernameIsTaken() throws Exception{
+    public void createVerifierShouldReturnUnprocessableWhenUsernameIsTaken() throws Exception{
         final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
         final RegisterDTO testEntityWithExistingUsername = testEntity();
         testEntityWithExistingUsername.setUsername("admin");
@@ -105,7 +106,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void createVerifierShouldReturnWhenUnprecessableWhenEmailIsTaken() throws Exception{
+    public void createVerifierShouldReturUnprecessableWhenEmailIsTaken() throws Exception{
         final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
         final RegisterDTO testEntityWithExistingEmail = testEntity();
         testEntityWithExistingEmail.setEmail("admin@admin.com");
@@ -127,6 +128,6 @@ public class UserControllerIntegrationTest {
         testEntity.setPassword("test_entity");
 
        return testEntity;
-   }
+    }
 
 }
