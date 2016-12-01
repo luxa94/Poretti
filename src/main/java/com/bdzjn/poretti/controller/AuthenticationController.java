@@ -3,8 +3,6 @@ package com.bdzjn.poretti.controller;
 import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
-import com.bdzjn.poretti.controller.dto.LoginDTO;
-import com.bdzjn.poretti.model.Authorization;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.service.AuthorizationService;
 import com.bdzjn.poretti.service.UserService;

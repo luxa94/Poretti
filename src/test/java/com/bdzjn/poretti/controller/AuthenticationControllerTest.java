@@ -1,83 +1,100 @@
 package com.bdzjn.poretti.controller;
 
-import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
-import org.junit.Assert;
+import com.bdzjn.poretti.util.TestUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
+import java.nio.charset.Charset;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles(profiles = "test")
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@SpringBootTest
+@AutoConfigureMockMvc
 public class AuthenticationControllerTest {
 
     private static final String URL_PREFIX = "/api/authentication";
 
+    private static final MediaType CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(),
+            Charset.forName("utf8"));
+
     @Autowired
-    TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
     @Test
-    @Rollback
-    //@Transactional
+    @Transactional
     public void testRegister() throws Exception {
-        final RegisterDTO registerDTO = new RegisterDTO();
-        registerDTO.setUsername("pera");
-        registerDTO.setPassword("password");
-        registerDTO.setEmail("pera@gmail.com");
-        registerDTO.setName("Pera Peric");
-        registerDTO.getContactEmails().add("pera@gmail.com");
-        registerDTO.getPhoneNumbers().add("perasnumber");
+        final RegisterDTO registerDTO = getRegisterDTO();
 
-        final ResponseEntity successEntity = restTemplate.postForEntity(URL_PREFIX + "/register", registerDTO, Long.class);
-        Assert.assertEquals(HttpStatus.CREATED, successEntity.getStatusCode());
+        mockMvc.perform(post(URL_PREFIX + "/register")
+                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
+                .andExpect(status().isCreated());
 
         registerDTO.setUsername("Kevin");
-        final ResponseEntity emailFailEntity = restTemplate.postForEntity(URL_PREFIX + "/register", registerDTO, String.class);
-        Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, emailFailEntity.getStatusCode());
+        mockMvc.perform(post(URL_PREFIX + "/register")
+                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
+                .andExpect(status().isUnprocessableEntity());
 
         registerDTO.setUsername("pera");
         registerDTO.setEmail("noviPera@gmail.com");
-        final ResponseEntity usernameFailEntity = restTemplate.postForEntity(URL_PREFIX + "/register", registerDTO, String.class);
-        Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, usernameFailEntity.getStatusCode());
+        mockMvc.perform(post(URL_PREFIX + "/register")
+                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
-   // @Transactional
+    @Transactional
     public void testLogin() throws Exception {
-        final RegisterDTO registerDTO = new RegisterDTO();
-        registerDTO.setUsername("pera");
-        registerDTO.setPassword("password");
-        registerDTO.setEmail("pera@gmail.com");
-        registerDTO.setName("Pera Peric");
-        registerDTO.getContactEmails().add("pera@gmail.com");
-        registerDTO.getPhoneNumbers().add("perasnumber");
+        final RegisterDTO registerDTO = getRegisterDTO();
 
-        final ResponseEntity successEntity = restTemplate.postForEntity(URL_PREFIX + "/register", registerDTO, Long.class);
-        Assert.assertEquals(HttpStatus.CREATED, successEntity.getStatusCode());
+        mockMvc.perform(post(URL_PREFIX + "/register")
+                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
+                .andExpect(status().isCreated());
 
         final LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUsername("pera");
         loginDTO.setPassword("password");
 
-        final ResponseEntity<AuthorizationDTO> responseEntity = restTemplate.postForEntity(URL_PREFIX + "/login", loginDTO, AuthorizationDTO.class);
-        Assert.assertNotNull(responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+                .andExpect(status().isOk());
+
+        loginDTO.setPassword("ups");
+        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    public void adminLoginTest() throws Exception {
+        final LoginDTO adminLogin = new LoginDTO();
+        adminLogin.setUsername("admin");
+        adminLogin.setPassword("admin");
+        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(adminLogin)))
+                .andExpect(status().isOk());
+    }
+
+    private RegisterDTO getRegisterDTO() {
+        final RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setUsername("pera");
+        registerDTO.setPassword("password");
+        registerDTO.setEmail("pera@gmail.com");
+        registerDTO.setName("Pera Peric");
+        registerDTO.getContactEmails().add("pera@gmail.com");
+        registerDTO.getPhoneNumbers().add("perasnumber");
+        return registerDTO;
     }
 
 }
