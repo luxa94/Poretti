@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserServiceTest implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
@@ -24,7 +24,7 @@ public class UserServiceTest implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceTest(UserRepository userRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;

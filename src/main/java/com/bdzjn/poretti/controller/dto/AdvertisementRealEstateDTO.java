@@ -4,7 +4,7 @@ public class AdvertisementRealEstateDTO {
 
     private RealEstateDTO realEstateDTO;
 
-    private AuthorizationDTO advertisementDTO;
+    private AdvertisementDTO advertisementDTO;
 
     public RealEstateDTO getRealEstateDTO() {
         return realEstateDTO;
@@ -14,11 +14,11 @@ public class AdvertisementRealEstateDTO {
         this.realEstateDTO = realEstateDTO;
     }
 
-    public AuthorizationDTO getAdvertisementDTO() {
+    public AdvertisementDTO getAdvertisementDTO() {
         return advertisementDTO;
     }
 
-    public void setAdvertisementDTO(AuthorizationDTO advertisementDTO) {
+    public void setAdvertisementDTO(AdvertisementDTO advertisementDTO) {
         this.advertisementDTO = advertisementDTO;
     }
     

@@ -2,8 +2,11 @@ package com.bdzjn.poretti.controller;
 
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.dto.RealEstateDTO;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.RealEstate;
 import com.bdzjn.poretti.model.User;
+import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.RealEstateService;
 import com.mysql.fabric.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +18,20 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/realEstates")
 public class RealEstateController {
 
-    private RealEstateService realEstateService;
+    private final RealEstateService realEstateService;
+    private final AdvertisementService advertisementService;
 
     @Autowired
-    public RealEstateController(RealEstateService realEstateService){
+    public RealEstateController(RealEstateService realEstateService, AdvertisementService advertisementService){
         this.realEstateService = realEstateService;
+        this.advertisementService = advertisementService;
     }
 
     @Transactional
@@ -35,15 +43,19 @@ public class RealEstateController {
     @Transactional
     @GetMapping("/{id}")
     public ResponseEntity findOne(@PathVariable long id){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        final RealEstate realEstate = realEstateService.findById(id).orElseThrow(NotFoundException::new);
+
+        return new ResponseEntity<>(realEstate, HttpStatus.OK);
     }
 
-    @PreAuthorize("haAnysAuthority('CREATE_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
     @PostMapping
     public ResponseEntity create(@RequestBody RealEstateDTO realEstateDTO,
                                  @AuthenticationPrincipal User user){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        realEstateDTO.setId(0);
+        RealEstate realEstate = realEstateService.save(realEstateDTO, user);
+        return new ResponseEntity<>(realEstate, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
@@ -51,28 +63,44 @@ public class RealEstateController {
     @PutMapping("/{id}")
     public ResponseEntity edit(@PathVariable long id, @RequestBody RealEstateDTO realEstateDTO,
                                @AuthenticationPrincipal User user){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        realEstateDTO.setId(id);
+
+        RealEstate realEstate = realEstateService.update(realEstateDTO, user.getId());
+
+        return new ResponseEntity<>(realEstate, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable long id, @AuthenticationPrincipal User user){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        final RealEstate realEstate = realEstateService.findById(id).orElseThrow(NotFoundException::new);
+
+        realEstateService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
     @GetMapping({"/{id}/advertisements"})
-    public ResponseEntity findAdvertisements(@PathVariable long id, Pageable pageable){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity findAdvertisements(@PathVariable long id){
+        final RealEstate realEstate = realEstateService.findById(id).orElseThrow(NotFoundException::new);
+        final List<Advertisement> advertisements = realEstate.getAdvertisements();
+
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
     @PostMapping("/{id}/advertisements")
-    public ResponseEntity createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO,
+    public ResponseEntity createAdvertisement(@PathVariable long id, @RequestBody AdvertisementDTO advertisementDTO,
                                               @AuthenticationPrincipal User user){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        advertisementDTO.setId(0);
+        final RealEstate realEstate = realEstateService.findByIdAndOwnerId(id, user.getId()).orElseThrow(NotFoundException::new);
+        Advertisement advertisement= advertisementService.save(advertisementDTO,realEstate);
+
+        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+
     }
 
 

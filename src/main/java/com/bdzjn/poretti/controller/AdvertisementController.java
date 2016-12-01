@@ -1,10 +1,12 @@
 package com.bdzjn.poretti.controller;
 
-import com.bdzjn.poretti.controller.dto.AdvertisementRealEstateDTO;
-import com.bdzjn.poretti.controller.dto.AdvertisementReportDTO;
-import com.bdzjn.poretti.controller.dto.ReviewDTO;
+import com.bdzjn.poretti.controller.dto.*;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.model.Advertisement;
+import com.bdzjn.poretti.model.RealEstate;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.service.AdvertisementService;
+import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,12 @@ import java.awt.print.Pageable;
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
+    private final RealEstateService realEstateService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService advertisementService) {
+    public AdvertisementController(AdvertisementService advertisementService, RealEstateService realEstateService) {
         this.advertisementService = advertisementService;
+        this.realEstateService = realEstateService;
     }
 
     @Transactional
@@ -35,21 +39,37 @@ public class AdvertisementController {
     @Transactional
     @GetMapping("/{id}")
     public ResponseEntity findOne(@PathVariable long id) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        Advertisement advertisement = advertisementService.findById(id).orElseThrow(NotFoundException::new);
+
+        return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
     @PostMapping
-    public ResponseEntity create(@RequestBody AdvertisementRealEstateDTO advertisementRealEstateDTO, @AuthenticationPrincipal User user) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity create(@RequestBody AdvertisementRealEstateDTO advertisementRealEstateDTO,
+                                 @AuthenticationPrincipal User user) {
+        AdvertisementDTO advertisementDTO = advertisementRealEstateDTO.getAdvertisementDTO();
+        RealEstateDTO realEstateDTO = advertisementRealEstateDTO.getRealEstateDTO();
+
+        advertisementDTO.setId(0);
+        realEstateDTO.setId(0);
+        RealEstate realEstate = realEstateService.save(realEstateDTO, user);
+        Advertisement advertisement = advertisementService.save(advertisementDTO, realEstate);
+        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity edit(@AuthenticationPrincipal User user, @PathVariable long id) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity edit(@PathVariable long id,
+                               @RequestBody AdvertisementDTO advertisementDTO,
+                               @AuthenticationPrincipal User user) {
+        advertisementDTO.setId(id);
+
+        Advertisement advertisement = advertisementService.update(advertisementDTO, user.getId());
+
+        return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
