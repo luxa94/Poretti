@@ -4,6 +4,7 @@ package com.bdzjn.poretti.model.enumeration;
 public enum Permission {
     CREATE_ADVERTISEMENT,
     EDIT_ADVERTISEMENT,
+    DELETE_ADVERTISEMENT,
     CREATE_REVIEW,
     DELETE_REVIEW,
     REPORT_ADVERTISEMENT,
