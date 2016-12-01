@@ -7,10 +7,9 @@ import java.util.List;
 public enum Role {
     USER(new Permission[]{Permission.CREATE_ADVERTISEMENT,
             Permission.EDIT_ADVERTISEMENT,
+            Permission.DELETE_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
             Permission.REPORT_ADVERTISEMENT,
-            Permission.CREATE_COMPANY_ADVERTISEMENT,
-            Permission.EDIT_COMPANY_ADVERTISEMENT,
             Permission.APPROVE_COMPANY_USER,
             Permission.REMOVE_USER_FROM_COMPANY,
             Permission.EDIT_COMPANY}),
