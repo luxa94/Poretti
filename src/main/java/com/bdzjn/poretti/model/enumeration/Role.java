@@ -9,20 +9,22 @@ public enum Role {
             Permission.EDIT_ADVERTISEMENT,
             Permission.DELETE_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
-            Permission.REPORT_ADVERTISEMENT,
+            Permission.CREATE_ADVERTISEMENT_REPORT,
             Permission.APPROVE_COMPANY_USER,
             Permission.REMOVE_USER_FROM_COMPANY,
+            Permission.JOIN_COMPANY,
+            Permission.LEAVE_COMPANY,
             Permission.EDIT_COMPANY}),
 
     VERIFIER(new Permission[]{
             Permission.CREATE_REVIEW,
-            Permission.REPORT_ADVERTISEMENT,
+            Permission.CREATE_ADVERTISEMENT_REPORT,
             Permission.CHANGE_ADVERTISEMENT_STATUS}),
 
     // If you change this, update resources/import.sql as well!
     SYSTEM_ADMIN(new Permission[]{Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
-            Permission.REPORT_ADVERTISEMENT,
+            Permission.CREATE_ADVERTISEMENT_REPORT,
             Permission.EDIT_COMPANY,
             Permission.CREATE_COMPANY,
             Permission.CREATE_SYSTEM_ADMIN,

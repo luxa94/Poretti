@@ -59,12 +59,12 @@ public class AdvertisementController {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PreAuthorize("hasAnyAuthority('REPORT_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT_REPORT')")
     @Transactional
     @PostMapping("/{id}/reports")
     public ResponseEntity createReport(@RequestBody AdvertisementReportDTO advertisementReportDTO,
-                             @PathVariable long id,
-                             @AuthenticationPrincipal long userId) {
+                                       @PathVariable long id,
+                                       @AuthenticationPrincipal long userId) {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 

@@ -15,5 +15,7 @@ public enum Permission {
     CREATE_COMPANY,
     CREATE_VERIFIER,
     CREATE_SYSTEM_ADMIN,
+    JOIN_COMPANY,
+    LEAVE_COMPANY,
     BAN_USER
 }
