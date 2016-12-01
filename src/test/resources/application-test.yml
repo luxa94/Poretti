@@ -11,6 +11,8 @@ spring:
         driverClassName: org.h2.Driver
         username: sa
         password:
+        dbcp2:
+          rollback-on-return: true
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
         database: H2
@@ -18,6 +20,5 @@ spring:
         hibernate:
             ddl-auto: create-drop
             naming:
-              strategy: org.hibernate.cfg.ImprovedNamingStrategy
-              physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-              
+                strategy: org.hibernate.cfg.ImprovedNamingStrategy
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

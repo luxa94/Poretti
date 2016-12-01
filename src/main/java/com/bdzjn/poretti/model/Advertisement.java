@@ -52,9 +52,6 @@ public class Advertisement {
     @ManyToOne
     private RealEstate realEstate;
 
-    @ManyToOne
-    private User verifier;
-
     @OneToMany(mappedBy = "advertisement")
     private List<ImproperAdvertisementReport> reports = new ArrayList<>();
 
@@ -71,8 +68,7 @@ public class Advertisement {
         if (!getAnnouncedOn().equals(that.getAnnouncedOn())) return false;
         if (!getAdvertiser().equals(that.getAdvertiser())) return false;
         if (getType() != that.getType()) return false;
-        if (!getRealEstate().equals(that.getRealEstate())) return false;
-        return getVerifier() != null ? getVerifier().equals(that.getVerifier()) : that.getVerifier() == null;
+        return getRealEstate().equals(that.getRealEstate());
 
     }
 
@@ -82,7 +78,6 @@ public class Advertisement {
         result = 31 * result + getAdvertiser().hashCode();
         result = 31 * result + getType().hashCode();
         result = 31 * result + getRealEstate().hashCode();
-        result = 31 * result + (getVerifier() != null ? getVerifier().hashCode() : 0);
         return result;
     }
 
@@ -100,7 +95,6 @@ public class Advertisement {
                 ", price=" + price +
                 ", currency=" + currency +
                 ", realEstate=" + realEstate +
-                ", verifier=" + verifier +
                 '}';
     }
 
@@ -190,14 +184,6 @@ public class Advertisement {
 
     public void setRealEstate(RealEstate realEstate) {
         this.realEstate = realEstate;
-    }
-
-    public User getVerifier() {
-        return verifier;
-    }
-
-    public void setVerifier(User verifier) {
-        this.verifier = verifier;
     }
 
     public List<ImproperAdvertisementReport> getReports() {
