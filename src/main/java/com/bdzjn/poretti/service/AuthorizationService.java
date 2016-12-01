@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.service;
 
+import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.model.Authorization;
 import com.bdzjn.poretti.model.User;
 
@@ -9,6 +10,6 @@ public interface AuthorizationService {
 
     Optional<Authorization> findByToken(String token);
 
-    Authorization createFor(User user);
+    AuthorizationDTO createFor(User user);
 
 }
