@@ -1,5 +1,8 @@
 package com.bdzjn.poretti.controller;
 
+import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
+import com.bdzjn.poretti.controller.dto.RealEstateDTO;
+import com.bdzjn.poretti.model.RealEstate;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.service.RealEstateService;
 import com.mysql.fabric.Response;
@@ -35,21 +38,23 @@ public class RealEstateController {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_ADVERTISEMENT')")
+    @PreAuthorize("haAnysAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
     @PostMapping
-    public ResponseEntity create(@AuthenticationPrincipal User user){
+    public ResponseEntity create(@RequestBody RealEstateDTO realEstateDTO,
+                                 @AuthenticationPrincipal User user){
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PreAuthorize("hasAuthority('EDIT_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity edit(@PathVariable long id, @AuthenticationPrincipal User user){
+    public ResponseEntity edit(@PathVariable long id, @RequestBody RealEstateDTO realEstateDTO,
+                               @AuthenticationPrincipal User user){
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PreAuthorize("hasAuthority('DELETE_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable long id, @AuthenticationPrincipal User user){
@@ -62,10 +67,11 @@ public class RealEstateController {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
     @PostMapping("/{id}/advertisements")
-    public ResponseEntity createAdvertisement(@AuthenticationPrincipal User user){
+    public ResponseEntity createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO,
+                                              @AuthenticationPrincipal User user){
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
