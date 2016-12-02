@@ -27,33 +27,31 @@ public class RealEstateServiceImpl implements RealEstateService {
 
 
     @Override
-    public RealEstate save(RealEstateDTO realEstateDTO, Owner owner) {
-        RealEstate realEstate = new RealEstate();
-        realEstate.setId(realEstateDTO.getId());
+    public RealEstate create(RealEstateDTO realEstateDTO, Owner owner) {
+        final RealEstate realEstate = new RealEstate();
         realEstate.setName(realEstate.getName());
         realEstate.setArea(realEstate.getArea());
-        realEstate.setTechnicalEquipment(realEstateDTO.getTehnicalEquipment());
+        realEstate.setTechnicalEquipment(realEstateDTO.getTechnicalEquipment());
         realEstate.setDescription(realEstate.getDescription());
         realEstate.setImageUrl(realEstate.getImageUrl());
         realEstate.setOwner(owner);
 
-        realEstate = realEstateRepository.save(realEstate);
-
-        return realEstate;
-
-    }
-
-    @Override
-    public RealEstate update(RealEstateDTO realEstateDTO, long ownerId) {
-        final RealEstate realEstate = findByIdAndOwnerId(realEstateDTO.getId(), ownerId).orElseThrow(NotFoundException::new);
-        realEstate.setName(realEstateDTO.getName());
-        realEstate.setTechnicalEquipment(realEstateDTO.getTehnicalEquipment());
-        realEstate.setDescription(realEstateDTO.getDescription());
-        realEstate.setArea(realEstateDTO.getArea());
-        realEstate.setLocation(realEstateDTO.getLocation());
         return realEstateRepository.save(realEstate);
     }
 
+    @Override
+    public RealEstate edit(RealEstateDTO realEstateDTO, long ownerId) {
+        final RealEstate realEstate = findByIdAndOwnerId(realEstateDTO.getId(), ownerId).orElseThrow(NotFoundException::new);
+        realEstate.setName(realEstateDTO.getName());
+        realEstate.setTechnicalEquipment(realEstateDTO.getTechnicalEquipment());
+        realEstate.setDescription(realEstateDTO.getDescription());
+        realEstate.setArea(realEstateDTO.getArea());
+        realEstate.setLocation(realEstateDTO.getLocation());
+
+        return realEstateRepository.save(realEstate);
+    }
+
+    @Override
     public Optional<RealEstate> findByIdAndOwnerId(long id, long ownerId) {
         return realEstateRepository.findByIdAndOwnerId(id, ownerId);
     }

@@ -10,4 +10,8 @@ public interface CompanyService {
     Company create(CompanyDTO companyDTO);
 
     Optional<Company> findByPib(String pib);
+
+    Optional<Company> findById(long id);
+
+    void edit(long id, CompanyDTO companyDTO);
 }

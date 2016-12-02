@@ -2,10 +2,10 @@ package com.bdzjn.poretti.controller;
 
 import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
-import com.bdzjn.poretti.model.Advertisement;
-import com.bdzjn.poretti.model.RealEstate;
-import com.bdzjn.poretti.model.User;
+import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.service.AdvertisementReviewService;
 import com.bdzjn.poretti.service.AdvertisementService;
+import com.bdzjn.poretti.service.ImproperAdvertisementReportService;
 import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,18 +16,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/advertisements")
 public class AdvertisementController {
 
-    private final AdvertisementService advertisementService;
     private final RealEstateService realEstateService;
+    private final AdvertisementService advertisementService;
+    private final AdvertisementReviewService advertisementReviewService;
+    private final ImproperAdvertisementReportService improperAdvertisementReportService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService advertisementService, RealEstateService realEstateService) {
-        this.advertisementService = advertisementService;
+    public AdvertisementController(AdvertisementService advertisementService, RealEstateService realEstateService, AdvertisementReviewService advertisementReviewService, ImproperAdvertisementReportService improperAdvertisementReportService) {
         this.realEstateService = realEstateService;
+        this.advertisementService = advertisementService;
+        this.advertisementReviewService = advertisementReviewService;
+        this.improperAdvertisementReportService = improperAdvertisementReportService;
     }
 
     @Transactional
@@ -39,7 +44,7 @@ public class AdvertisementController {
     @Transactional
     @GetMapping("/{id}")
     public ResponseEntity findOne(@PathVariable long id) {
-        Advertisement advertisement = advertisementService.findById(id).orElseThrow(NotFoundException::new);
+        final Advertisement advertisement = advertisementService.findById(id).orElseThrow(NotFoundException::new);
 
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
@@ -49,13 +54,11 @@ public class AdvertisementController {
     @PostMapping
     public ResponseEntity create(@RequestBody AdvertisementRealEstateDTO advertisementRealEstateDTO,
                                  @AuthenticationPrincipal User user) {
-        AdvertisementDTO advertisementDTO = advertisementRealEstateDTO.getAdvertisementDTO();
-        RealEstateDTO realEstateDTO = advertisementRealEstateDTO.getRealEstateDTO();
+        final AdvertisementDTO advertisementDTO = advertisementRealEstateDTO.getAdvertisementDTO();
+        final RealEstateDTO realEstateDTO = advertisementRealEstateDTO.getRealEstateDTO();
 
-        advertisementDTO.setId(0);
-        realEstateDTO.setId(0);
-        RealEstate realEstate = realEstateService.save(realEstateDTO, user);
-        Advertisement advertisement = advertisementService.save(advertisementDTO, realEstate);
+        final RealEstate realEstate = realEstateService.create(realEstateDTO, user);
+        final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
         return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
 
@@ -66,8 +69,7 @@ public class AdvertisementController {
                                @RequestBody AdvertisementDTO advertisementDTO,
                                @AuthenticationPrincipal User user) {
         advertisementDTO.setId(id);
-
-        Advertisement advertisement = advertisementService.update(advertisementDTO, user.getId());
+        final Advertisement advertisement = advertisementService.edit(advertisementDTO, user.getId());
 
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
@@ -76,7 +78,10 @@ public class AdvertisementController {
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@AuthenticationPrincipal User user, @PathVariable long id) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        advertisementService.findByIdAndOwnerId(id, user.getId()).orElseThrow(NotFoundException::new);
+        advertisementService.delete(id);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT_REPORT')")
@@ -84,14 +89,18 @@ public class AdvertisementController {
     @PostMapping("/{id}/reports")
     public ResponseEntity createReport(@RequestBody AdvertisementReportDTO advertisementReportDTO,
                                        @PathVariable long id,
-                                       @AuthenticationPrincipal long userId) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+                                       @AuthenticationPrincipal User user) {
+        final ImproperAdvertisementReport report = improperAdvertisementReportService.create(advertisementReportDTO, id, user);
+        return new ResponseEntity<>(report, HttpStatus.CREATED);
     }
 
     @Transactional
     @GetMapping("/{id}/reports")
     public ResponseEntity findReports(@PathVariable long id) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        final Advertisement advertisement = advertisementService.findById(id).orElseThrow(NotFoundException::new);
+        final List<ImproperAdvertisementReport> reports = advertisement.getReports();
+
+        return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_REVIEW')")
@@ -99,14 +108,18 @@ public class AdvertisementController {
     @PostMapping("/{id}/reviews")
     public ResponseEntity createReview(@RequestBody ReviewDTO reviewDTO,
                                        @PathVariable long id,
-                                       @AuthenticationPrincipal long userId) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+                                       @AuthenticationPrincipal User user) {
+        final AdvertisementReview review = advertisementReviewService.create(reviewDTO, id, user);
+        return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 
     @Transactional
     @GetMapping("/{id}/reviews")
-    public ResponseEntity findReviews() {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity findReviews(@PathVariable long id) {
+        final Advertisement advertisement = advertisementService.findById(id).orElseThrow(NotFoundException::new);
+        final List<AdvertisementReview> reviews = advertisement.getReviews();
+
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
 }

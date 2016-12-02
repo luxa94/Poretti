@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface RealEstateService {
 
+    RealEstate create(RealEstateDTO realEstateDTO, Owner owner);
+
     Optional<RealEstate> findById(long id);
 
-    RealEstate save(RealEstateDTO realEstateDTO, Owner owner);
+    Optional<RealEstate> findByIdAndOwnerId(long id, long ownerId);
 
-    RealEstate update(RealEstateDTO realEstateDTO, long id);
+    RealEstate edit(RealEstateDTO realEstateDTO, long id);
 
     void delete(long id);
-
-    Optional<RealEstate> findByIdAndOwnerId(long id, long ownerId);
 }

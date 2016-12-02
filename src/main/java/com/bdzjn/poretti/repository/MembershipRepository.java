@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface MembershipRepository extends JpaRepository<Membership, Long>, MembershipRepositoryCustom {
 
     Optional<Membership> findById(long id);
+
+    Optional<Membership> findByMemberIdAndCompanyId(long memberId, long companyId);
+
 }

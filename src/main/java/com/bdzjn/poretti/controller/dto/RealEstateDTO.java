@@ -15,7 +15,7 @@ public class RealEstateDTO {
 
     private Location location;
 
-    private List<String> tehnicalEquipment;
+    private List<String> technicalEquipment;
 
     public long getId() {
         return id;
@@ -57,11 +57,12 @@ public class RealEstateDTO {
         this.location = location;
     }
 
-    public List<String> getTehnicalEquipment() {
-        return tehnicalEquipment;
+    public List<String> getTechnicalEquipment() {
+        return technicalEquipment;
     }
 
-    public void setTehnicalEquipment(List<String> tehnicalEquipment) {
-        this.tehnicalEquipment = tehnicalEquipment;
+    public void setTechnicalEquipment(List<String> technicalEquipment) {
+        this.technicalEquipment = technicalEquipment;
     }
+
 }

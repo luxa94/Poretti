@@ -10,9 +10,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 public interface AdvertisementService {
-    Advertisement save(AdvertisementDTO advertisementDTO, RealEstate realEstate);
+
+    Advertisement create(AdvertisementDTO advertisementDTO, RealEstate realEstate);
 
     Optional<Advertisement> findById(long id);
 
-    Advertisement update(AdvertisementDTO advertisementDTO, long id);
+    Optional<Advertisement> findByIdAndOwnerId(long id, long ownerId);
+
+    Advertisement edit(AdvertisementDTO advertisementDTO, long id);
+
+    void delete(long id);
+
 }
