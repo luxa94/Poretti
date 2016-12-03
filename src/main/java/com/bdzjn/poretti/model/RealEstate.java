@@ -45,7 +45,7 @@ public class RealEstate {
     private List<String> technicalEquipment = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "realEstate")
+    @OneToMany(mappedBy = "realEstate", cascade = CascadeType.REMOVE)
     private List<Advertisement> advertisements = new ArrayList<>();
 
     @Override

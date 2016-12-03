@@ -31,6 +31,7 @@ public class User extends Owner {
     @NotNull
     private boolean registrationConfirmed;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private List<Membership> memberships = new ArrayList<>();
 

@@ -70,7 +70,8 @@ public class RealEstateController {
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity delete(@PathVariable long id,
+                                 @AuthenticationPrincipal User user) {
         realEstateService.findByIdAndOwnerId(id, user.getId()).orElseThrow(NotFoundException::new);
         realEstateService.delete(id);
 
@@ -97,6 +98,5 @@ public class RealEstateController {
 
         return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
-
 
 }

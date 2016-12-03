@@ -9,4 +9,6 @@ public interface AdvertisementReviewService {
 
     AdvertisementReview create(ReviewDTO reviewDTO, long advertisementId, User author);
 
+    void delete(long id, User user);
+
 }

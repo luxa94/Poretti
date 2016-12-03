@@ -1,6 +1,7 @@
 package com.bdzjn.poretti.service.impl;
 
 import com.bdzjn.poretti.controller.dto.AdvertisementReportDTO;
+import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.ImproperAdvertisementReport;
@@ -28,6 +29,9 @@ public class ImproperAdvertisementReportServiceImpl implements ImproperAdvertise
     @Override
     public ImproperAdvertisementReport create(AdvertisementReportDTO advertisementReportDTO, long advertisementId, User user) {
         final Advertisement advertisement = advertisementRepository.findById(advertisementId).orElseThrow(NotFoundException::new);
+        if (advertisement.getAdvertiser().getId() == user.getId()) {
+            throw new ForbiddenException();
+        }
 
         final ImproperAdvertisementReport improperAdvertisementReport = new ImproperAdvertisementReport();
         improperAdvertisementReport.setAuthor(user);

@@ -3,6 +3,7 @@ package com.bdzjn.poretti.model;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -52,10 +53,12 @@ public class Advertisement {
     @ManyToOne
     private RealEstate realEstate;
 
-    @OneToMany(mappedBy = "advertisement")
+    @JsonIgnore
+    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.REMOVE)
     private List<ImproperAdvertisementReport> reports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "target")
+    @JsonIgnore
+    @OneToMany(mappedBy = "target", cascade = CascadeType.REMOVE)
     private List<AdvertisementReview> reviews = new ArrayList<>();
 
     @Override

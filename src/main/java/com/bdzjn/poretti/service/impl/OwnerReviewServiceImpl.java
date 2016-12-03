@@ -1,6 +1,7 @@
 package com.bdzjn.poretti.service.impl;
 
 import com.bdzjn.poretti.controller.dto.ReviewDTO;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Owner;
 import com.bdzjn.poretti.model.OwnerReview;
 import com.bdzjn.poretti.model.User;
@@ -31,6 +32,12 @@ public class OwnerReviewServiceImpl implements OwnerReviewService {
         ownerReview.setEditedOn(new Date());
 
         return ownerReviewRepository.save(ownerReview);
+    }
+
+    @Override
+    public void delete(long id, User user) {
+        ownerReviewRepository.findByIdAndAuthorId(id, user.getId()).orElseThrow(NotFoundException::new);
+        ownerReviewRepository.delete(id);
     }
 
 }

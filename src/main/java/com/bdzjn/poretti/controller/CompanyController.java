@@ -27,7 +27,9 @@ public class CompanyController {
     private final AdvertisementService advertisementService;
 
     @Autowired
-    public CompanyController(CompanyService companyService, UserService userService, MembershipService membershipService, RealEstateService realEstateService, OwnerReviewService ownerReviewService, AdvertisementService advertisementService) {
+    public CompanyController(CompanyService companyService, UserService userService,
+                             MembershipService membershipService, RealEstateService realEstateService,
+                             OwnerReviewService ownerReviewService, AdvertisementService advertisementService) {
         this.userService = userService;
         this.companyService = companyService;
         this.membershipService = membershipService;
@@ -46,7 +48,8 @@ public class CompanyController {
     @Transactional
     @PreAuthorize("hasAnyAuthority('CREATE_COMPANY')")
     @PostMapping
-    public ResponseEntity create(@RequestBody RegisterCompanyDTO registerCompanyDTO, @AuthenticationPrincipal User admin) {
+    public ResponseEntity create(@RequestBody RegisterCompanyDTO registerCompanyDTO,
+                                 @AuthenticationPrincipal User admin) {
         final CompanyDTO companyDTO = registerCompanyDTO.getCompanyDTO();
         final RegisterDTO registerDTO = registerCompanyDTO.getRegisterDTO();
 
@@ -206,7 +209,8 @@ public class CompanyController {
     @PreAuthorize("hasAnyAuthority('JOIN_COMPANY')")
     @Transactional
     @PostMapping("/{id}/memberships")
-    public ResponseEntity createMembership(@PathVariable long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity createMembership(@PathVariable long id,
+                                           @AuthenticationPrincipal User user) {
         // Request for the user to join the company.
         final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
         membershipService.findByMemberIdAndCompanyId(user.getId(), id).ifPresent(membership -> {

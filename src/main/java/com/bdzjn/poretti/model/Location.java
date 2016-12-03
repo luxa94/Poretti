@@ -1,6 +1,5 @@
 package com.bdzjn.poretti.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,14 +20,14 @@ public class Location {
     private String state;
     private String zipCode;
 
-    @Column(nullable = true)
-    private double latitude;
+    @NotNull
+    private double latitude = 0;
 
-    @Column(nullable = true)
-    private double longitude;
+    @NotNull
+    private double longitude = 0;
 
-    @Column(nullable = true)
-    private boolean hasLatLong;
+    @NotNull
+    private boolean hasLatLong = false;
 
     @Override
     public boolean equals(Object o) {

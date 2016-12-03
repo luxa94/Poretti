@@ -25,9 +25,11 @@ public class OwnerReviewController {
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable long id, @AuthenticationPrincipal User user){
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
-    }
+    public ResponseEntity delete(@PathVariable long id,
+                                 @AuthenticationPrincipal User user){
 
+        ownerReviewService.delete(id, user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }

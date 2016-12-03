@@ -2,7 +2,10 @@ package com.bdzjn.poretti.service.impl;
 
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
+import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.controller.exception.AuthenticationException;
+import com.bdzjn.poretti.controller.exception.ForbiddenException;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Membership;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.model.enumeration.Role;
@@ -33,6 +36,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(long id) {
         return null;
+    }
+
+    @Override
+    public User update(UserDTO userDTO, User user) {
+        user.setName(userDTO.getName());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setPhoneNumbers(userDTO.getPhoneNumbers());
+        user.setContactEmails(userDTO.getContactEmails());
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -81,7 +94,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumbers(registerDTO.getPhoneNumbers());
         user.setContactEmails(registerDTO.getContactEmails());
         user.setRole(role);
-        user.setPermissions(role.getPermissions()); // TODO: Set permissions when email is confirmed.
+        user.setPermissions(role.getPermissions());
         return user;
     }
 
@@ -89,10 +102,26 @@ public class UserServiceImpl implements UserService {
     public User login(LoginDTO loginDTO) {
         final User user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow(AuthenticationException::new);
 
+        if (!user.isRegistrationConfirmed()) {
+            throw new AuthenticationException("Please verify your account with the link in the email.");
+        }
+
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             throw new AuthenticationException();
         }
 
         return user;
+    }
+
+    @Override
+    public void verify(long id) {
+        final User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+
+        if (user.isRegistrationConfirmed()) {
+            throw new ForbiddenException("User is already verified.");
+        }
+
+        user.setRegistrationConfirmed(true);
+        userRepository.save(user);
     }
 }

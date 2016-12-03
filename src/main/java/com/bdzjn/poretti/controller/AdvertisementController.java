@@ -77,7 +77,8 @@ public class AdvertisementController {
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@AuthenticationPrincipal User user, @PathVariable long id) {
+    public ResponseEntity delete(@AuthenticationPrincipal User user,
+                                 @PathVariable long id) {
         advertisementService.findByIdAndOwnerId(id, user.getId()).orElseThrow(NotFoundException::new);
         advertisementService.delete(id);
 

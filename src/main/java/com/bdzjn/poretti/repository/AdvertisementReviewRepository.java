@@ -9,4 +9,6 @@ public interface AdvertisementReviewRepository extends JpaRepository<Advertiseme
 
     Optional<AdvertisementReview> findById(long id);
 
+    Optional<AdvertisementReview> findByIdAndAuthorId(long id, long authorId);
+
 }

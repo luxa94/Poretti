@@ -9,4 +9,6 @@ public interface OwnerReviewRepository extends JpaRepository<OwnerReview, Long>,
 
     Optional<OwnerReview> findById(long id);
 
+    Optional<OwnerReview> findByIdAndAuthorId(long id, long authorId);
+
 }

@@ -1,6 +1,8 @@
 package com.bdzjn.poretti.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -30,12 +32,15 @@ public abstract class Owner {
     @Column(name = "email", nullable = false)
     private List<String> contactEmails = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "advertiser")
     private List<Advertisement> advertisements = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<RealEstate> realEstates = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "target")
     private List<OwnerReview> reviews = new ArrayList<>();
 

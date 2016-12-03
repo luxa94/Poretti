@@ -25,8 +25,10 @@ public class AdvertisementReviewController {
     @PreAuthorize("hasAnyAuthority('CREATE_REVIEW')")
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable long id, @AuthenticationPrincipal User user) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity delete(@PathVariable long id,
+                                 @AuthenticationPrincipal User user) {
+        advertisementReviewService.delete(id, user);
+        return new ResponseEntity(HttpStatus.OK);
     }
     
 }

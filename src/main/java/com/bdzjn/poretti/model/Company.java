@@ -1,5 +1,7 @@
 package com.bdzjn.poretti.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -12,7 +14,8 @@ public class Company extends Owner {
     @Column(unique = true, nullable = false)
     private String pib;
 
-    @OneToMany(mappedBy = "company")
+    @JsonIgnore
+    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
     private List<Membership> memberships = new ArrayList<>();
 
     @NotNull
