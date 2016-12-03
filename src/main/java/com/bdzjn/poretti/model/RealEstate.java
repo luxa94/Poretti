@@ -25,7 +25,7 @@ public class RealEstate {
     private String description;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Location location;
 
     @NotNull

@@ -1,6 +1,8 @@
 package com.bdzjn.poretti.controller.dto;
 
 import com.bdzjn.poretti.model.Location;
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
+
 import java.util.List;
 
 public class RealEstateDTO {
@@ -16,6 +18,10 @@ public class RealEstateDTO {
     private Location location;
 
     private List<String> technicalEquipment;
+
+    private String imageUrl;
+
+    private RealEstateType realEstateType;
 
     public long getId() {
         return id;
@@ -65,4 +71,19 @@ public class RealEstateDTO {
         this.technicalEquipment = technicalEquipment;
     }
 
+    public String getImageUrl() {
+        return imageUrl != null ? imageUrl : "/images/defaultUser.jpg";
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public RealEstateType getRealEstateType() {
+        return realEstateType;
+    }
+
+    public void setRealEstateType(RealEstateType realEstateType) {
+        this.realEstateType = realEstateType;
+    }
 }

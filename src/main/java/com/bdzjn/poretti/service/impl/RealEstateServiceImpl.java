@@ -4,6 +4,7 @@ import com.bdzjn.poretti.controller.dto.RealEstateDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Owner;
 import com.bdzjn.poretti.model.RealEstate;
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.repository.RealEstateRepository;
 import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class RealEstateServiceImpl implements RealEstateService {
 
     @Override
     public RealEstate create(RealEstateDTO realEstateDTO, Owner owner) {
-        final RealEstate realEstate = new RealEstate();
-        realEstate.setName(realEstate.getName());
-        realEstate.setArea(realEstate.getArea());
+        RealEstate realEstate = new RealEstate();
+        realEstate.setId(realEstateDTO.getId());
+        realEstate.setName(realEstateDTO.getName());
+        realEstate.setArea(realEstateDTO.getArea());
+        realEstate.setLocation(realEstateDTO.getLocation());
         realEstate.setTechnicalEquipment(realEstateDTO.getTechnicalEquipment());
-        realEstate.setDescription(realEstate.getDescription());
-        realEstate.setImageUrl(realEstate.getImageUrl());
+        realEstate.setDescription(realEstateDTO.getDescription());
+        realEstate.setImageUrl(realEstateDTO.getImageUrl());
+        realEstate.setType(realEstateDTO.getRealEstateType());
         realEstate.setOwner(owner);
 
         return realEstateRepository.save(realEstate);
