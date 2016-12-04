@@ -51,6 +51,7 @@ public class RealEstateServiceImpl implements RealEstateService {
         realEstate.setDescription(realEstateDTO.getDescription());
         realEstate.setArea(realEstateDTO.getArea());
         realEstate.setLocation(realEstateDTO.getLocation());
+        realEstate.setImageUrl(realEstateDTO.getImageUrl());
 
         return realEstateRepository.save(realEstate);
     }
