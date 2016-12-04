@@ -26,3 +26,5 @@ INSERT INTO `realestate` (`id`, `area`, `description`, `imageurl`, `name`, `type
 
 INSERT INTO `advertisement` (`id`, `title`, `announcedon`, `editedon`, `endson`, `status`, `type`, `price`, `currency`,`realestate_id`, `advertiser_id`)
             VALUES (1, 'Advertisement title', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'ACTIVE', 'SALE', 3000, 'RSD', 1, 2);
+
+INSERT INTO `advertisementreview` (`id`, `comment`, `editedon`, `rating`, `author_id`, `target_id`) VALUES (1, 'Test comment', CURRENT_TIMESTAMP(), 5, 3, 1);

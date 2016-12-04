@@ -10,6 +10,7 @@ public enum Role {
             Permission.EDIT_ADVERTISEMENT,
             Permission.DELETE_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
+            Permission.DELETE_REVIEW,
             Permission.CREATE_ADVERTISEMENT_REPORT,
             Permission.APPROVE_COMPANY_USER,
             Permission.REMOVE_USER_FROM_COMPANY,
