@@ -11,6 +11,7 @@ import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.model.enumeration.Role;
 import com.bdzjn.poretti.repository.CompanyRepository;
 import com.bdzjn.poretti.repository.UserRepository;
+import com.bdzjn.poretti.service.EmailService;
 import com.bdzjn.poretti.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,13 +22,16 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final EmailService emailService;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(EmailService emailService, UserRepository userRepository,
+                           CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+        this.emailService = emailService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
@@ -55,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(RegisterDTO registerDTO) {
-        final User user = createUserWithRole(registerDTO, Role.USER);
+        final User user = createUser(registerDTO);
 
         companyRepository.findById(registerDTO.getCompanyId()).ifPresent(company -> {
             final Membership membership = new Membership();
@@ -63,25 +67,23 @@ public class UserServiceImpl implements UserService {
             membership.setMember(user);
             user.addMembership(membership);
         });
+
         return userRepository.save(user);
     }
 
     @Override
     public User createUser(RegisterDTO registerDTO) {
-        final User user = createUserWithRole(registerDTO, Role.USER);
-        return userRepository.save(user);
+        return createUserWithRole(registerDTO, Role.USER);
     }
 
     @Override
     public User createVerifier(RegisterDTO registerDTO) {
-        final User user = createUserWithRole(registerDTO, Role.VERIFIER);
-        return userRepository.save(user);
+        return createUserWithRole(registerDTO, Role.VERIFIER);
     }
 
     @Override
     public User createAdmin(RegisterDTO registerDTO) {
-        final User user = createUserWithRole(registerDTO, Role.SYSTEM_ADMIN);
-        return userRepository.save(user);
+        return createUserWithRole(registerDTO, Role.SYSTEM_ADMIN);
     }
 
     private User createUserWithRole(RegisterDTO registerDTO, Role role) {
@@ -95,6 +97,10 @@ public class UserServiceImpl implements UserService {
         user.setContactEmails(registerDTO.getContactEmails());
         user.setRole(role);
         user.setPermissions(role.getPermissions());
+
+        userRepository.save(user);
+        emailService.sendTo(user);
+
         return user;
     }
 

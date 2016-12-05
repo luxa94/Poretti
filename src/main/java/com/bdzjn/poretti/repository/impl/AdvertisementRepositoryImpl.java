@@ -32,5 +32,5 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
                 .where(advertisement.reports.isNotEmpty())
                 .fetch();
     }
-    
+
 }
