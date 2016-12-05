@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Role {
+    // If you change this, update sql files as well!
     USER(new Permission[]{Permission.CREATE_ADVERTISEMENT,
             Permission.EDIT_ADVERTISEMENT,
             Permission.DELETE_ADVERTISEMENT,
@@ -16,12 +17,13 @@ public enum Role {
             Permission.LEAVE_COMPANY,
             Permission.EDIT_COMPANY}),
 
+    // If you change this, update sql files as well!
     VERIFIER(new Permission[]{
             Permission.CREATE_REVIEW,
             Permission.CREATE_ADVERTISEMENT_REPORT,
             Permission.CHANGE_ADVERTISEMENT_STATUS}),
 
-    // If you change this, update resources/import.sql as well!
+    // If you change this, update sql files as well!
     SYSTEM_ADMIN(new Permission[]{Permission.EDIT_ADVERTISEMENT,
             Permission.CREATE_REVIEW,
             Permission.CREATE_ADVERTISEMENT_REPORT,

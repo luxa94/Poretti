@@ -4,7 +4,6 @@ import com.bdzjn.poretti.controller.dto.RealEstateDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Owner;
 import com.bdzjn.poretti.model.RealEstate;
-import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.repository.RealEstateRepository;
 import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.Optional;
 @Service
 public class RealEstateServiceImpl implements RealEstateService {
 
-    private RealEstateRepository realEstateRepository;
+    private final RealEstateRepository realEstateRepository;
 
     @Autowired
     public RealEstateServiceImpl(RealEstateRepository realEstateRepository){

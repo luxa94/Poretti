@@ -10,7 +10,7 @@ public enum RealEstateType {
     HOUSE,
     ROOM,
     COTTAGE,
-    RESIDENTIAL_FACILIY(new RealEstateType[]{RealEstateType.APARTMENT, HOUSE, ROOM, COTTAGE}),
+    RESIDENTIAL_FACILITY(new RealEstateType[]{RealEstateType.APARTMENT, HOUSE, ROOM, COTTAGE}),
     BUSINESS_SPACE,
     WAREHOUSE,
     OUTLET,

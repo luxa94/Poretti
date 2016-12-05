@@ -1,8 +1,8 @@
 package com.bdzjn.poretti.integration;
 
-import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.util.TestUtil;
+import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,18 +24,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles(profiles = "test")
 public class UserControllerIntegrationTest {
 
-    private static final String URL_PREFIX = "/api/users";
+    private static final String BASE_URL = "/api/users";
     private static final String AUTHORIZATION = "X-AUTH-TOKEN";
     private static final String TOKEN_VALUE = "102da414-847d-4602-8b2d-edca26ab26d7";
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
    @Test
    @Transactional
    public void createAdminShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception{
-       final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
-       final RegisterDTO testEntity = testEntity();
+       final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
+       final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
                .header(AUTHORIZATION, TOKEN_VALUE)
@@ -48,9 +47,9 @@ public class UserControllerIntegrationTest {
     @Test
     @Transactional
     public void createAdminShouldReturnWhenUnprocessableWhenUsernameIsTaken() throws Exception{
-        final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
+        final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
 
-        final RegisterDTO testEntityWithExistingUsername = testEntity();
+        final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
@@ -63,10 +62,10 @@ public class UserControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void createAdminShouldReturnWhenUnprecessableWhenEmailIsTaken() throws Exception{
-        final String CREATE_ADMIN_URL = URL_PREFIX + "/createSysAdmin";
+    public void createAdminShouldReturnWhenUnprocessableWhenEmailIsTaken() throws Exception{
+        final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
 
-        final RegisterDTO testEntityWithExistingEmail = testEntity();
+        final RegisterDTO testEntityWithExistingEmail = UserTestData.registerDTOTestEntity();
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
@@ -80,8 +79,8 @@ public class UserControllerIntegrationTest {
     @Test
     @Transactional
     public void createVerifierShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception{
-        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
-        final RegisterDTO testEntity = testEntity();
+        final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
+        final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
                 .header(AUTHORIZATION, TOKEN_VALUE)
@@ -93,8 +92,8 @@ public class UserControllerIntegrationTest {
     @Test
     @Transactional
     public void createVerifierShouldReturnUnprocessableWhenUsernameIsTaken() throws Exception{
-        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
-        final RegisterDTO testEntityWithExistingUsername = testEntity();
+        final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
+        final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
@@ -107,9 +106,9 @@ public class UserControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void createVerifierShouldReturUnprecessableWhenEmailIsTaken() throws Exception{
-        final String CREATE_VERIFIER_URL = URL_PREFIX + "/createVerifier";
-        final RegisterDTO testEntityWithExistingEmail = testEntity();
+    public void createVerifierShouldReturnUnprocessableWhenEmailIsTaken() throws Exception{
+        final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
+        final RegisterDTO testEntityWithExistingEmail = UserTestData.registerDTOTestEntity();
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
@@ -118,17 +117,6 @@ public class UserControllerIntegrationTest {
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("Username or email taken."));
-    }
-
-
-    private RegisterDTO testEntity(){
-        final RegisterDTO testEntity = new RegisterDTO();
-        testEntity.setEmail("test@entity.com");
-        testEntity.setName("Test Entity");
-        testEntity.setUsername("test_entity");
-        testEntity.setPassword("test_entity");
-
-       return testEntity;
     }
 
 }

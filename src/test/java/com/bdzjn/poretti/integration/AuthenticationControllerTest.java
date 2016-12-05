@@ -1,4 +1,4 @@
-package com.bdzjn.poretti.controller;
+package com.bdzjn.poretti.integration;
 
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.nio.charset.Charset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,7 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AuthenticationControllerTest {
 
-    private static final String URL_PREFIX = "/api/authentication";
+    private static final String BASE_URL = "/api/authentication";
+    private static final String REGISTER = "/register";
+    private static final String LOGIN = "/login";
 
     private static final MediaType CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
@@ -39,18 +41,18 @@ public class AuthenticationControllerTest {
     public void testRegister() throws Exception {
         final RegisterDTO registerDTO = getRegisterDTO();
 
-        mockMvc.perform(post(URL_PREFIX + "/register")
+        mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isCreated());
 
         registerDTO.setUsername("Kevin");
-        mockMvc.perform(post(URL_PREFIX + "/register")
+        mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isUnprocessableEntity());
 
         registerDTO.setUsername("pera");
         registerDTO.setEmail("noviPera@gmail.com");
-        mockMvc.perform(post(URL_PREFIX + "/register")
+        mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isUnprocessableEntity());
     }
@@ -60,7 +62,7 @@ public class AuthenticationControllerTest {
     public void testLogin() throws Exception {
         final RegisterDTO registerDTO = getRegisterDTO();
 
-        mockMvc.perform(post(URL_PREFIX + "/register")
+        mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isCreated());
 
@@ -68,21 +70,21 @@ public class AuthenticationControllerTest {
         loginDTO.setUsername("pera");
         loginDTO.setPassword("password");
 
-        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
                 .andExpect(status().isOk());
 
         loginDTO.setPassword("ups");
-        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
                 .andExpect(status().isUnauthorized());
-
     }
 
     @Test
+    @Transactional
     public void adminLoginTest() throws Exception {
         final LoginDTO adminLogin = new LoginDTO();
         adminLogin.setUsername("admin");
         adminLogin.setPassword("admin");
-        mockMvc.perform(post(URL_PREFIX + "/login").contentType(CONTENT_TYPE).content(TestUtil.json(adminLogin)))
+        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(adminLogin)))
                 .andExpect(status().isOk());
     }
 

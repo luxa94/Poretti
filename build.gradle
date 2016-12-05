@@ -1,5 +1,5 @@
 def springBootVersion = '1.4.1.RELEASE'
-def queryDslVersion = "4.1.3";
+def queryDslVersion = "4.1.3"
 
 buildscript {
 	ext {
