@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,6 +61,10 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         advertisement.setEndsOn(advertisementDTO.getEndsOn());
         advertisement.setType(advertisementDTO.getType());
 
+        if (advertisement.getStatus() == AdvertisementStatus.INVALID) {
+            advertisement.setStatus(AdvertisementStatus.PENDING_APPROVAL);
+        }
+
         return advertisementRepository.save(advertisement);
     }
 
@@ -67,4 +72,18 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     public void delete(long id) {
         advertisementRepository.delete(id);
     }
+
+    @Override
+    public void changeStatus(long id, AdvertisementStatus status) {
+        final Advertisement advertisement = findById(id).orElseThrow(NotFoundException::new);
+
+        advertisement.setStatus(status);
+        advertisementRepository.save(advertisement);
+    }
+
+    @Override
+    public List<Advertisement> findReported() {
+        return advertisementRepository.findReported();
+    }
+
 }

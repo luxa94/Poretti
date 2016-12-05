@@ -3,7 +3,9 @@ package com.bdzjn.poretti.service;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.RealEstate;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AdvertisementService {
@@ -17,5 +19,9 @@ public interface AdvertisementService {
     Advertisement edit(AdvertisementDTO advertisementDTO, long id);
 
     void delete(long id);
+
+    void changeStatus(long id, AdvertisementStatus status);
+
+    List<Advertisement> findReported();
 
 }

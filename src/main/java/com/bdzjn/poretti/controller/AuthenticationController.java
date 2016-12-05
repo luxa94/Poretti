@@ -45,7 +45,7 @@ public class AuthenticationController {
     }
 
     @Transactional
-    @PostMapping("/verify/{id}")
+    @PutMapping("/{id}/verify")
     public ResponseEntity verify(@PathVariable long id) {
         userService.verify(id);
         return new ResponseEntity(HttpStatus.OK);

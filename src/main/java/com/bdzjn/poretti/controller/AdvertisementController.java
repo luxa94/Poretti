@@ -3,6 +3,7 @@ package com.bdzjn.poretti.controller;
 import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.service.AdvertisementReviewService;
 import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.ImproperAdvertisementReportService;
@@ -28,7 +29,8 @@ public class AdvertisementController {
     private final ImproperAdvertisementReportService improperAdvertisementReportService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService advertisementService, RealEstateService realEstateService, AdvertisementReviewService advertisementReviewService, ImproperAdvertisementReportService improperAdvertisementReportService) {
+    public AdvertisementController(AdvertisementService advertisementService, RealEstateService realEstateService,
+                                   AdvertisementReviewService advertisementReviewService, ImproperAdvertisementReportService improperAdvertisementReportService) {
         this.realEstateService = realEstateService;
         this.advertisementService = advertisementService;
         this.advertisementReviewService = advertisementReviewService;
@@ -83,6 +85,32 @@ public class AdvertisementController {
         advertisementService.delete(id);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('CHANGE_ADVERTISEMENT_STATUS')")
+    @Transactional
+    @PutMapping("/{id}/invalidate")
+    public ResponseEntity invalidate(@PathVariable long id) {
+        advertisementService.changeStatus(id, AdvertisementStatus.INVALID);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('CHANGE_ADVERTISEMENT_STATUS')")
+    @Transactional
+    @PutMapping("/{id}/approve")
+    public ResponseEntity approve(@PathVariable long id) {
+        advertisementService.changeStatus(id, AdvertisementStatus.ACTIVE);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('CHANGE_ADVERTISEMENT_STATUS')")
+    @Transactional
+    @GetMapping("/reported")
+    public ResponseEntity findReported() {
+        final List<Advertisement> reported = advertisementService.findReported();
+        return new ResponseEntity<>(reported, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT_REPORT')")

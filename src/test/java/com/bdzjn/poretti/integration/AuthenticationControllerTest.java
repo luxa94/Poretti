@@ -3,6 +3,7 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.util.TestUtil;
+import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.Charset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles(profiles = "test")
@@ -28,6 +30,7 @@ public class AuthenticationControllerTest {
     private static final String BASE_URL = "/api/authentication";
     private static final String REGISTER = "/register";
     private static final String LOGIN = "/login";
+    private static final String VERIFY = "/verify";
 
     private static final MediaType CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
@@ -51,7 +54,7 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isUnprocessableEntity());
 
         registerDTO.setUsername("pera");
-        registerDTO.setEmail("noviPera@gmail.com");
+        registerDTO.setEmail("bdzjn.co@gmail.com");
         mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isUnprocessableEntity());
@@ -59,32 +62,51 @@ public class AuthenticationControllerTest {
 
     @Test
     @Transactional
-    public void testLogin() throws Exception {
-        final RegisterDTO registerDTO = getRegisterDTO();
-
-        mockMvc.perform(post(BASE_URL + REGISTER)
-                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
-                .andExpect(status().isCreated());
-
-        final LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setUsername("pera");
-        loginDTO.setPassword("password");
+    public void loginShouldReturnOkWithValidCredentials() throws Exception {
+        final LoginDTO loginDTO = UserTestData.getLoginDTO("test_user", "admin");
 
         mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
                 .andExpect(status().isOk());
+    }
 
-        loginDTO.setPassword("ups");
+    @Test
+    @Transactional
+    public void loginShouldReturnUnauthorizedWithWrongPassword() throws Exception {
+        final LoginDTO loginDTO = UserTestData.getLoginDTO("test_user", "oops");
+
         mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @Transactional
-    public void adminLoginTest() throws Exception {
-        final LoginDTO adminLogin = new LoginDTO();
-        adminLogin.setUsername("admin");
-        adminLogin.setPassword("admin");
-        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(adminLogin)))
+    public void loginShouldReturnUnauthorizedWithWrongUsername() throws Exception {
+        final LoginDTO loginDTO = UserTestData.getLoginDTO("asshole", "admin");
+
+        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Transactional
+    public void loginShouldReturnUnauthorizedWhenUserIsNotConfirmed() throws Exception {
+        final LoginDTO loginDTO = UserTestData.getLoginDTO("test_test_user", "admin");
+
+        mockMvc.perform(post(BASE_URL + LOGIN).contentType(CONTENT_TYPE).content(TestUtil.json(loginDTO)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Transactional
+    public void verificationShouldReturnForbiddenWhenAlreadyConfirmed() throws Exception {
+        mockMvc.perform(put(BASE_URL + "/1" + VERIFY))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Transactional
+    public void verificationShouldReturnOkWhenNotConfirmed() throws Exception {
+        mockMvc.perform(put(BASE_URL + "/3" + VERIFY))
                 .andExpect(status().isOk());
     }
 

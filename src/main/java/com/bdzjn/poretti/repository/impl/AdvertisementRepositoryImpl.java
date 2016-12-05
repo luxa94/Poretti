@@ -5,6 +5,7 @@ import com.bdzjn.poretti.model.QAdvertisement;
 import com.bdzjn.poretti.repository.AdvertisementRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport implements AdvertisementRepositoryCustom {
@@ -15,7 +16,7 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
 
     @Override
     public Optional<Advertisement> findByIdAndOwnerId(long id, long ownerId) {
-        QAdvertisement advertisement = QAdvertisement.advertisement;
+        final QAdvertisement advertisement = QAdvertisement.advertisement;
         final Advertisement result = from(advertisement).select(advertisement)
                 .where(advertisement.id.eq(id),
                         advertisement.advertiser.id.eq(ownerId))
@@ -23,4 +24,13 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
 
         return Optional.ofNullable(result);
     }
+
+    @Override
+    public List<Advertisement> findReported() {
+        final QAdvertisement advertisement = QAdvertisement.advertisement;
+        return from(advertisement).select(advertisement)
+                .where(advertisement.reports.isNotEmpty())
+                .fetch();
+    }
+    
 }
