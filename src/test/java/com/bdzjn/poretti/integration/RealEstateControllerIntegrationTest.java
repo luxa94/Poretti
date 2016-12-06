@@ -3,10 +3,10 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.dto.RealEstateDTO;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
-import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.AdvertisementTestData;
 import com.bdzjn.poretti.util.data.RealEstateTestData;
+import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RealEstateControllerIntegrationTest {
 
     private static final String BASE_URL = "/api/realEstates";
-    private static final String AUTHORIZATION = "X-AUTH-TOKEN";
-    private static final String TOKEN_VALUE = "102da414-847d-4602-8b2d-edca26ab26d8";
+    public static final String ADVERTISEMENTS_PATH = "/advertisements";
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,27 +39,26 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void findOneShouldReturnOkWhenRealEstateExists() throws Exception {
-        final String FIND_ONE_REAL_ESTATE = BASE_URL + "/1";
+        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
 
         this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andDo(print())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Test name")))
-                .andExpect(jsonPath("$.description", is("Test description")))
-                .andExpect(jsonPath("$.area", is(100d)))
-                .andExpect(jsonPath("$.location.id", is(1)))
-                .andExpect(jsonPath("$.imageUrl", is("/images/defaultRealEstate.jpg")))
-                .andExpect(jsonPath("$.type", is(RealEstateType.APARTMENT.toString())))
-                .andExpect(jsonPath("$.owner.id", is(2)));
+                .andExpect(jsonPath("$.id", is(RealEstateTestData.EXISTING_ID)))
+                .andExpect(jsonPath("$.name", is(RealEstateTestData.EXISTING_TITLE)))
+                .andExpect(jsonPath("$.description", is(RealEstateTestData.EXISTING_DESCRIPTION)))
+                .andExpect(jsonPath("$.area", is(RealEstateTestData.EXISTING_PRICE)))
+                .andExpect(jsonPath("$.location.id", is(RealEstateTestData.LOCATION_ID)))
+                .andExpect(jsonPath("$.imageUrl", is(RealEstateTestData.EXISTING_IMAGE)))
+                .andExpect(jsonPath("$.type", is(RealEstateTestData.EXISTING_TYPE)))
+                .andExpect(jsonPath("$.owner.id", is(RealEstateTestData.OWNER_ID)));
     }
 
     @Test
     @Transactional
     public void findOneShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String nonExistingId = "/2";
-        final String FIND_ONE_REAL_ESTATE = BASE_URL + nonExistingId;
+        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE))
                 .andExpect(status().isNotFound());
@@ -72,7 +70,7 @@ public class RealEstateControllerIntegrationTest {
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
         this.mockMvc.perform(post(BASE_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andDo(print())
@@ -83,19 +81,19 @@ public class RealEstateControllerIntegrationTest {
                 .andExpect(jsonPath("$.area", is(testEntity.getArea())))
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
-                .andExpect(jsonPath("$.technicalEquipment", hasSize(1)))
-                .andExpect(jsonPath("$.owner.id", is(2)));
+                .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
+                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)));
     }
 
     @Test
     @Transactional
     public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception{
-        final String EDIT_REAL_ESTATE = BASE_URL + "/1";
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
         testEntity.setName("Real estate new test name");
 
         this.mockMvc.perform(put(EDIT_REAL_ESTATE)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andDo(print())
@@ -106,20 +104,19 @@ public class RealEstateControllerIntegrationTest {
                 .andExpect(jsonPath("$.area", is(testEntity.getArea())))
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
-                .andExpect(jsonPath("$.technicalEquipment", hasSize(1)))
-                .andExpect(jsonPath("$.owner.id", is(2)));
+                .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
+                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)));
     }
 
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception{
-        final String nonExistingId = "/2";
-        final String EDIT_REAL_ESTATE = BASE_URL + nonExistingId;
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
         this.mockMvc.perform(put(EDIT_REAL_ESTATE)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
@@ -128,13 +125,11 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String EDIT_REAL_ESTATE = BASE_URL + "/1";
-        final String NOT_ADVERTISER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
-
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
         this.mockMvc.perform(put(EDIT_REAL_ESTATE)
-                .header(AUTHORIZATION, NOT_ADVERTISER_TOKEN)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
@@ -143,14 +138,12 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenCurrentUserIsNotOwnerAndNonExistingRealEstate() throws Exception {
-        final String nonExistingId = "/2";
-        final String EDIT_REAL_ESTATE = BASE_URL + nonExistingId;
-        final String NOT_ADVERTISER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
         this.mockMvc.perform(put(EDIT_REAL_ESTATE)
-                .header(AUTHORIZATION, NOT_ADVERTISER_TOKEN)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
@@ -159,51 +152,48 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void deleteShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
-        final String DELETE_REAL_ESTATE = BASE_URL + "/1";
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
 
         this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
-                .header(AUTHORIZATION, TOKEN_VALUE))
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isOk());
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String nonExistingId = "/2";
-        final String DELETE_REAL_ESTATE = BASE_URL + nonExistingId;
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
-                .header(AUTHORIZATION, TOKEN_VALUE))
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String DELETE_REAL_ESTATE = BASE_URL + "/1";
-        final String NOT_ADVERTISER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
 
         this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
-                .header(AUTHORIZATION, NOT_ADVERTISER_TOKEN))
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void findAdvertisementsShouldReturnOkWhenRealEstateExists() throws Exception {
-        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + "/1/advertisements";
+        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(RealEstateTestData.OCCURRENCE_IN_ADVERTISEMENTS)));
     }
 
     @Test
     @Transactional
     public void findAdvertisementsShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String nonExistingId = "/2";
-        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + nonExistingId + "/advertisement";
+        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS))
                 .andExpect(status().isNotFound());
@@ -212,36 +202,35 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void createAdvertisementShouldReturnCreatedWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + "/1/advertisements";
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
         this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.title", is(testEntity.getTitle())))
-                .andExpect(jsonPath("$.advertiser.id", is(2)))
+                .andExpect(jsonPath("$.advertiser.id", is(UserTestData.CURRENT_USER_ID)))
                 .andExpect(jsonPath("$.status", is(AdvertisementStatus.ACTIVE.toString())))
                 .andExpect(jsonPath("$.type", is(testEntity.getType().toString())))
                 .andExpect(jsonPath("$.price", is(testEntity.getPrice())))
                 .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
-                .andExpect(jsonPath("$.realEstate.id", is(1)));
+                .andExpect(jsonPath("$.realEstate.id", is(RealEstateTestData.EXISTING_ID)));
     }
 
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String nonExistingId = "/2";
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + nonExistingId + "/advertisements";
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
         this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
@@ -250,13 +239,12 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + "/1/advertisements";
-        final String NOT_ADVERTISER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
         this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
-                .header(AUTHORIZATION, NOT_ADVERTISER_TOKEN)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
@@ -265,14 +253,12 @@ public class RealEstateControllerIntegrationTest {
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenCurrentIsNotOwnerAndNonExistingRE() throws Exception {
-        final String nonExistingId = "/2";
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + nonExistingId + "/advertisements";
-        final String NOT_ADVERTISER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
         this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
-                .header(AUTHORIZATION, NOT_ADVERTISER_TOKEN)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());

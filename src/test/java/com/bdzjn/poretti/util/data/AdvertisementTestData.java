@@ -3,12 +3,25 @@ package com.bdzjn.poretti.util.data;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.dto.AdvertisementRealEstateDTO;
 import com.bdzjn.poretti.controller.dto.RealEstateDTO;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 
 import java.util.Date;
 
 public class AdvertisementTestData {
+
+    public static final int EXISTING_ID = 1;
+    public static final int NON_EXISTING_ID = 2;
+    public static final String EXISTING_ID_PATH = "/1";
+    public static final String NON_EXISTING_ID_PATH = "/2";
+    public static final String EXISTING_TITLE = "Advertisement title";
+    public static final double EXISTING_PRICE = 3000d;
+    public static final String EXISTING_TYPE = AdvertisementType.SALE.toString();
+    public static final String EXISTING_STATUS = AdvertisementStatus.ACTIVE.toString();
+    public static final String EXISTING_CURRENCY = Currency.RSD.toString();
+    public static final int CONTAINING_REAL_ESTATE_ID = 1;
+    public static final int ADVERTISER_ID = 2;
 
     public static AdvertisementDTO testEntity() {
         final AdvertisementDTO advertisement = new AdvertisementDTO();
@@ -19,8 +32,6 @@ public class AdvertisementTestData {
         advertisement.setEndsOn(new Date());
         return advertisement;
     }
-
-
 
     public static AdvertisementRealEstateDTO realEstateAdvertisementTestEntity() {
         final AdvertisementRealEstateDTO advertisementRealEstate = new AdvertisementRealEstateDTO();

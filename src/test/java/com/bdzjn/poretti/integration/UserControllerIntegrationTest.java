@@ -25,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerIntegrationTest {
 
     private static final String BASE_URL = "/api/users";
-    private static final String AUTHORIZATION = "X-AUTH-TOKEN";
-    private static final String TOKEN_VALUE = "102da414-847d-4602-8b2d-edca26ab26d7";
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,7 +36,7 @@ public class UserControllerIntegrationTest {
        final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
-               .header(AUTHORIZATION, TOKEN_VALUE)
+               .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                .contentType(MediaType.APPLICATION_JSON)
                .content(TestUtil.json(testEntity)))
                .andExpect(status().isCreated());
@@ -53,7 +51,7 @@ public class UserControllerIntegrationTest {
         testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
@@ -69,7 +67,7 @@ public class UserControllerIntegrationTest {
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
@@ -83,7 +81,7 @@ public class UserControllerIntegrationTest {
         final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated());
@@ -97,7 +95,7 @@ public class UserControllerIntegrationTest {
         testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
@@ -112,7 +110,7 @@ public class UserControllerIntegrationTest {
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
-                .header(AUTHORIZATION, TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())

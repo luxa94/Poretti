@@ -53,7 +53,7 @@ public class AdvertisementReviewServiceTest {
 
     @Test(expected = ForbiddenException.class)
     @Transactional
-    public void createShouldThrowExceptionWhenCurrentUserIsAdvertiser(){
+    public void createShouldThrowExceptionWhenCurrentUserIsAdvertiser() {
         final long advertisementId = 1L;
         ReviewDTO testEntity = reviewTestEntity();
         User authorTestEntity = authorTestEntity();
@@ -93,7 +93,7 @@ public class AdvertisementReviewServiceTest {
 
     @Test(expected = NotFoundException.class)
     @Transactional
-    public void deleteShouldThrowExceptionWhenCurrentUserIsNotAuthorAndNonExistingReview(){
+    public void deleteShouldThrowExceptionWhenCurrentUserIsNotAuthorAndNonExistingReview() {
         final long nonExistingId = 2L;
         final User authorTestEntity = authorTestEntity();
         authorTestEntity.setId(2L);
