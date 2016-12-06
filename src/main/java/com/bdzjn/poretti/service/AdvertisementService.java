@@ -16,7 +16,7 @@ public interface AdvertisementService {
 
     Optional<Advertisement> findByIdAndOwnerId(long id, long ownerId);
 
-    Advertisement edit(AdvertisementDTO advertisementDTO, long id);
+    Advertisement edit(AdvertisementDTO advertisementDTO, long ownerId);
 
     void delete(long id);
 

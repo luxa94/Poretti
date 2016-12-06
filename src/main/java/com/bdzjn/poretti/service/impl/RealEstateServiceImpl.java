@@ -21,10 +21,10 @@ public class RealEstateServiceImpl implements RealEstateService {
         this.realEstateRepository = realEstateRepository;
     }
 
+    @Override
     public Optional<RealEstate> findById(long id) {
         return realEstateRepository.findById(id);
     }
-
 
     @Override
     public RealEstate create(RealEstateDTO realEstateDTO, Owner owner) {

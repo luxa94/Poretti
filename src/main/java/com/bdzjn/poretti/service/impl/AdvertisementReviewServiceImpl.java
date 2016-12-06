@@ -48,5 +48,4 @@ public class AdvertisementReviewServiceImpl implements AdvertisementReviewServic
         advertisementReviewRepository.findByIdAndAuthorId(id, user.getId()).orElseThrow(NotFoundException::new);
         advertisementReviewRepository.delete(id);
     }
-
 }

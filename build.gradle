@@ -51,7 +51,7 @@ dependencies {
 	compile "com.querydsl:querydsl-jpa:$queryDslVersion"
 
 	// Email
-	compile group: 'com.sun.mail', name: 'javax.mail', version: '1.5.3'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.4.1.RELEASE'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

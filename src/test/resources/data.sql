@@ -6,7 +6,7 @@ INSERT INTO `owner` (`id`, `imageurl`, `name`) VALUES (4,'/images/defaultUser.jp
 
 INSERT INTO `user` (`email`, `password`, `registrationconfirmed`, `role`, `username`, `id`) VALUES ('admin@admin.com','$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K',TRUE,'SYSTEM_ADMIN','admin',1);
 INSERT INTO `user` (`email`, `password`, `registrationconfirmed`, `role`, `username`, `id`) VALUES ('test@user.com','$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K',TRUE,'USER','test_user',2);
-INSERT INTO `user` (`email`, `password`, `registrationconfirmed`, `role`, `username`, `id`) VALUES ('testtest@user.com','$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K',TRUE,'USER','test_test_user',3);
+INSERT INTO `user` (`email`, `password`, `registrationconfirmed`, `role`, `username`, `id`) VALUES ('testtest@user.com','$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K',FALSE,'USER','test_test_user',3);
 INSERT INTO `user` (`email`, `password`, `registrationconfirmed`, `role`, `username`, `id`) VALUES ('test@verifier.com','$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K',TRUE,'VERIFIER','test_verifier',4);
 
 INSERT INTO `userpermission` (`user`, `permission`) VALUES (1, 'EDIT_ADVERTISEMENT'), (1, 'CREATE_REVIEW'), (1, 'CREATE_ADVERTISEMENT_REPORT'), (1, 'EDIT_COMPANY'), (1, 'CREATE_COMPANY'), (1, 'CREATE_SYSTEM_ADMIN'), (1, 'CREATE_VERIFIER'), (1, 'BAN_USER'), (1, 'DELETE_REVIEW');
@@ -26,3 +26,5 @@ INSERT INTO `realestate` (`id`, `area`, `description`, `imageurl`, `name`, `type
 
 INSERT INTO `advertisement` (`id`, `title`, `announcedon`, `editedon`, `endson`, `status`, `type`, `price`, `currency`,`realestate_id`, `advertiser_id`)
             VALUES (1, 'Advertisement title', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'ACTIVE', 'SALE', 3000, 'RSD', 1, 2);
+
+INSERT INTO `advertisementreview` (`id`, `comment`, `editedon`, `rating`, `author_id`, `target_id`) VALUES (1, 'Test comment', CURRENT_TIMESTAMP(), 5, 3, 1);
