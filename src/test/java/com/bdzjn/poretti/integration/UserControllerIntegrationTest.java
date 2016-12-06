@@ -51,7 +51,7 @@ public class UserControllerIntegrationTest {
         testEntityWithExistingUsername.setUsername("admin");
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
-                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())

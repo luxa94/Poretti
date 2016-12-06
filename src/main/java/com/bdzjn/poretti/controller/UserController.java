@@ -5,9 +5,12 @@ import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.OwnerReviewService;
 import com.bdzjn.poretti.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +26,13 @@ public class UserController {
 
     private final UserService userService;
     private final OwnerReviewService ownerReviewService;
+    private final AdvertisementService advertisementService;
 
     @Autowired
-    public UserController(UserService userService, OwnerReviewService ownerReviewService) {
+    public UserController(UserService userService, OwnerReviewService ownerReviewService, AdvertisementService advertisementService) {
         this.userService = userService;
         this.ownerReviewService = ownerReviewService;
+        this.advertisementService = advertisementService;
     }
 
     @PostMapping("/createSysAdmin")
@@ -76,7 +81,14 @@ public class UserController {
 
     @Transactional
     @GetMapping("/{id}/advertisements")
-    public ResponseEntity findAdvertisements(@PathVariable long id) {
+    public ResponseEntity findAdvertisements(@PathVariable long id,
+                                             @AuthenticationPrincipal User requester,
+                                             Pageable pageable) {
+        if (requester == null || requester.getId() != id) {
+            final Page<Advertisement> advertisements = advertisementService.findActiveByUser(id, pageable);
+            return new ResponseEntity<>(advertisements, HttpStatus.OK);
+        }
+
         // TODO: Paging, sorting, filtering.
         final User user = userService.findById(id).orElseThrow(NotFoundException::new);
         final List<Advertisement> advertisements = user.getAdvertisements();

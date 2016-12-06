@@ -23,3 +23,5 @@ out/
 dist/
 nbdist/
 .nb-gradle/
+
+src/main/webapp/bower_components

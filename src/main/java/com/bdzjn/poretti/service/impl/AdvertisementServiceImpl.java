@@ -8,6 +8,8 @@ import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.repository.AdvertisementRepository;
 import com.bdzjn.poretti.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -52,6 +54,16 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
+    public List<Advertisement> findReported() {
+        return advertisementRepository.findReported();
+    }
+
+    @Override
+    public Page<Advertisement> findActiveByUser(long advertiserId, Pageable pageable) {
+        return advertisementRepository.findByStatusAndAdvertiserId(AdvertisementStatus.ACTIVE, advertiserId, pageable);
+    }
+
+    @Override
     public Advertisement edit(AdvertisementDTO advertisementDTO, long ownerId) {
         final Advertisement advertisement = findByIdAndOwnerId(advertisementDTO.getId(), ownerId).orElseThrow(NotFoundException::new);
         advertisement.setTitle(advertisementDTO.getTitle());
@@ -79,11 +91,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
         advertisement.setStatus(status);
         advertisementRepository.save(advertisement);
-    }
-
-    @Override
-    public List<Advertisement> findReported() {
-        return advertisementRepository.findReported();
     }
 
 }

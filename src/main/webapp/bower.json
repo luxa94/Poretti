@@ -1,0 +1,30 @@
+{
+  "name": "poretti",
+  "homepage": "https://github.com/luxa94/Poretti",
+  "authors": [
+    "Nikola Lukić <luknik94@gmail.com>",
+    "Jasna Stanković <jaca994@yahoo.com>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "keywords": [
+    "keywords"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.9",
+    "angular-ui-router": "^0.3.2",
+    "restangular": "^1.5.2",
+    "angular-material": "^1.1.1",
+    "alertifyjs": "^1.0.11",
+    "angular-route": "^1.5.9",
+    "angular-file-upload": "^2.4.0"
+  }
+}
