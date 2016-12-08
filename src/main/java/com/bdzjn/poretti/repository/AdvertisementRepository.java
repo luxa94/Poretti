@@ -12,7 +12,4 @@ import java.util.Optional;
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>, AdvertisementRepositoryCustom {
 
     Optional<Advertisement> findById(long id);
-
-    Page<Advertisement> findByStatusAndAdvertiserId(AdvertisementStatus status, long advertiserId, Pageable pageable);
-
 }

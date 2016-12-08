@@ -1,10 +1,14 @@
 package com.bdzjn.poretti.controller;
 
+import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementType;
+import com.bdzjn.poretti.model.enumeration.Currency;
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.OwnerReviewService;
 import com.bdzjn.poretti.service.UserService;
@@ -83,15 +87,31 @@ public class UserController {
     @GetMapping("/{id}/advertisements")
     public ResponseEntity findAdvertisements(@PathVariable long id,
                                              @AuthenticationPrincipal User requester,
+                                             @RequestParam(required = false) String realEstateName,
+                                             @RequestParam(required = false) Double areaFrom,
+                                             @RequestParam(required = false) Double areaTo,
+                                             @RequestParam(required = false) String city,
+                                             @RequestParam(required = false) String cityArea,
+                                             @RequestParam(required = false) String state,
+                                             @RequestParam(required = false) String street,
+                                             @RequestParam(required = false) Double latitude,
+                                             @RequestParam(required = false) Double longitude,
+                                             @RequestParam(required = false) RealEstateType realEstateType,
+                                             @RequestParam(required = false) String advertisementTitle,
+                                             @RequestParam(required = false) AdvertisementType advertisementType,
+                                             @RequestParam(required = false) Double priceFrom,
+                                             @RequestParam(required = false) Double priceTo,
+                                             @RequestParam(required = false) Currency currency,
                                              Pageable pageable) {
+        userService.findById(id).orElseThrow(NotFoundException::new);
+        final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
         if (requester == null || requester.getId() != id) {
-            final Page<Advertisement> advertisements = advertisementService.findActiveByUser(id, pageable);
+            final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
             return new ResponseEntity<>(advertisements, HttpStatus.OK);
         }
 
-        // TODO: Paging, sorting, filtering.
-        final User user = userService.findById(id).orElseThrow(NotFoundException::new);
-        final List<Advertisement> advertisements = user.getAdvertisements();
+        final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 

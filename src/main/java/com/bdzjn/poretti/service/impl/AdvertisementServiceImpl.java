@@ -59,10 +59,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         return advertisementRepository.findReported();
     }
 
-    @Override
-    public Page<Advertisement> findActiveByUser(long advertiserId, Pageable pageable) {
-        return advertisementRepository.findByStatusAndAdvertiserId(AdvertisementStatus.ACTIVE, advertiserId, pageable);
-    }
 
     @Override
     public Page<Advertisement> findFor(long companyId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
@@ -72,6 +68,11 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
         return advertisementRepository.findActiveFor(advertiserId, searchCriteria, pageable);
+    }
+
+    @Override
+    public Page<Advertisement> findActive(AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        return advertisementRepository.findActive(searchCriteria, pageable);
     }
 
     @Override

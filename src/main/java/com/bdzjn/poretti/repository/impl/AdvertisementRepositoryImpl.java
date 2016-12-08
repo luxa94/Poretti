@@ -66,6 +66,19 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
         return new PageImpl<>(result, pageable, size);
     }
 
+    @Override
+    public Page<Advertisement> findActive(AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        final QAdvertisement advertisement = QAdvertisement.advertisement;
+        final JPQLQuery<Advertisement> query = queryForCriteria(searchCriteria, advertisement)
+                .where(advertisement.status.eq(AdvertisementStatus.ACTIVE));
+
+        final long size = query.fetchCount();
+        getQuerydsl().applyPagination(pageable, query);
+        final List<Advertisement> result = query.fetch();
+
+        return new PageImpl<>(result, pageable, size);
+    }
+
     private JPQLQuery<Advertisement> queryForCriteria(AdvertisementSearchCriteria searchCriteria, QAdvertisement advertisement) {
         return from(advertisement).select(advertisement)
                 .where(searchCriteria.getRealEstateName() != null ? advertisement.realEstate.name.containsIgnoreCase(searchCriteria.getRealEstateName()) : null,
