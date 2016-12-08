@@ -12,6 +12,7 @@ public class AdvertisementSearchCriteria {
     private final String city;
     private final String cityArea;
     private final String state;
+    private final String street;
     private final Double latitude;
     private final Double longitude;
     private final RealEstateType realEstateType;
@@ -22,7 +23,7 @@ public class AdvertisementSearchCriteria {
     private final Currency currency;
 
     public AdvertisementSearchCriteria(String realEstateName, Double areaFrom, Double areaTo,
-                                       String city, String cityArea, String state, Double latitude,
+                                       String city, String cityArea, String state, String street, Double latitude,
                                        Double longitude, RealEstateType realEstateType, String advertisementTitle,
                                        AdvertisementType advertisementType, Double priceFrom, Double priceTo, Currency currency) {
         this.realEstateName = realEstateName;
@@ -31,6 +32,7 @@ public class AdvertisementSearchCriteria {
         this.city = city;
         this.cityArea = cityArea;
         this.state = state;
+        this.street = street;
         this.latitude = latitude;
         this.longitude = longitude;
         this.realEstateType = realEstateType;
@@ -95,5 +97,9 @@ public class AdvertisementSearchCriteria {
 
     public Currency getCurrency() {
         return currency;
+    }
+
+    public String getStreet() {
+        return street;
     }
 }

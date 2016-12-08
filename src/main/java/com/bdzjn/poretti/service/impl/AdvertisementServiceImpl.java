@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.service.impl;
 
+import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Advertisement;
@@ -61,6 +62,16 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public Page<Advertisement> findActiveByUser(long advertiserId, Pageable pageable) {
         return advertisementRepository.findByStatusAndAdvertiserId(AdvertisementStatus.ACTIVE, advertiserId, pageable);
+    }
+
+    @Override
+    public Page<Advertisement> findFor(long companyId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        return advertisementRepository.findFor(companyId, searchCriteria, pageable);
+    }
+
+    @Override
+    public Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        return advertisementRepository.findActiveFor(advertiserId, searchCriteria, pageable);
     }
 
     @Override

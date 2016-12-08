@@ -1,5 +1,6 @@
 package com.bdzjn.poretti.service;
 
+import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.RealEstate;
@@ -21,6 +22,10 @@ public interface AdvertisementService {
     List<Advertisement> findReported();
 
     Page<Advertisement> findActiveByUser(long advertiserId, Pageable pageable);
+
+    Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
+
+    Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 
     Advertisement edit(AdvertisementDTO advertisementDTO, long ownerId);
 

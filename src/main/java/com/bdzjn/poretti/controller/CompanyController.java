@@ -1,11 +1,17 @@
 package com.bdzjn.poretti.controller;
 
+import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementType;
+import com.bdzjn.poretti.model.enumeration.Currency;
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/companies")
@@ -141,10 +148,35 @@ public class CompanyController {
 
     @Transactional
     @GetMapping("/{id}/advertisements")
-    public ResponseEntity findAdvertisements(@PathVariable long id) {
-        // TODO: Paging, sorting, filtering.
-        final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
-        final List<Advertisement> advertisements = company.getAdvertisements();
+    public ResponseEntity findAdvertisements(@PathVariable long id,
+                                             @AuthenticationPrincipal User user,
+                                             @RequestParam(required = false) String realEstateName,
+                                             @RequestParam(required = false) Double areaFrom,
+                                             @RequestParam(required = false) Double areaTo,
+                                             @RequestParam(required = false) String city,
+                                             @RequestParam(required = false) String cityArea,
+                                             @RequestParam(required = false) String state,
+                                             @RequestParam(required = false) String street,
+                                             @RequestParam(required = false) Double latitude,
+                                             @RequestParam(required = false) Double longitude,
+                                             @RequestParam(required = false) RealEstateType realEstateType,
+                                             @RequestParam(required = false) String advertisementTitle,
+                                             @RequestParam(required = false) AdvertisementType advertisementType,
+                                             @RequestParam(required = false) Double priceFrom,
+                                             @RequestParam(required = false) Double priceTo,
+                                             @RequestParam(required = false) Currency currency,
+                                             Pageable pageable) {
+        companyService.findById(id).orElseThrow(NotFoundException::new);
+        final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
+        if (user != null) {
+            final Optional<Membership> membership = membershipService.findByMemberIdAndCompanyId(user.getId(), id);
+            if (membership.isPresent() && membership.get().isConfirmed()) {
+                final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
+                return new ResponseEntity<>(advertisements, HttpStatus.OK);
+            }
+        }
+        final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
