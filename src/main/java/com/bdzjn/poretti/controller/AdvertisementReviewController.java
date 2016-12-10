@@ -22,7 +22,7 @@ public class AdvertisementReviewController {
         this.advertisementReviewService = advertisementReviewService;
     }
 
-    @PreAuthorize("hasAnyAuthority('CREATE_REVIEW')")
+    @PreAuthorize("hasAnyAuthority('DELETE_REVIEW')")
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable long id,

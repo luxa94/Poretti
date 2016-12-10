@@ -5,8 +5,10 @@ import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
+import com.bdzjn.poretti.repository.AdvertisementRepository;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.*;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +38,17 @@ public class AdvertisementControllerIntegrationTest {
     private static final String BASE_URL = "/api/advertisements";
     private static final String REPORTS_PATH = "/reports";
     private static final String REVIEWS_PATH = "/reviews";
+    private static final String REPORTED_PATH = "/reported";
+    private static final String APPROVE_PATH = "/approve";
+    private static final String INVALIDATE_PATH = "/invalidate";
     private static final int PAGE = 0;
     private static final int PAGE_SIZE = 5;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AdvertisementRepository advertisementRepository;
 
     @Test
     @Transactional
@@ -473,6 +481,8 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void createShouldReturnCreated() throws Exception {
         final AdvertisementRealEstateDTO testEntity = AdvertisementTestData.realEstateAdvertisementTestEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
+        int numberOfElementsAfter;
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -487,6 +497,9 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(jsonPath("$.type", is(testEntity.getAdvertisementDTO().getType().toString())))
                 .andExpect(jsonPath("$.price", is(testEntity.getAdvertisementDTO().getPrice())))
                 .andExpect(jsonPath("$.currency", is(testEntity.getAdvertisementDTO().getCurrency().toString())));
+
+        numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore+1));
     }
 
     @Test
@@ -495,6 +508,8 @@ public class AdvertisementControllerIntegrationTest {
         final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
         testEntity.setTitle("New test title");
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
+        int numberOfElementsAfter;
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -509,6 +524,9 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(jsonPath("$.price", is(testEntity.getPrice())))
                 .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
                 .andExpect(jsonPath("$.realEstate.id", is(AdvertisementTestData.CONTAINING_REAL_ESTATE_ID)));
+
+        numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -554,10 +572,16 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void deleteShouldReturnOkWhenAdvertisementExistsAndCurrentUserIsAdvertiser() throws Exception {
         final String DELETE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH;
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
+        int numberOfElementsAfter;
 
         this.mockMvc.perform(delete(DELETE_ADVERTISEMENT)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isOk());
+
+        numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore-1));
+
     }
 
     @Test
@@ -726,6 +750,61 @@ public class AdvertisementControllerIntegrationTest {
         final String FIND_ADVERTISEMENT_REVIEWS = BASE_URL + AdvertisementTestData.NON_EXISTING_ID + REVIEWS_PATH;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENT_REVIEWS))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void findReportedShouldReturnOk() throws Exception {
+        final String FIND_REPORTED = BASE_URL + REPORTED_PATH;
+
+        this.mockMvc.perform(get(FIND_REPORTED)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    public void invalidateShouldReturnOkWhenAdvertisementExists() throws Exception {
+        final String INVALIDATE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + INVALIDATE_PATH;
+
+        this.mockMvc.perform(put(INVALIDATE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    public void invalidateShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
+        final String INVALIDATE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.NON_EXISTING_ID_PATH + INVALIDATE_PATH;
+
+        this.mockMvc.perform(put(INVALIDATE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void approveShouldReturnOkWhenAdvertisementExists() throws Exception {
+        final String APPROVE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + APPROVE_PATH;
+
+        this.mockMvc.perform(put(APPROVE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    public void approveShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
+        final String APPROVE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.NON_EXISTING_ID_PATH + APPROVE_PATH;
+
+        this.mockMvc.perform(put(APPROVE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 

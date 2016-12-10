@@ -100,7 +100,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public void changeStatus(long id, AdvertisementStatus status) {
         final Advertisement advertisement = findById(id).orElseThrow(NotFoundException::new);
-
         advertisement.setStatus(status);
         advertisementRepository.save(advertisement);
     }

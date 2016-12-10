@@ -59,7 +59,7 @@ public class AdvertisementController {
                                @RequestParam(required = false) Double priceFrom,
                                @RequestParam(required = false) Double priceTo,
                                @RequestParam(required = false) Currency currency,
-                               Pageable pageable){
+                               Pageable pageable) {
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
                 cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
         final Page<Advertisement> advertisements = advertisementService.findActive(searchCriteria, pageable);

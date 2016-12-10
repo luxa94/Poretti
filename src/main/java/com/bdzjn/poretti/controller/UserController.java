@@ -118,7 +118,6 @@ public class UserController {
     @Transactional
     @GetMapping("/{id}/realEstates")
     public ResponseEntity findRealEstates(@PathVariable long id) {
-        // TODO: Paging, sorting, filtering.
         final User user = userService.findById(id).orElseThrow(NotFoundException::new);
         final List<RealEstate> realEstates = user.getRealEstates();
         return new ResponseEntity<>(realEstates, HttpStatus.OK);

@@ -21,7 +21,7 @@ public class OwnerReviewController {
         this.ownerReviewService = ownerReviewService;
     }
 
-    @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
+    @PreAuthorize("hasAnyAuthority('DELETE_REVIEW')")
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable long id,
