@@ -25,7 +25,6 @@ public interface AdvertisementService {
 
     Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 
-
     Page<Advertisement> findActive(AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 
     Advertisement edit(AdvertisementDTO advertisementDTO, long ownerId);

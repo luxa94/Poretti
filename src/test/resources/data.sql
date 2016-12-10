@@ -19,7 +19,7 @@ INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (2,'102da414-847d-
 INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (3,'102da414-847d-4602-8b2d-edca26ab26d9',3);
 INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (4,'102da414-847d-4602-8b2d-edca26ab26e7',4);
 
-INSERT INTO `location` (`id`,`city`, `latitude`, `longitude`, `haslatlong`) VALUES (1, 'Test city', 1, 1, TRUE);
+INSERT INTO `location` (`id`,`city`, `latitude`, `longitude`, `haslatlong`, `cityArea`, `state`, `street`, `streetnumber`) VALUES (1, 'Test city', 1, 1, TRUE, 'Test city area', 'Test state', 'Test street', '123test');
 
 INSERT INTO `realestate` (`id`, `area`, `description`, `imageurl`, `name`, `type`, `location_id`, `owner_id`)
             VALUES (1, 100, 'Test description', '/images/defaultRealEstate.jpg', 'Test name', 'APARTMENT', 1, 2);

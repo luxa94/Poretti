@@ -90,6 +90,7 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
                         searchCriteria.getStreet() != null ? advertisement.realEstate.location.street.containsIgnoreCase(searchCriteria.getStreet()) : null,
                         searchCriteria.getLatitude() != null ? advertisement.realEstate.location.latitude.between(searchCriteria.getLatitude() - 0.01, searchCriteria.getLatitude() + 0.01) : null,
                         searchCriteria.getLongitude() != null ? advertisement.realEstate.location.longitude.between(searchCriteria.getLongitude() - 0.01, searchCriteria.getLongitude() + 0.01) : null,
+                        searchCriteria.getRealEstateType() != null ? advertisement.realEstate.type.eq(searchCriteria.getRealEstateType()) : null,
                         searchCriteria.getAdvertisementTitle() != null ? advertisement.title.containsIgnoreCase(searchCriteria.getAdvertisementTitle()) : null,
                         searchCriteria.getAdvertisementType() != null ? advertisement.type.eq(searchCriteria.getAdvertisementType()) : null,
                         searchCriteria.getPriceFrom() != null ? advertisement.price.goe(searchCriteria.getPriceFrom()) : null,
