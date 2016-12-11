@@ -170,14 +170,15 @@ public class CompanyController {
                                              Pageable pageable) {
         companyService.findById(id).orElseThrow(NotFoundException::new);
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
-                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
         if (user != null) {
             final Optional<Membership> membership = membershipService.findByMemberIdAndCompanyId(user.getId(), id);
             if (membership.isPresent() && membership.get().isConfirmed()) {
-                final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, advertisementStatus, pageable);
+                final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
                 return new ResponseEntity<>(advertisements, HttpStatus.OK);
             }
         }
+        searchCriteria.setAdvertisementStatus(null);
         final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }

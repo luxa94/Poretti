@@ -39,14 +39,13 @@ public class AdvertisementReviewControllerIntegration {
     public void deleteShouldReturnOkWhenReviewExistsAndCurrentUserIsAuthor() throws Exception {
         final String DELETE_REVIEW = BASE_URL + ReviewTestData.EXISTING_AD_REVIEW_ID_PATH;
         final int numberOfElementsBefore = reviewRepository.findAll().size();
-        int numberOfElementsAfter;
 
         this.mockMvc.perform(delete(DELETE_REVIEW)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        numberOfElementsAfter = reviewRepository.findAll().size();
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));
     }
 

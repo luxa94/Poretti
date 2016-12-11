@@ -56,12 +56,14 @@ public class AdvertisementController {
                                @RequestParam(required = false) RealEstateType realEstateType,
                                @RequestParam(required = false) String advertisementTitle,
                                @RequestParam(required = false) AdvertisementType advertisementType,
+                               @RequestParam(required = false) AdvertisementStatus advertisementStatus,
                                @RequestParam(required = false) Double priceFrom,
                                @RequestParam(required = false) Double priceTo,
                                @RequestParam(required = false) Currency currency,
                                Pageable pageable) {
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
-                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
+        searchCriteria.setAdvertisementStatus(null);
         final Page<Advertisement> advertisements = advertisementService.findActive(searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }

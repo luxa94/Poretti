@@ -145,7 +145,7 @@ public class UserControllerIntegrationTest {
     @Transactional
     public void editShouldReturnOkWhenCurrentUserIsUserToEdit() throws Exception {
         final String EDIT_USER = BASE_URL + UserTestData.CURRENT_USER_ID_PATH;
-        UserDTO testEntity = UserTestData.userDTOTestEntity();
+        final UserDTO testEntity = UserTestData.userDTOTestEntity();
 
         this.mockMvc.perform(put(EDIT_USER)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -163,7 +163,7 @@ public class UserControllerIntegrationTest {
     @Transactional
     public void editShouldReturnForbiddenWhenCurrentUserIsNotUserToEdit() throws Exception {
         final String EDIT_USER = BASE_URL + UserTestData.CURRENT_USER_ID_PATH;
-        UserDTO testEntity = UserTestData.userDTOTestEntity();
+        final UserDTO testEntity = UserTestData.userDTOTestEntity();
 
         this.mockMvc.perform(put(EDIT_USER)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)

@@ -61,8 +61,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
 
     @Override
-    public Page<Advertisement> findFor(long companyId, AdvertisementSearchCriteria searchCriteria, AdvertisementStatus status, Pageable pageable) {
-        return advertisementRepository.findFor(companyId, searchCriteria, status, pageable);
+    public Page<Advertisement> findFor(long companyId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        return advertisementRepository.findFor(companyId, searchCriteria, pageable);
     }
 
     @Override

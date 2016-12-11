@@ -107,13 +107,14 @@ public class UserController {
                                              Pageable pageable) {
         userService.findById(id).orElseThrow(NotFoundException::new);
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
-                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
         if (requester == null || requester.getId() != id) {
+            searchCriteria.setAdvertisementStatus(null);
             final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
             return new ResponseEntity<>(advertisements, HttpStatus.OK);
         }
 
-        final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, advertisementStatus, pageable);
+        final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
@@ -141,7 +142,7 @@ public class UserController {
                                        @PathVariable long id,
                                        @AuthenticationPrincipal User user) {
         final User target = userService.findById(id).orElseThrow(NotFoundException::new);
-        if (id == user.getId()){
+        if (id == user.getId()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         final OwnerReview ownerReview = ownerReviewService.create(reviewDTO, target, user);

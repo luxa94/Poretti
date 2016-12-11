@@ -43,6 +43,7 @@ public class AdvertisementControllerIntegrationTest {
     private static final String INVALIDATE_PATH = "/invalidate";
     private static final int PAGE = 0;
     private static final int PAGE_SIZE = 5;
+    private static final String PAGING = "?page=" + PAGE + "&size=" + PAGE_SIZE;
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +54,7 @@ public class AdvertisementControllerIntegrationTest {
     @Test
     @Transactional
     public void findShouldReturnOkWhenNoFilters() throws Exception {
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING;
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -65,7 +66,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForRealEstateNameFilter() throws Exception {
         final String filter = "name";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&realEstateName=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&realEstateName=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -78,7 +79,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForRealEstateNameFilter() throws Exception {
         final String filter = "non existing name";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&realEstateName=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&realEstateName=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -90,7 +91,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAreaFromFilter() throws Exception {
         final double filter = 50;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&areaFrom=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&areaFrom=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -103,7 +104,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForAreaFromFilter() throws Exception {
         final double filter = 50000;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&areaFrom=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&areaFrom=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -115,7 +116,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAreaToFilter() throws Exception {
         final double filter = 150;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&areaTo=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&areaTo=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -128,7 +129,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForAreaToFilter() throws Exception {
         final double filter = 50;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&areaTo=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&areaTo=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -140,7 +141,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForCityFilter() throws Exception {
         final String filter = "city";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&city=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&city=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -153,7 +154,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForCityFilter() throws Exception {
         final String filter = "non existing city";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&city=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&city=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -165,7 +166,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForCityAreaFilter() throws Exception {
         final String filter = " city area";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&cityArea=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&cityArea=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -179,7 +180,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForCityAreaFilter() throws Exception {
         final String filter = "non existing city area";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&cityArea=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&cityArea=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -191,7 +192,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForStateFilter() throws Exception {
         final String filter = "state";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&state=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&state=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -204,7 +205,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForStateFilter() throws Exception {
         final String filter = "non existing state";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&state=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&state=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -216,7 +217,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForStreetFilter() throws Exception {
         final String filter = "street";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&street=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&street=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -229,7 +230,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForStreetFilter() throws Exception {
         final String filter = "non exsiting street";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&street=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&street=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -241,7 +242,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForLatitudeFilter() throws Exception {
         final double filter = 1;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&latitude=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&latitude=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -254,7 +255,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForLatitudeFilter() throws Exception {
         final double filter = 50;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&latitude=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&latitude=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -266,7 +267,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForLongitudeFilter() throws Exception {
         final double filter = 1;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&longitude=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&longitude=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -279,7 +280,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForLongitudeFilter() throws Exception {
         final double filter = 50;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&longitude=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&longitude=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -291,7 +292,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForRealEstateTypeFilter() throws Exception {
         final String filter = RealEstateTestData.EXISTING_TYPE;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&realEstateType=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&realEstateType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -304,7 +305,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForRealEstateTypeFilter() throws Exception {
         final RealEstateType filter = RealEstateType.AGRICULTURAL;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&realEstateType=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&realEstateType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -316,7 +317,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAdvertisementTitleFilter() throws Exception {
         final String filter = "title";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&advertisementTitle=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementTitle=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -329,7 +330,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForAdvertisementTitleFilter() throws Exception {
         final String filter = "non existing title";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&advertisementTitle=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementTitle=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -341,7 +342,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAdvertisementTypeFilter() throws Exception {
         final AdvertisementType filter = AdvertisementType.SALE;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&advertisementType=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -354,7 +355,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForAdvertisementTypeFilter() throws Exception {
         final AdvertisementType filter = AdvertisementType.RENT;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&advertisementType=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -366,7 +367,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForPriceFromFilter() throws Exception {
         final double filter = 1000;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&priceFrom=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&priceFrom=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -379,7 +380,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForPriceFromFilter() throws Exception {
         final double filter = 5000000;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&priceFrom=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&priceFrom=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -391,7 +392,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForPriceToFilter() throws Exception {
         final double filter = 5000;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&priceTo=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&priceTo=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -404,7 +405,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForPriceToFilter() throws Exception {
         final double filter = 100;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&priceTo=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&priceTo=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -416,7 +417,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForCurrencyFilter() throws Exception {
         final String filter = AdvertisementTestData.EXISTING_CURRENCY.toString();
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&currency=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&currency=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -429,7 +430,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkAndEmptyContentForCurrencyFilter() throws Exception {
         final Currency filter = Currency.USD;
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&currency=" + filter;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&currency=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
@@ -441,7 +442,7 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void findShouldReturnOkWhenFilterForTitleExists() throws Exception {
         final String filterTitle = "title";
-        final String FIND_ADVERTISEMENTS = BASE_URL + "?page=" + PAGE + "&size=" + PAGE_SIZE + "&advertisementTitle=" + filterTitle;
+        final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementTitle=" + filterTitle;
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -482,7 +483,6 @@ public class AdvertisementControllerIntegrationTest {
     public void createShouldReturnCreated() throws Exception {
         final AdvertisementRealEstateDTO testEntity = AdvertisementTestData.realEstateAdvertisementTestEntity();
         final int numberOfElementsBefore = advertisementRepository.findAll().size();
-        int numberOfElementsAfter;
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -498,7 +498,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(jsonPath("$.price", is(testEntity.getAdvertisementDTO().getPrice())))
                 .andExpect(jsonPath("$.currency", is(testEntity.getAdvertisementDTO().getCurrency().toString())));
 
-        numberOfElementsAfter = advertisementRepository.findAll().size();
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
@@ -509,7 +509,6 @@ public class AdvertisementControllerIntegrationTest {
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
         testEntity.setTitle("New test title");
         final int numberOfElementsBefore = advertisementRepository.findAll().size();
-        int numberOfElementsAfter;
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -525,7 +524,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
                 .andExpect(jsonPath("$.realEstate.id", is(AdvertisementTestData.CONTAINING_REAL_ESTATE_ID)));
 
-        numberOfElementsAfter = advertisementRepository.findAll().size();
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
@@ -573,13 +572,12 @@ public class AdvertisementControllerIntegrationTest {
     public void deleteShouldReturnOkWhenAdvertisementExistsAndCurrentUserIsAdvertiser() throws Exception {
         final String DELETE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH;
         final int numberOfElementsBefore = advertisementRepository.findAll().size();
-        int numberOfElementsAfter;
 
         this.mockMvc.perform(delete(DELETE_ADVERTISEMENT)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isOk());
 
-        numberOfElementsAfter = advertisementRepository.findAll().size();
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));
 
     }
