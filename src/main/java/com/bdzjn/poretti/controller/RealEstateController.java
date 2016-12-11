@@ -33,12 +33,6 @@ public class RealEstateController {
     }
 
     @Transactional
-    @GetMapping
-    public ResponseEntity find(Pageable pageable) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity findOne(@PathVariable long id) {
         final RealEstate realEstate = realEstateService.findById(id).orElseThrow(NotFoundException::new);

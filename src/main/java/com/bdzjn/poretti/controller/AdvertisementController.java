@@ -1,14 +1,20 @@
 package com.bdzjn.poretti.controller;
 
+import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
+import com.bdzjn.poretti.model.enumeration.AdvertisementType;
+import com.bdzjn.poretti.model.enumeration.Currency;
+import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.service.AdvertisementReviewService;
 import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.ImproperAdvertisementReportService;
 import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +22,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -39,8 +44,28 @@ public class AdvertisementController {
 
     @Transactional
     @GetMapping
-    public ResponseEntity find(Pageable pageable) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity find(@RequestParam(required = false) String realEstateName,
+                               @RequestParam(required = false) Double areaFrom,
+                               @RequestParam(required = false) Double areaTo,
+                               @RequestParam(required = false) String city,
+                               @RequestParam(required = false) String cityArea,
+                               @RequestParam(required = false) String state,
+                               @RequestParam(required = false) String street,
+                               @RequestParam(required = false) Double latitude,
+                               @RequestParam(required = false) Double longitude,
+                               @RequestParam(required = false) RealEstateType realEstateType,
+                               @RequestParam(required = false) String advertisementTitle,
+                               @RequestParam(required = false) AdvertisementType advertisementType,
+                               @RequestParam(required = false) AdvertisementStatus advertisementStatus,
+                               @RequestParam(required = false) Double priceFrom,
+                               @RequestParam(required = false) Double priceTo,
+                               @RequestParam(required = false) Currency currency,
+                               Pageable pageable) {
+        final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
+        searchCriteria.setAdvertisementStatus(null);
+        final Page<Advertisement> advertisements = advertisementService.findActive(searchCriteria, pageable);
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
     @Transactional

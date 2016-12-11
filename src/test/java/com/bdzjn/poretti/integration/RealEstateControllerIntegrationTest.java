@@ -46,9 +46,9 @@ public class RealEstateControllerIntegrationTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andDo(print())
                 .andExpect(jsonPath("$.id", is(RealEstateTestData.EXISTING_ID)))
-                .andExpect(jsonPath("$.name", is(RealEstateTestData.EXISTING_TITLE)))
+                .andExpect(jsonPath("$.name", is(RealEstateTestData.EXISTING_NAME)))
                 .andExpect(jsonPath("$.description", is(RealEstateTestData.EXISTING_DESCRIPTION)))
-                .andExpect(jsonPath("$.area", is(RealEstateTestData.EXISTING_PRICE)))
+                .andExpect(jsonPath("$.area", is(RealEstateTestData.EXISTING_AREA)))
                 .andExpect(jsonPath("$.location.id", is(RealEstateTestData.LOCATION_ID)))
                 .andExpect(jsonPath("$.imageUrl", is(RealEstateTestData.EXISTING_IMAGE)))
                 .andExpect(jsonPath("$.type", is(RealEstateTestData.EXISTING_TYPE)))
@@ -87,7 +87,7 @@ public class RealEstateControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception{
+    public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
         final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
         testEntity.setName("Real estate new test name");
@@ -110,7 +110,7 @@ public class RealEstateControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception{
+    public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
         final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();

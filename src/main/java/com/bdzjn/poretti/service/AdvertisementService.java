@@ -21,11 +21,11 @@ public interface AdvertisementService {
 
     List<Advertisement> findReported();
 
-    Page<Advertisement> findActiveByUser(long advertiserId, Pageable pageable);
-
     Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 
     Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
+
+    Page<Advertisement> findActive(AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 
     Advertisement edit(AdvertisementDTO advertisementDTO, long ownerId);
 

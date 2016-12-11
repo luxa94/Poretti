@@ -13,14 +13,20 @@ public class RealEstateTestData {
     public static final int NON_EXISTING_ID = 2;
     public static final String EXISTING_ID_PATH = "/1";
     public static final String NON_EXISTING_ID_PATH = "/2";
-    public static final String EXISTING_TITLE = "Test name";
+    public static final String EXISTING_NAME = "Test name";
     public static final String EXISTING_DESCRIPTION = "Test description";
-    public static final double EXISTING_PRICE = 100d;
+    public static final double EXISTING_AREA = 100d;
     public static final int LOCATION_ID = 1;
+    public static final String LOCATION_CITY = "Test city";
+    public static final String LOCATION_CITY_AREA = "Test city area";
+    public static final String LOCATION_STATE = "Test state";
+    public static final String LOCATION_STREET = "Test street";
+    public static final double LOCATION_LATITUDE = 1;
+    public static final double LOCATION_LONGITUDE = 1;
     public static final String EXISTING_IMAGE = "/images/defaultRealEstate.jpg";
     public static final String EXISTING_TYPE = RealEstateType.APARTMENT.toString();
     public static final int OWNER_ID = 2;
-    public static final int OCCURRENCE_IN_ADVERTISEMENTS = 1;;
+    public static final int OCCURRENCE_IN_ADVERTISEMENTS = 1;
 
     public static RealEstateDTO testEntity() {
         final Location location = new Location();

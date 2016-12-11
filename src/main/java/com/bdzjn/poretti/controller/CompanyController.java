@@ -5,6 +5,7 @@ import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
@@ -162,13 +163,14 @@ public class CompanyController {
                                              @RequestParam(required = false) RealEstateType realEstateType,
                                              @RequestParam(required = false) String advertisementTitle,
                                              @RequestParam(required = false) AdvertisementType advertisementType,
+                                             @RequestParam(required = false) AdvertisementStatus advertisementStatus,
                                              @RequestParam(required = false) Double priceFrom,
                                              @RequestParam(required = false) Double priceTo,
                                              @RequestParam(required = false) Currency currency,
                                              Pageable pageable) {
         companyService.findById(id).orElseThrow(NotFoundException::new);
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
-                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, priceFrom, priceTo, currency);
+                cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
         if (user != null) {
             final Optional<Membership> membership = membershipService.findByMemberIdAndCompanyId(user.getId(), id);
             if (membership.isPresent() && membership.get().isConfirmed()) {
@@ -176,6 +178,7 @@ public class CompanyController {
                 return new ResponseEntity<>(advertisements, HttpStatus.OK);
             }
         }
+        searchCriteria.setAdvertisementStatus(null);
         final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }

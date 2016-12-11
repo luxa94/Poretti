@@ -1,6 +1,7 @@
 package com.bdzjn.poretti.controller.criteria;
 
 
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
@@ -21,11 +22,12 @@ public class AdvertisementSearchCriteria {
     private final Double priceFrom;
     private final Double priceTo;
     private final Currency currency;
+    private AdvertisementStatus advertisementStatus;
 
     public AdvertisementSearchCriteria(String realEstateName, Double areaFrom, Double areaTo,
                                        String city, String cityArea, String state, String street, Double latitude,
                                        Double longitude, RealEstateType realEstateType, String advertisementTitle,
-                                       AdvertisementType advertisementType, Double priceFrom, Double priceTo, Currency currency) {
+                                       AdvertisementType advertisementType, AdvertisementStatus advertisementStatus, Double priceFrom, Double priceTo, Currency currency) {
         this.realEstateName = realEstateName;
         this.areaFrom = areaFrom;
         this.areaTo = areaTo;
@@ -38,6 +40,7 @@ public class AdvertisementSearchCriteria {
         this.realEstateType = realEstateType;
         this.advertisementTitle = advertisementTitle;
         this.advertisementType = advertisementType;
+        this.advertisementStatus = advertisementStatus;
         this.priceFrom = priceFrom;
         this.priceTo = priceTo;
         this.currency = currency;
@@ -101,5 +104,9 @@ public class AdvertisementSearchCriteria {
 
     public String getStreet() {
         return street;
+    }
+
+    public void setAdvertisementStatus(AdvertisementStatus advertisementStatus) {
+        this.advertisementStatus = advertisementStatus;
     }
 }
