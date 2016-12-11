@@ -87,7 +87,7 @@ public class RealEstateControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception{
+    public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
         final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
         testEntity.setName("Real estate new test name");
@@ -110,7 +110,7 @@ public class RealEstateControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception{
+    public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
         final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();

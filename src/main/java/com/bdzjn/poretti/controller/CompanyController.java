@@ -5,6 +5,7 @@ import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
@@ -162,6 +163,7 @@ public class CompanyController {
                                              @RequestParam(required = false) RealEstateType realEstateType,
                                              @RequestParam(required = false) String advertisementTitle,
                                              @RequestParam(required = false) AdvertisementType advertisementType,
+                                             @RequestParam(required = false) AdvertisementStatus advertisementStatus,
                                              @RequestParam(required = false) Double priceFrom,
                                              @RequestParam(required = false) Double priceTo,
                                              @RequestParam(required = false) Currency currency,
@@ -172,7 +174,7 @@ public class CompanyController {
         if (user != null) {
             final Optional<Membership> membership = membershipService.findByMemberIdAndCompanyId(user.getId(), id);
             if (membership.isPresent() && membership.get().isConfirmed()) {
-                final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
+                final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, advertisementStatus, pageable);
                 return new ResponseEntity<>(advertisements, HttpStatus.OK);
             }
         }

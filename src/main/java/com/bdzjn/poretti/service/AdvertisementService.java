@@ -21,7 +21,7 @@ public interface AdvertisementService {
 
     List<Advertisement> findReported();
 
-    Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
+    Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, AdvertisementStatus status, Pageable pageable);
 
     Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 

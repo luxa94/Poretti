@@ -499,7 +499,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(jsonPath("$.currency", is(testEntity.getAdvertisementDTO().getCurrency().toString())));
 
         numberOfElementsAfter = advertisementRepository.findAll().size();
-        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore+1));
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
     @Test
@@ -580,7 +580,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         numberOfElementsAfter = advertisementRepository.findAll().size();
-        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore-1));
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));
 
     }
 

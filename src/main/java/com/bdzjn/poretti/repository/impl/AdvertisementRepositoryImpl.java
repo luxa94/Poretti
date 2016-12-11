@@ -40,10 +40,11 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
     }
 
     @Override
-    public Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+    public Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, AdvertisementStatus status, Pageable pageable) {
         final QAdvertisement advertisement = QAdvertisement.advertisement;
         final JPQLQuery<Advertisement> query = queryForCriteria(searchCriteria, advertisement)
-                .where(advertisement.advertiser.id.eq(advertiserId));
+                .where(advertisement.advertiser.id.eq(advertiserId),
+                        advertisement.status.eq(status));
 
         final long size = query.fetchCount();
         getQuerydsl().applyPagination(pageable, query);

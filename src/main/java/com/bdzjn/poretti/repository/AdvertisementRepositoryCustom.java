@@ -2,6 +2,7 @@ package com.bdzjn.poretti.repository;
 
 import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.model.Advertisement;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,7 @@ public interface AdvertisementRepositoryCustom {
 
     List<Advertisement> findReported();
 
-    Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
+    Page<Advertisement> findFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, AdvertisementStatus status, Pageable pageable);
 
     Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable);
 

@@ -47,7 +47,7 @@ public class AdvertisementReviewControllerIntegration {
                 .andExpect(status().isOk());
 
         numberOfElementsAfter = reviewRepository.findAll().size();
-        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore-1));
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class AdvertisementReviewControllerIntegration {
 
     @Test
     @Transactional
-    public void deleteShouldReturnNotFoundWhenNonExistingReviewAndCurrentUserIsNotAuthor() throws Exception{
+    public void deleteShouldReturnNotFoundWhenNonExistingReviewAndCurrentUserIsNotAuthor() throws Exception {
         final String DELETE_REVIEW = BASE_URL + ReviewTestData.NON_EXISTING_AD_REVIEW_ID_PATH;
 
         this.mockMvc.perform(delete(DELETE_REVIEW)

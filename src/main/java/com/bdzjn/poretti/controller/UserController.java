@@ -6,6 +6,7 @@ import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.*;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
@@ -76,7 +77,7 @@ public class UserController {
                                @PathVariable long id,
                                @AuthenticationPrincipal User user) {
         if (user.getId() != id) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
 
         userService.update(userDTO, user);
@@ -99,6 +100,7 @@ public class UserController {
                                              @RequestParam(required = false) RealEstateType realEstateType,
                                              @RequestParam(required = false) String advertisementTitle,
                                              @RequestParam(required = false) AdvertisementType advertisementType,
+                                             @RequestParam(required = false) AdvertisementStatus advertisementStatus,
                                              @RequestParam(required = false) Double priceFrom,
                                              @RequestParam(required = false) Double priceTo,
                                              @RequestParam(required = false) Currency currency,
@@ -111,7 +113,7 @@ public class UserController {
             return new ResponseEntity<>(advertisements, HttpStatus.OK);
         }
 
-        final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, pageable);
+        final Page<Advertisement> advertisements = advertisementService.findFor(id, searchCriteria, advertisementStatus, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
@@ -139,6 +141,9 @@ public class UserController {
                                        @PathVariable long id,
                                        @AuthenticationPrincipal User user) {
         final User target = userService.findById(id).orElseThrow(NotFoundException::new);
+        if (id == user.getId()){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         final OwnerReview ownerReview = ownerReviewService.create(reviewDTO, target, user);
         return new ResponseEntity<>(ownerReview, HttpStatus.CREATED);
     }
