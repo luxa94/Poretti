@@ -36,4 +36,18 @@ public class ExceptionResolver {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    @ExceptionHandler(BadDateException.class)
+    public ResponseEntity badDateException(HttpServletRequest request, BadDateException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(InvalidRangeException.class)
+    public ResponseEntity invalidRangeException(HttpServletRequest request, InvalidRangeException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UnprocessableException.class)
+    public ResponseEntity unprocessableException(HttpServletRequest request, UnprocessableException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

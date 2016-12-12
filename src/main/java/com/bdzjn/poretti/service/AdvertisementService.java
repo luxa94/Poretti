@@ -33,4 +33,5 @@ public interface AdvertisementService {
 
     void changeStatus(long id, AdvertisementStatus status);
 
+    void deleteReportsAfterApprove(long id);
 }
