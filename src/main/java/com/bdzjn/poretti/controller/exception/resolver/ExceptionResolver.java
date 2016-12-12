@@ -46,8 +46,8 @@ public class ExceptionResolver {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler(UnprocessableException.class)
-    public ResponseEntity unprocessableException(HttpServletRequest request, UnprocessableException exception) {
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity unprocessableEntityException(HttpServletRequest request, UnprocessableEntityException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }
