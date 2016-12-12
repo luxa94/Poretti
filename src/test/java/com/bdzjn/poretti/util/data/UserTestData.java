@@ -16,6 +16,8 @@ public class UserTestData {
     public static final String NOT_ADVERTISER_TOKEN = NOT_OWNER_TOKEN;
     public static final String CURRENT_USER_ID_PATH = "/2";
     public static final String NON_EXISTING_ID_PATH = "/100";
+    public static final String EXISTING_EMAIL = "test@user.com";
+    public static final String EXISTING_USERNAME = "test_user";
     public static final int CURRENT_USER_ID = 2;
 
     public static RegisterDTO registerDTOTestEntity() {

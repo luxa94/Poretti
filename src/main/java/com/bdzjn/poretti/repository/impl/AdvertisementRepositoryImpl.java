@@ -23,7 +23,7 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
     @Override
     public Optional<Advertisement> findByIdAndOwnerId(long id, long ownerId) {
         final QAdvertisement advertisement = QAdvertisement.advertisement;
-        final Advertisement result = from(advertisement).select(advertisement)
+        final Advertisement result = from(advertisement)
                 .where(advertisement.id.eq(id),
                         advertisement.advertiser.id.eq(ownerId))
                 .fetchFirst();
@@ -34,7 +34,7 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
     @Override
     public List<Advertisement> findReported() {
         final QAdvertisement advertisement = QAdvertisement.advertisement;
-        return from(advertisement).select(advertisement)
+        return from(advertisement)
                 .where(advertisement.reports.isNotEmpty())
                 .fetch();
     }
@@ -54,10 +54,10 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
 
     @Override
     public Page<Advertisement> findActiveFor(long advertiserId, AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        searchCriteria.setAdvertisementStatus(AdvertisementStatus.ACTIVE);
         final QAdvertisement advertisement = QAdvertisement.advertisement;
         final JPQLQuery<Advertisement> query = queryForCriteria(searchCriteria, advertisement)
-                .where(advertisement.advertiser.id.eq(advertiserId),
-                        advertisement.status.eq(AdvertisementStatus.ACTIVE));
+                .where(advertisement.advertiser.id.eq(advertiserId));
 
         final long size = query.fetchCount();
         getQuerydsl().applyPagination(pageable, query);
@@ -68,9 +68,9 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
 
     @Override
     public Page<Advertisement> findActive(AdvertisementSearchCriteria searchCriteria, Pageable pageable) {
+        searchCriteria.setAdvertisementStatus(AdvertisementStatus.ACTIVE);
         final QAdvertisement advertisement = QAdvertisement.advertisement;
-        final JPQLQuery<Advertisement> query = queryForCriteria(searchCriteria, advertisement)
-                .where(advertisement.status.eq(AdvertisementStatus.ACTIVE));
+        final JPQLQuery<Advertisement> query = queryForCriteria(searchCriteria, advertisement);
 
         final long size = query.fetchCount();
         getQuerydsl().applyPagination(pageable, query);
@@ -80,22 +80,23 @@ public class AdvertisementRepositoryImpl extends QueryDslRepositorySupport imple
     }
 
     private JPQLQuery<Advertisement> queryForCriteria(AdvertisementSearchCriteria searchCriteria, QAdvertisement advertisement) {
-        return from(advertisement).select(advertisement)
-                .where(searchCriteria.getRealEstateName() != null ? advertisement.realEstate.name.containsIgnoreCase(searchCriteria.getRealEstateName()) : null,
-                        searchCriteria.getAreaFrom() != null ? advertisement.realEstate.area.goe(searchCriteria.getAreaFrom()) : null,
-                        searchCriteria.getAreaTo() != null ? advertisement.realEstate.area.loe(searchCriteria.getAreaTo()) : null,
-                        searchCriteria.getCity() != null ? advertisement.realEstate.location.city.containsIgnoreCase(searchCriteria.getCity()) : null,
-                        searchCriteria.getCityArea() != null ? advertisement.realEstate.location.cityArea.containsIgnoreCase(searchCriteria.getCityArea()) : null,
-                        searchCriteria.getState() != null ? advertisement.realEstate.location.state.containsIgnoreCase(searchCriteria.getState()) : null,
-                        searchCriteria.getStreet() != null ? advertisement.realEstate.location.street.containsIgnoreCase(searchCriteria.getStreet()) : null,
-                        searchCriteria.getLatitude() != null ? advertisement.realEstate.location.latitude.between(searchCriteria.getLatitude() - 0.01, searchCriteria.getLatitude() + 0.01) : null,
-                        searchCriteria.getLongitude() != null ? advertisement.realEstate.location.longitude.between(searchCriteria.getLongitude() - 0.01, searchCriteria.getLongitude() + 0.01) : null,
-                        searchCriteria.getRealEstateType() != null ? advertisement.realEstate.type.eq(searchCriteria.getRealEstateType()) : null,
-                        searchCriteria.getAdvertisementTitle() != null ? advertisement.title.containsIgnoreCase(searchCriteria.getAdvertisementTitle()) : null,
-                        searchCriteria.getAdvertisementType() != null ? advertisement.type.eq(searchCriteria.getAdvertisementType()) : null,
-                        searchCriteria.getPriceFrom() != null ? advertisement.price.goe(searchCriteria.getPriceFrom()) : null,
-                        searchCriteria.getPriceTo() != null ? advertisement.price.loe(searchCriteria.getPriceTo()) : null,
-                        searchCriteria.getCurrency() != null ? advertisement.currency.eq(searchCriteria.getCurrency()) : null);
+        return from(advertisement)
+                .where(searchCriteria.getRealEstateName() == null ? null : advertisement.realEstate.name.containsIgnoreCase(searchCriteria.getRealEstateName()),
+                        searchCriteria.getAreaFrom() == null ? null : advertisement.realEstate.area.goe(searchCriteria.getAreaFrom()),
+                        searchCriteria.getAreaTo() == null ? null : advertisement.realEstate.area.loe(searchCriteria.getAreaTo()),
+                        searchCriteria.getCity() == null ? null : advertisement.realEstate.location.city.containsIgnoreCase(searchCriteria.getCity()),
+                        searchCriteria.getCityArea() == null ? null : advertisement.realEstate.location.cityArea.containsIgnoreCase(searchCriteria.getCityArea()),
+                        searchCriteria.getState() == null ? null : advertisement.realEstate.location.state.containsIgnoreCase(searchCriteria.getState()),
+                        searchCriteria.getStreet() == null ? null : advertisement.realEstate.location.street.containsIgnoreCase(searchCriteria.getStreet()),
+                        searchCriteria.getLatitude() == null ? null : advertisement.realEstate.location.latitude.between(searchCriteria.getLatitude() - 0.01, searchCriteria.getLatitude() + 0.01),
+                        searchCriteria.getLongitude() == null ? null : advertisement.realEstate.location.longitude.between(searchCriteria.getLongitude() - 0.01, searchCriteria.getLongitude() + 0.01),
+                        searchCriteria.getRealEstateType() == null ? null : advertisement.realEstate.type.eq(searchCriteria.getRealEstateType()),
+                        searchCriteria.getAdvertisementTitle() == null ? null : advertisement.title.containsIgnoreCase(searchCriteria.getAdvertisementTitle()),
+                        searchCriteria.getAdvertisementType() == null ? null : advertisement.type.eq(searchCriteria.getAdvertisementType()),
+                        searchCriteria.getAdvertisementStatus() == null ? null : advertisement.status.eq(searchCriteria.getAdvertisementStatus()),
+                        searchCriteria.getPriceFrom() == null ? null : advertisement.price.goe(searchCriteria.getPriceFrom()),
+                        searchCriteria.getPriceTo() == null ? null : advertisement.price.loe(searchCriteria.getPriceTo()),
+                        searchCriteria.getCurrency() == null ? null : advertisement.currency.eq(searchCriteria.getCurrency()));
     }
 
 }

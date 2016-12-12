@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RealEstateControllerIntegrationTest {
 
     private static final String BASE_URL = "/api/realEstates";
-    public static final String ADVERTISEMENTS_PATH = "/advertisements";
+    private static final String ADVERTISEMENTS_PATH = "/advertisements";
 
     @Autowired
     private MockMvc mockMvc;

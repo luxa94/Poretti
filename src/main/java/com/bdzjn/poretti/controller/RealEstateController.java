@@ -9,7 +9,6 @@ import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.service.AdvertisementService;
 import com.bdzjn.poretti.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

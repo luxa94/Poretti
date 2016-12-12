@@ -109,7 +109,7 @@ public class UserController {
         final AdvertisementSearchCriteria searchCriteria = new AdvertisementSearchCriteria(realEstateName, areaFrom, areaTo, city,
                 cityArea, state, street, latitude, longitude, realEstateType, advertisementTitle, advertisementType, advertisementStatus, priceFrom, priceTo, currency);
         if (requester == null || requester.getId() != id) {
-            searchCriteria.setAdvertisementStatus(null);
+            searchCriteria.setAdvertisementStatus(AdvertisementStatus.ACTIVE);
             final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
             return new ResponseEntity<>(advertisements, HttpStatus.OK);
         }

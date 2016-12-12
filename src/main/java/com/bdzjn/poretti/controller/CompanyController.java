@@ -53,8 +53,8 @@ public class CompanyController {
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
-    @Transactional
     @PreAuthorize("hasAnyAuthority('CREATE_COMPANY')")
+    @Transactional
     @PostMapping
     public ResponseEntity create(@RequestBody RegisterCompanyDTO registerCompanyDTO,
                                  @AuthenticationPrincipal User admin) {
@@ -113,7 +113,6 @@ public class CompanyController {
     @Transactional
     @GetMapping("/{id}/realEstates")
     public ResponseEntity findRealEstates(@PathVariable long id) {
-        // TODO: Paging, sorting, filtering.
         final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
         final List<RealEstate> realEstates = company.getRealEstates();
         return new ResponseEntity<>(realEstates, HttpStatus.OK);
@@ -131,6 +130,19 @@ public class CompanyController {
         final RealEstate realEstate = realEstateService.edit(realEstateDTO, id);
 
         return new ResponseEntity<>(realEstate, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
+    @Transactional
+    @DeleteMapping("/{id}/realEstates/{realEstateId}")
+    public ResponseEntity deleteRealEstate(@PathVariable long id,
+                                           @PathVariable long realEstateId,
+                                           @AuthenticationPrincipal User user) {
+        membershipService.findActiveMembership(user.getId(), id);
+        realEstateService.findByIdAndOwnerId(realEstateId, id).orElseThrow(NotFoundException::new);
+        realEstateService.delete(realEstateId);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
@@ -212,6 +224,19 @@ public class CompanyController {
         final Advertisement advertisement = advertisementService.edit(advertisementDTO, id);
 
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
+    @Transactional
+    @DeleteMapping("/{id}/advertisements/{advertisementId}")
+    public ResponseEntity deleteAdvertisement(@PathVariable long id,
+                                              @PathVariable long advertisementId,
+                                              @AuthenticationPrincipal User user) {
+        membershipService.findActiveMembership(user.getId(), id);
+        advertisementService.findByIdAndOwnerId(advertisementId, id).orElseThrow(NotFoundException::new);
+        advertisementService.delete(advertisementId);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_REVIEW')")
