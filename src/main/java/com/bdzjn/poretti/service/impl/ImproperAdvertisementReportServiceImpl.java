@@ -3,9 +3,11 @@ package com.bdzjn.poretti.service.impl;
 import com.bdzjn.poretti.controller.dto.AdvertisementReportDTO;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.controller.exception.UnprocessableException;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.ImproperAdvertisementReport;
 import com.bdzjn.poretti.model.User;
+import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.repository.AdvertisementRepository;
 import com.bdzjn.poretti.repository.ImproperAdvertisementReportRepository;
 import com.bdzjn.poretti.service.ImproperAdvertisementReportService;
@@ -29,6 +31,9 @@ public class ImproperAdvertisementReportServiceImpl implements ImproperAdvertise
     @Override
     public ImproperAdvertisementReport create(AdvertisementReportDTO advertisementReportDTO, long advertisementId, User user) {
         final Advertisement advertisement = advertisementRepository.findById(advertisementId).orElseThrow(NotFoundException::new);
+        if (advertisement.getStatus() == AdvertisementStatus.DONE){
+            throw new UnprocessableException("Cannot report on advertisement which is done");
+        }
         if (advertisement.getAdvertiser().getId() == user.getId()) {
             throw new ForbiddenException();
         }

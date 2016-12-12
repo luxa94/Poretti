@@ -1,6 +1,11 @@
 package com.bdzjn.poretti.integration;
 
-import com.bdzjn.poretti.controller.dto.*;
+import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
+import com.bdzjn.poretti.controller.dto.AdvertisementRealEstateDTO;
+import com.bdzjn.poretti.controller.dto.AdvertisementReportDTO;
+import com.bdzjn.poretti.controller.dto.ReviewDTO;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
@@ -8,6 +13,7 @@ import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.repository.AdvertisementRepository;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.*;
+import com.bdzjn.poretti.utils.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +26,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,6 +46,7 @@ public class AdvertisementControllerIntegrationTest {
     private static final String REPORTED_PATH = "/reported";
     private static final String APPROVE_PATH = "/approve";
     private static final String INVALIDATE_PATH = "/invalidate";
+    private static final String DONE_PATH = "/done";
     private static final int PAGE = 0;
     private static final int PAGE_SIZE = 5;
     private static final String PAGING = "?page=" + PAGE + "&size=" + PAGE_SIZE;
@@ -518,6 +527,25 @@ public class AdvertisementControllerIntegrationTest {
 
     @Test
     @Transactional
+    public void createShouldReturnUnprocessableWhenNotProperEndsOnDate() throws Exception {
+        final AdvertisementRealEstateDTO testEntity = AdvertisementTestData.realEstateAdvertisementTestEntity();
+        final Date yesterday = DateUtils.yesterday();
+        testEntity.getAdvertisementDTO().setEndsOn(yesterday);
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntity)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
+    }
+
+    @Test
+    @Transactional
     public void editShouldReturnOkWhenAdvertisementExistsAndCurrentUserIsAdvertiser() throws Exception {
         final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
@@ -579,6 +607,21 @@ public class AdvertisementControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void editShouldReturnUnprocessableWhenNotProperEndsOnDate() throws Exception {
+        final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH;
+        final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final Date yesterday = DateUtils.yesterday();
+        testEntity.setEndsOn(yesterday);
+
+        this.mockMvc.perform(put(EDIT_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntity)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -682,6 +725,24 @@ public class AdvertisementControllerIntegrationTest {
 
     @Test
     @Transactional
+    public void createReportShouldReturnUnprocessableWhenAdvertisementStatusIsDone() throws Exception {
+        final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REPORTS_PATH;
+        final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+
+        //TODO: change this to use test suite (if you have time :) )
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.DONE);
+        advertisementRepository.save(advertisement);
+
+        this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REPORT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntity)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional
     public void findReportsShouldReturnOkWhenAdvertisementExists() throws Exception {
         final String FIND_ADVERTISEMENT_REPORTS_PATH = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REPORTS_PATH;
 
@@ -734,8 +795,25 @@ public class AdvertisementControllerIntegrationTest {
     @Transactional
     public void createReviewShouldReturnForbiddenWhenCurrentUserIsAdvertiser() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REVIEWS_PATH;
-
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+
+        this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.json(testEntity)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Transactional
+    public void createReviewShouldReturnUnprocessableWhenAdvertisementStatusIsDone() throws Exception {
+        final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REVIEWS_PATH;
+        final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+
+        //TODO: change this alo to use test suite
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.DONE);
+        advertisementRepository.save(advertisement);
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -816,6 +894,50 @@ public class AdvertisementControllerIntegrationTest {
 
         this.mockMvc.perform(put(APPROVE_ADVERTISEMENT)
                 .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void doneShouldReturnOkWhenExistingAdvertisementAndCurrentUserIsAdvertiser() throws Exception {
+        final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + DONE_PATH;
+
+        this.mockMvc.perform(put(DONE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    public void doneShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
+        final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.NON_EXISTING_ID_PATH + DONE_PATH;
+
+        this.mockMvc.perform(put(DONE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void doneShouldReturnNotFoundWhenCurrentUserIsNotAdvertiser() throws Exception {
+        final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + DONE_PATH;
+
+        this.mockMvc.perform(put(DONE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void doneShouldReturnNotFoundWhenCurrentUserIsNotAdvertiserAndNonExistingAdv() throws Exception {
+        final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.NON_EXISTING_ID_PATH + DONE_PATH;
+
+        this.mockMvc.perform(put(DONE_ADVERTISEMENT)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

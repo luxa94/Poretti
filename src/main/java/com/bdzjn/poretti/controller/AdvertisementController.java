@@ -124,6 +124,17 @@ public class AdvertisementController {
     @PutMapping("/{id}/approve")
     public ResponseEntity approve(@PathVariable long id) {
         advertisementService.changeStatus(id, AdvertisementStatus.ACTIVE);
+        advertisementService.deleteReportsAfterApprove(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
+    @Transactional
+    @PutMapping("/{id}/done")
+    public ResponseEntity done(@PathVariable long id, @AuthenticationPrincipal User user){
+        advertisementService.findByIdAndOwnerId(id,user.getId()).orElseThrow(NotFoundException::new);
+        advertisementService.changeStatus(id, AdvertisementStatus.DONE);
 
         return new ResponseEntity(HttpStatus.OK);
     }
