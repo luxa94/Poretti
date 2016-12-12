@@ -4,7 +4,7 @@ import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.InvalidRangeException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
-import com.bdzjn.poretti.controller.exception.UnprocessableException;
+import com.bdzjn.poretti.controller.exception.UnprocessableEntityException;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.AdvertisementReview;
 import com.bdzjn.poretti.model.User;
@@ -36,7 +36,7 @@ public class AdvertisementReviewServiceImpl implements AdvertisementReviewServic
             throw new ForbiddenException();
         }
         if (advertisement.getStatus() == AdvertisementStatus.DONE) {
-            throw new UnprocessableException("Cannot create review on advertisement which is done");
+            throw new UnprocessableEntityException("Cannot create review on advertisement which is done");
         }
         if (reviewDTO.getRating() < 1 || reviewDTO.getRating() > 10) {
             throw new InvalidRangeException("Rating must be in range form 1 to 10");

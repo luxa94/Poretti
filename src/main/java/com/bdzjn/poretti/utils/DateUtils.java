@@ -5,7 +5,7 @@ import java.util.Date;
 
 public final class DateUtils {
 
-    public DateUtils() {
+    private DateUtils() {
 
     }
 
