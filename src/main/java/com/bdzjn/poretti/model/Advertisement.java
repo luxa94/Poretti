@@ -61,6 +61,10 @@ public class Advertisement {
     @OneToMany(mappedBy = "target", cascade = CascadeType.REMOVE)
     private List<AdvertisementReview> reviews = new ArrayList<>();
 
+    public double getAverageRating() {
+        return reviews.stream().mapToInt(Review::getRating).average().orElse(0d);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -12,14 +12,14 @@ import java.util.Date;
 public class AdvertisementTestData {
 
     public static final int EXISTING_ID = 1;
-    public static final int NON_EXISTING_ID = 2;
+    public static final int NON_EXISTING_ID = 212;
     public static final String EXISTING_ID_PATH = "/1";
-    public static final String NON_EXISTING_ID_PATH = "/2";
+    public static final String NON_EXISTING_ID_PATH = "/" + NON_EXISTING_ID;
     public static final String EXISTING_TITLE = "Advertisement title";
-    public static final double EXISTING_PRICE = 3000d;
-    public static final String EXISTING_TYPE = AdvertisementType.SALE.toString();
-    public static final String EXISTING_STATUS = AdvertisementStatus.ACTIVE.toString();
-    public static final String EXISTING_CURRENCY = Currency.RSD.toString();
+    public static final double EXISTING_PRICE = 30000d;
+    public static final String EXISTING_TYPE = AdvertisementType.SALE.name();
+    public static final String EXISTING_STATUS = AdvertisementStatus.ACTIVE.name();
+    public static final String EXISTING_CURRENCY = Currency.RSD.name();
     public static final int CONTAINING_REAL_ESTATE_ID = 1;
     public static final int ADVERTISER_ID = 2;
 

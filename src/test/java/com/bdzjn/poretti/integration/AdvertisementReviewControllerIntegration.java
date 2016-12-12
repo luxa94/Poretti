@@ -1,7 +1,6 @@
 package com.bdzjn.poretti.integration;
 
 import com.bdzjn.poretti.repository.AdvertisementReviewRepository;
-import com.bdzjn.poretti.repository.OwnerReviewRepository;
 import com.bdzjn.poretti.util.data.ReviewTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Assert;

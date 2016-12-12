@@ -38,7 +38,7 @@ public class MembershipServiceImpl implements MembershipService {
 
     private Membership findMembership(long memberId, long companyId, boolean confirmedStatus) {
         final Membership membership = findByMemberIdAndCompanyId(memberId, companyId).orElseThrow(NotFoundException::new);
-        if (membership.isConfirmed() == confirmedStatus) {
+        if (membership.isConfirmed() != confirmedStatus) {
             throw new NotFoundException();
         }
 

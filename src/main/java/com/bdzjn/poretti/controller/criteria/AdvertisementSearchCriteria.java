@@ -109,4 +109,8 @@ public class AdvertisementSearchCriteria {
     public void setAdvertisementStatus(AdvertisementStatus advertisementStatus) {
         this.advertisementStatus = advertisementStatus;
     }
+
+    public AdvertisementStatus getAdvertisementStatus() {
+        return advertisementStatus;
+    }
 }

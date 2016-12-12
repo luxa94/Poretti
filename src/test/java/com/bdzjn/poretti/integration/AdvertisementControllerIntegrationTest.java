@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,9 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,7 +56,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.content", hasSize(1)));
+                .andExpect(jsonPath("$.content", hasSize(2)));
     }
 
     @Test
@@ -72,7 +69,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.name", hasItem(RealEstateTestData.EXISTING_NAME)));
+                .andExpect(jsonPath("$.content.[*].realEstate.name", everyItem(containsString(filter))));
     }
 
     @Test
@@ -90,14 +87,14 @@ public class AdvertisementControllerIntegrationTest {
     @Test
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAreaFromFilter() throws Exception {
-        final double filter = 50;
+        final double filter = 150;
         final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&areaFrom=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.area", hasItem(RealEstateTestData.EXISTING_AREA)));
+                .andExpect(jsonPath("$.content.[*].realEstate.area", everyItem(greaterThanOrEqualTo(filter))));
     }
 
     @Test
@@ -109,7 +106,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.area", everyItem(greaterThanOrEqualTo(filter))));
     }
 
     @Test
@@ -122,7 +120,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.area", hasItem(RealEstateTestData.EXISTING_AREA)));
+                .andExpect(jsonPath("$.content.[*].realEstate.area", everyItem(lessThan(filter))));
     }
 
     @Test
@@ -134,7 +132,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.area", everyItem(lessThan(filter))));
     }
 
     @Test
@@ -147,7 +146,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.city", hasItem(RealEstateTestData.LOCATION_CITY)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.city", everyItem(containsString(filter))));
     }
 
     @Test
@@ -159,7 +158,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.city", everyItem(containsString(filter))));
     }
 
     @Test
@@ -172,7 +172,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.cityArea", hasItem(RealEstateTestData.LOCATION_CITY_AREA)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.cityArea", everyItem(containsString(filter))));
 
     }
 
@@ -185,7 +185,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.cityArea", everyItem(containsString(filter))));
     }
 
     @Test
@@ -198,7 +199,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.state", hasItem(RealEstateTestData.LOCATION_STATE)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.state", everyItem(containsString(filter))));
     }
 
     @Test
@@ -210,7 +211,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.state", everyItem(containsString(filter))));
     }
 
     @Test
@@ -223,7 +225,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.street", hasItem(RealEstateTestData.LOCATION_STREET)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.street", everyItem(containsString(filter))));
     }
 
     @Test
@@ -248,7 +250,8 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", hasItem(RealEstateTestData.LOCATION_LATITUDE)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", everyItem(greaterThanOrEqualTo(filter - 0.01))))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", everyItem(lessThanOrEqualTo(filter + 0.01))));
     }
 
     @Test
@@ -260,7 +263,9 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", everyItem(greaterThanOrEqualTo(filter - 0.01))))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", everyItem(lessThanOrEqualTo(filter + 0.01))));
     }
 
     @Test
@@ -273,7 +278,8 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.location.latitude", hasItem(RealEstateTestData.LOCATION_LONGITUDE)));
+                .andExpect(jsonPath("$.content.[*].realEstate.location.longitude", everyItem(greaterThanOrEqualTo(filter - 0.01))))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.longitude", everyItem(lessThanOrEqualTo(filter + 0.01))));
     }
 
     @Test
@@ -285,7 +291,9 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.longitude", everyItem(greaterThanOrEqualTo(filter - 0.01))))
+                .andExpect(jsonPath("$.content.[*].realEstate.location.longitude", everyItem(lessThanOrEqualTo(filter + 0.01))));
     }
 
     @Test
@@ -298,7 +306,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].realEstate.type", hasItem(RealEstateTestData.EXISTING_TYPE)));
+                .andExpect(jsonPath("$.content.[*].realEstate.type", everyItem(equalTo(filter))));
     }
 
     @Test
@@ -310,7 +318,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].realEstate.type", everyItem(equalTo(filter))));
     }
 
     @Test
@@ -323,7 +332,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].title", hasItem(AdvertisementTestData.EXISTING_TITLE)));
+                .andExpect(jsonPath("$.content.[*].title", everyItem(containsString(filter))));
     }
 
     @Test
@@ -335,32 +344,34 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].title", everyItem(containsString(filter))));
     }
 
     @Test
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForAdvertisementTypeFilter() throws Exception {
-        final AdvertisementType filter = AdvertisementType.SALE;
+        final String filter = AdvertisementType.SALE.name();
         final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].type", hasItem(AdvertisementTestData.EXISTING_TYPE)));
+                .andExpect(jsonPath("$.content.[*].type", hasItem(filter)));
     }
 
     @Test
     @Transactional
     public void findShouldReturnOkAndEmptyContentForAdvertisementTypeFilter() throws Exception {
-        final AdvertisementType filter = AdvertisementType.RENT;
+        final String filter = AdvertisementType.RENT.name();
         final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&advertisementType=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content.[*].type", hasItem(filter)));
     }
 
     @Test
@@ -373,7 +384,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].price", hasItem(AdvertisementTestData.EXISTING_PRICE)));
+                .andExpect(jsonPath("$.content.[*].price", everyItem(greaterThanOrEqualTo(filter))));
     }
 
     @Test
@@ -385,7 +396,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].price", everyItem(greaterThanOrEqualTo(filter))));
     }
 
     @Test
@@ -398,7 +410,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].price", hasItem(AdvertisementTestData.EXISTING_PRICE)));
+                .andExpect(jsonPath("$.content.[*].price", everyItem(lessThanOrEqualTo(filter))));
     }
 
     @Test
@@ -410,20 +422,21 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].price", everyItem(lessThanOrEqualTo(filter))));
     }
 
     @Test
     @Transactional
     public void findShouldReturnOkAndNotEmptyContentForCurrencyFilter() throws Exception {
-        final String filter = AdvertisementTestData.EXISTING_CURRENCY.toString();
+        final String filter = AdvertisementTestData.EXISTING_CURRENCY;
         final String FIND_ADVERTISEMENTS = BASE_URL + PAGING + "&currency=" + filter;
 
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].currency", hasItem(AdvertisementTestData.EXISTING_CURRENCY)));
+                .andExpect(jsonPath("$.content.[*].currency", everyItem(equalTo(filter))));
     }
 
     @Test
@@ -435,7 +448,8 @@ public class AdvertisementControllerIntegrationTest {
         this.mockMvc.perform(get(FIND_ADVERTISEMENTS))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
+                .andExpect(jsonPath("$.content", hasSize(0)))
+                .andExpect(jsonPath("$.content.[*].currency", everyItem(equalTo(filter))));
     }
 
     @Test
@@ -448,7 +462,7 @@ public class AdvertisementControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content.[*].title", hasItem(AdvertisementTestData.EXISTING_TITLE)));
+                .andExpect(jsonPath("$.content.[*].title", everyItem(containsString(filterTitle))));
     }
 
     @Test
