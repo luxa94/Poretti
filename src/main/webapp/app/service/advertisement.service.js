@@ -78,8 +78,6 @@
         function findReviews(id) {
             return $http.get(pathWithId(id) + '/reviews');
         }
-
     }
-
 }());
 
