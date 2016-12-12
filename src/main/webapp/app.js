@@ -1,3 +1,4 @@
 (function () {
-    var app = angular.module('poretti', ['ngRoute', 'ngResource', 'ui.router', 'ngMaterial', 'angularFileUpload']);
+    'use strict';
+    var porettiApp = angular.module('poretti', ['ngRoute', 'ngResource', 'ui.router', 'ngMaterial', 'angularFileUpload']);
 }());
