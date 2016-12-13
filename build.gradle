@@ -2,56 +2,66 @@ def springBootVersion = '1.4.1.RELEASE'
 def queryDslVersion = "4.1.3"
 
 buildscript {
-	ext {
-		springBootVersion = '1.4.1.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2.1"
+    }
 }
 
+
+apply plugin: 'org.sonarqube'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'poretti'
-	version = '0.0.1-SNAPSHOT'
+    baseName = 'poretti'
+    version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
 
 idea {
-	module {
-		sourceDirs += file('build/classes/main/com/bdzjn/poretti/model')
-		generatedSourceDirs += file('build/classes/main/com/bdzjn/poretti/model')
-	}
+    module {
+        sourceDirs += file('build/classes/main/com/bdzjn/poretti/model')
+        generatedSourceDirs += file('build/classes/main/com/bdzjn/poretti/model')
+    }
 }
 
+
 dependencies {
-	// Spring
+    // Spring
     compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
-	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 
-	// Database
+    // Database
     compile 'mysql:mysql-connector-java:5.1.36'
-	compile group: 'com.h2database', name: 'h2', version: '1.4.193'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.193'
 
-	// QueryDSL
-	compile "com.querydsl:querydsl-apt:$queryDslVersion:jpa"
-	compile "com.querydsl:querydsl-jpa:$queryDslVersion"
+    // QueryDSL
+    compile "com.querydsl:querydsl-apt:$queryDslVersion:jpa"
+    compile "com.querydsl:querydsl-jpa:$queryDslVersion"
 
-	// Email
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.4.1.RELEASE'
+    // Email
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.4.1.RELEASE'
 
-	testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

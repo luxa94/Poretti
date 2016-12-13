@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -38,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = "test")
-public class AdvertisementControllerIntegrationTest {
+public class AdvertisementControllerTest {
 
     private static final String BASE_URL = "/api/advertisements";
     private static final String REPORTS_PATH = "/reports";
@@ -725,7 +726,7 @@ public class AdvertisementControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void createReportShouldReturnUnprocessableWhenAdvertisementStatusIsDone() throws Exception {
+    public void createReportShouldReturnUnprocessableWhenAdvertisementStatusIsNotActive() throws Exception {
         final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REPORTS_PATH;
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
 
@@ -738,6 +739,7 @@ public class AdvertisementControllerIntegrationTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
+                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -806,9 +808,9 @@ public class AdvertisementControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void createReviewShouldReturnUnprocessableWhenAdvertisementStatusIsDone() throws Exception {
+    public void createReviewShouldReturnUnprocessableWhenAdvertisementStatusIsNotActive() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.EXISTING_ID_PATH + REVIEWS_PATH;
-        final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final ReviewDTO testEntity = ReviewTestData.testEntity();
 
         //TODO: change this alo to use test suite
         final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
@@ -816,10 +818,11 @@ public class AdvertisementControllerIntegrationTest {
         advertisementRepository.save(advertisement);
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW)
-                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
+                .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
-                .andExpect(status().isForbidden());
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

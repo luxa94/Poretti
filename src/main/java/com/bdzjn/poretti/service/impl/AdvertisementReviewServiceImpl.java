@@ -35,8 +35,8 @@ public class AdvertisementReviewServiceImpl implements AdvertisementReviewServic
         if (advertisement.getAdvertiser().getId() == author.getId()) {
             throw new ForbiddenException();
         }
-        if (advertisement.getStatus() == AdvertisementStatus.DONE) {
-            throw new UnprocessableEntityException("Cannot create review on advertisement which is done");
+        if (advertisement.getStatus() != AdvertisementStatus.ACTIVE) {
+            throw new UnprocessableEntityException("Cannot create review on non active advertisement");
         }
         if (reviewDTO.getRating() < 1 || reviewDTO.getRating() > 10) {
             throw new InvalidRangeException("Rating must be in range form 1 to 10");

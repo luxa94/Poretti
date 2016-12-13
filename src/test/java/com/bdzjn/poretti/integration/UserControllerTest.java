@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = "test")
-public class UserControllerIntegrationTest {
+public class UserControllerTest {
 
     private static final String BASE_URL = "/api/users";
     private static final String REAL_ESTATES_PATH = "/realEstates";
