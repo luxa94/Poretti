@@ -31,8 +31,8 @@ public class ImproperAdvertisementReportServiceImpl implements ImproperAdvertise
     @Override
     public ImproperAdvertisementReport create(AdvertisementReportDTO advertisementReportDTO, long advertisementId, User user) {
         final Advertisement advertisement = advertisementRepository.findById(advertisementId).orElseThrow(NotFoundException::new);
-        if (advertisement.getStatus() == AdvertisementStatus.DONE){
-            throw new UnprocessableEntityException("Cannot report on advertisement which is done");
+        if (advertisement.getStatus() != AdvertisementStatus.ACTIVE){
+            throw new UnprocessableEntityException("Cannot report on non active advertisement");
         }
         if (advertisement.getAdvertiser().getId() == user.getId()) {
             throw new ForbiddenException();

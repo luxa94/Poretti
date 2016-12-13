@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = "test")
-public class AdvertisementReviewControllerIntegration {
+public class AdvertisementReviewControllerTest {
 
     private static final String BASE_URL = "/api/advertisementReviews";
 
