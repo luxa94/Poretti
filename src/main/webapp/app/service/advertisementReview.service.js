@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
     'use strict';
     angular
         .module('poretti')
@@ -15,5 +15,5 @@
             return $http.delete(BASE_URL + '/' + id);
         }
     }
-}());
+}(angular));
 

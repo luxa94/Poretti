@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
     'use strict';
     angular
         .module('poretti')
@@ -51,5 +51,5 @@
             LOCAL_STORAGE_INSTANCE && LOCAL_STORAGE_INSTANCE.removeItem(LOCAL_STORAGE_KEY);
         }
     }
-}());
+}(angular));
 

@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
     'use strict';
     angular
         .module('poretti')
@@ -79,5 +79,5 @@
             return $http.get(pathWithId(id) + '/reviews');
         }
     }
-}());
+}(angular));
 

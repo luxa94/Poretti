@@ -147,6 +147,23 @@ public class CompanyController {
 
     @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
     @Transactional
+    @PostMapping("/{id}/advertisements")
+    public ResponseEntity createAdvertisementAndRealEstate(@RequestBody AdvertisementRealEstateDTO advertisementRealEstateDTO,
+                                                           @PathVariable long id,
+                                                           @AuthenticationPrincipal User user) {
+        membershipService.findActiveMembership(user.getId(), id);
+        final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
+
+        final AdvertisementDTO advertisementDTO = advertisementRealEstateDTO.getAdvertisementDTO();
+        final RealEstateDTO realEstateDTO = advertisementRealEstateDTO.getRealEstateDTO();
+
+        final RealEstate realEstate = realEstateService.create(realEstateDTO, company);
+        final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
+        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
+    @Transactional
     @PostMapping("/{id}/realEstates/{realEstateId}/advertisements")
     public ResponseEntity createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO,
                                               @PathVariable long id,
@@ -193,23 +210,6 @@ public class CompanyController {
         searchCriteria.setAdvertisementStatus(null);
         final Page<Advertisement> advertisements = advertisementService.findActiveFor(id, searchCriteria, pageable);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyAuthority('CREATE_ADVERTISEMENT')")
-    @Transactional
-    @PostMapping("/{id}/advertisements")
-    public ResponseEntity createAdvertisementAndRealEstate(@RequestBody AdvertisementRealEstateDTO advertisementRealEstateDTO,
-                                                           @PathVariable long id,
-                                                           @AuthenticationPrincipal User user) {
-        membershipService.findActiveMembership(user.getId(), id);
-        final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
-
-        final AdvertisementDTO advertisementDTO = advertisementRealEstateDTO.getAdvertisementDTO();
-        final RealEstateDTO realEstateDTO = advertisementRealEstateDTO.getRealEstateDTO();
-
-        final RealEstate realEstate = realEstateService.create(realEstateDTO, company);
-        final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
