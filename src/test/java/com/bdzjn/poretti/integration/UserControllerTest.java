@@ -264,7 +264,7 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andDo(document("find-memberships of user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .andDo(document("find-memberships-of-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("id").description("Id of user")
                         )));

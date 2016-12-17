@@ -351,6 +351,125 @@ In case when there is no user with specified id, response looks like.
 
 include::{snippets}/find-one-user-bad-id/http-response.adoc[]
 
+[[resource-create-admin]]
+=== Create admin
+A `POST` method for creating system admin.
+
+==== Example request
+
+include::{snippets}/create-admin/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/create-admin/path-parameters.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-admin/request-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/create-admin/http-response.adoc[]
+
+[[resource-create-verifier]]
+=== Create verifier
+A `POST` method for creating verifier.
+
+==== Example request
+
+include::{snippets}/create-verifier/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-verifier/request-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/create-verifier/http-response.adoc[]
+
+[[resource-edit-user]]
+=== Create verifier
+A `PUT` method for editing *existing* user.
+
+==== Example request
+
+include::{snippets}/edit-user/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/edit-user/request-parameters.adoc[]
+
+==== Path parameters
+
+include::{snippets}/edit-user/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/edi-user/http-response.adoc[]
+
+[[resource-review-for-user]]
+=== User review
+A `POST` method for creating user review.
+
+==== Example request
+
+include::{snippets}/create-review-for-user/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-review-for-user/request-parameters.adoc[]
+
+==== Path parameters
+
+include::{snippets}/create-review-for-user/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/create-review-for-user/http-response.adoc[]
+
+[[resource-reviews-for-user]]
+=== Reviews for user
+A `GET` method for getting all user reviews.
+
+==== Example request
+
+include::{snippets}/find-reviews-for-user/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/find-reviews-for-user/request-parameters.adoc[]
+
+==== Path parameters
+
+include::{snippets}/find-reviews-for-user/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/find-reviews-for-user/http-response.adoc[]
+
+[[resource-memberships-for-user]]
+=== Memberships of user
+A `GET` method for getting all memberships of user.
+
+==== Example request
+
+include::{snippets}/find-memberships-of-user/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/find-memberships-of-user/request-parameters.adoc[]
+
+==== Path parameters
+
+include::{snippets}/find-memberships-of-user/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/find-memberships-of-user/http-response.adoc[]
+
+
+
+
 
 
 
