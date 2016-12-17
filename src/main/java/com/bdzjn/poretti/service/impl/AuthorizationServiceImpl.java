@@ -45,4 +45,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         return authorizationDTO;
     }
+
+    @Override
+    public void deleteByToken(String token) {
+        authorizationRepository.findByToken(token).ifPresent(authorizationRepository::delete);
+    }
+
 }
