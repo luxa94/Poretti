@@ -8,6 +8,11 @@ import java.util.Optional;
 
 public interface AuthorizationService {
 
+    /**
+     *
+     * @param token Token for finding 
+     * @return
+     */
     Optional<Authorization> findByToken(String token);
 
     AuthorizationDTO createFor(User user);
