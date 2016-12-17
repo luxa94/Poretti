@@ -16,7 +16,8 @@ public interface AuthorizationService {
     Optional<Authorization> findByToken(String token);
 
     /**
-     * Creates {@link Authorization} token for user who wants to log in
+     * Creates {@link Authorization} token for user who wants to log in.
+     *
      * @param user User for whom new {@link Authorization} is created
      * @return DTO object based on created authorization
      */
