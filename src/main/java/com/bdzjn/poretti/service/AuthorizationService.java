@@ -12,4 +12,5 @@ public interface AuthorizationService {
 
     AuthorizationDTO createFor(User user);
 
+    void deleteByToken(String token);
 }

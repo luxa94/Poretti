@@ -3,12 +3,16 @@ package com.bdzjn.poretti.controller;
 import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
+import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.model.Authorization;
 import com.bdzjn.poretti.model.User;
+import com.bdzjn.poretti.security.AuthenticationFilter;
 import com.bdzjn.poretti.service.AuthorizationService;
 import com.bdzjn.poretti.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +54,14 @@ public class AuthenticationController {
         userService.verify(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @Transactional
+    @DeleteMapping("/logout")
+    public ResponseEntity logout(@RequestHeader(name = AuthenticationFilter.AUTHORIZATION) String token) {
+        authorizationService.deleteByToken(token);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 
 }

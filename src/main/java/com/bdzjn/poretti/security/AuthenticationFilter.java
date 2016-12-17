@@ -23,7 +23,7 @@ public class AuthenticationFilter extends GenericFilterBean {
 
     private final AuthorizationService authorizationService;
 
-    private static final String AUTHORIZATION = "X-AUTH-TOKEN";
+    public static final String AUTHORIZATION = "X-AUTH-TOKEN";
 
     @Autowired
     public AuthenticationFilter(AuthorizationService authorizationService) {

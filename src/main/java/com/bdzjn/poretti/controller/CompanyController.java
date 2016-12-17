@@ -226,6 +226,17 @@ public class CompanyController {
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
+    @Transactional
+    @PutMapping("/{id}/advertisements/{advertisementId}/done")
+    public ResponseEntity done(@PathVariable long id,
+                               @PathVariable long advertisementId,
+                               @AuthenticationPrincipal User user) {
+        membershipService.findActiveMembership(user.getId(), id);
+        advertisementService.changeStatus(advertisementId, AdvertisementStatus.DONE);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAnyAuthority('DELETE_ADVERTISEMENT')")
     @Transactional
     @DeleteMapping("/{id}/advertisements/{advertisementId}")
