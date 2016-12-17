@@ -1,0 +1,359 @@
+= Poretti Getting Started Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[introduction]
+= Introduction
+
+  Poretti application is system for adding advertisements an realestates and something more
+  Lack of inspiration...
+
+[[resources]]
+= Resources
+
+
+[[resources-advertisement]]
+== Advertisement
+  Advertisement
+
+[[resource-finding-one-advertisement]]
+=== Find advertisement
+A `GET` method for finding advertisement by id.
+
+==== Example request
+
+include::{snippets}/find-one-advertisement/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/find-one-advertisement/http-response.adoc[]
+
+[[resource-create-advertisement]]
+=== Create advertisement
+A `POST` method for creating new advertisement.
+
+==== Example request
+
+include::{snippets}/create-advertisement/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-advertisement/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/create-advertisement/http-response.adoc[]
+
+[[resource-edit-advertisement]]
+=== Edit advertisement
+A `PUT` method for editing *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/edit-advertisement/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/edit-advertisement/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/edit-advertisement/http-response.adoc[]
+
+[[resource-delete-advertisement]]
+=== Delete advertisement
+A `DELETE` method for deleting *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/delete-advertisement/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/delete-advertisement/http-response.adoc[]
+
+[[resource-create-advertisement-report]]
+=== Create report for advertisement
+A `POST` method for creating new report on *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/create-advertisement-report/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-advertisement-report/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/create-advertisement-report/http-response.adoc[]
+
+[[resource-find-advertisement-reports]]
+=== Find reports for advertisement
+A `GET` method for getting reports on *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/find-advertisement-reports/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/find-advertisement-reports/http-response.adoc[]
+
+[[resource-create-advertisement-review]]
+=== Create report for advertisement
+A `POST` method for creating new review on *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/create-advertisement-review/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-advertisement-review/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/create-advertisement-review/http-response.adoc[]
+
+[[resource-find-advertisement-reviews]]
+=== Find reports for advertisement
+A `GET` method for getting reviews on *existing* advertisement.
+
+==== Example request
+
+include::{snippets}/find-advertisement-reviews/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/find-advertisement-reviews/http-response.adoc[]
+
+[[resource-find-reported-advertisements]]
+=== Find reported advertisements
+A `GET` method for getting all currently reported advertisements.
+
+==== Example request
+
+include::{snippets}/find-reported-advertisements/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/find-reported-advertisements/http-response.adoc
+
+[[resource-approve-advertisement]]
+=== Approve advertisement
+A `PUT` method for editing advertisement currently status.
+Used by verifier when reported advertisement is changed and those changes are
+acceptable.
+
+==== Example request
+
+include::{snippets}/approve-advertisement/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/approve-advertisement/http-response.adoc[]
+
+[[resource-invalid-advertisement]]
+=== Invalid advertisement
+A `PUT` method for editing advertisement currently status.
+Used by verifier when advertisement is reported and it's improper because of something.
+
+==== Example request
+
+include::{snippets}/invalidate-advertisement/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/invalidate-advertisement/http-response.adoc[]
+
+[[resource-ending-advertisement]]
+=== End advertisement
+A `PUT` method for editing advertisement currently status.
+Used by advertiser when it wants to _end_ advertisement.
+
+==== Example request
+
+include::{snippets}/end-advertisement/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/end-advertisement/http-response.adoc[]
+
+[[resources-real-estate]]
+== Real Estate
+  Real estate
+
+[[resource-find-one-real-estate]]
+=== Find real estate
+A `GET` method for finding real estate.
+
+==== Example request
+
+include::{snippets}/find-one-real-estate/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/find-one-real-estate/path-parameters.adoc[]
+
+==== Request parameters
+
+include::{snippets}/find-one-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/find-one-real-estate/http-response.adoc[]
+
+[[resource-create-real-estate]]
+=== Create real estate
+A `POST` method for creating new real estate.
+
+==== Example request
+
+include::{snippets}/create-real-estate/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/create-real-estate/http-response.adoc[]
+
+[[resource-edit-real-estate]]
+=== Edit real estate
+A `PUT` method for editing *existing* real estate.
+
+==== Example request
+
+include::{snippets}/edit-real-estate/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/edit-real-estate/path-parameters.adoc[]
+
+==== Request parameters
+
+include::{snippets}/edit-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/edit-real-estate/http-response.adoc[]
+
+[[resource-delete-real-estate]]
+=== Delete real estate
+A `DELETE` method for deleting *existing* real estate.
+
+==== Example request
+
+include::{snippets}/delete-real-estate/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/delete-real-estate/path-parameters.adoc[]
+
+==== Request parameters
+
+include::{snippets}/delete-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/delete-real-estate/http-response.adoc[]
+
+[[resource-create-advertisement-for-real-estate]]
+=== Create advertisement for real estate
+A `POST` method for creating advertisement which contains *existing* real estate.
+
+==== Example request
+
+include::{snippets}/create-advertisement-for-real-estate/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/create-advertisement-for-real-estate/path-parameters.adoc[]
+
+==== Request parameters
+
+include::{snippets}/create-advertisement-for-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/create-advertisement-for-real-estate/http-response.adoc[]
+
+[[resources-advertisement-review]]
+== Advertisement Review
+  Advertisement review
+
+[[resource-delete-advertisement-review]]
+=== Delete advertisement review
+A `DELETE` method for deleting advertisement review.
+
+==== Example request
+
+include::{snippets}/delete-advertisement-review/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/delete-advertisement-review/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/delete-advertisement-review/http-response.adoc[]
+
+[[resources-owner-review]]
+== Owner Review
+  Owner review
+
+[[resource-delete-owner-review]]
+=== Delete owner review
+A `DELETE` method for deleting owner review.
+
+==== Example request
+
+include::{snippets}/delete-owner-review/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/delete-owner-review/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/delete-owner-review/http-response.adoc[]
+
+[[resources-user]]
+== User
+   User
+
+[[resource-find-one-user]]
+=== Find one user
+A `GET` method for finding one user with specified id.
+
+==== Example request
+
+include::{snippets}/find-one-user/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/find-one-user/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/find-one-user/http-response.adoc[]
+
+===== Find one user with bad id
+In case when there is no user with specified id, response looks like.
+
+====== Example response
+
+include::{snippets}/find-one-user-bad-id/http-response.adoc[]
+
+
+
+
+
+
+

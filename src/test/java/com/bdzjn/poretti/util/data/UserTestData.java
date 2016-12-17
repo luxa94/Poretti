@@ -14,11 +14,11 @@ public class UserTestData {
     public static final String VERIFIER_TOKEN_VALUE = "102da414-847d-4602-8b2d-edca26ab26e7";
     public static final String NOT_OWNER_TOKEN = "102da414-847d-4602-8b2d-edca26ab26d9";
     public static final String NOT_ADVERTISER_TOKEN = NOT_OWNER_TOKEN;
-    public static final String CURRENT_USER_ID_PATH = "/2";
-    public static final String NON_EXISTING_ID_PATH = "/100";
+    public static final String ID_PATH_VARIABLE = "/{id}";
     public static final String EXISTING_EMAIL = "test@user.com";
     public static final String EXISTING_USERNAME = "test_user";
     public static final int CURRENT_USER_ID = 2;
+    public static final int NON_EXISTING_ID = 212;
 
     public static RegisterDTO registerDTOTestEntity() {
         final RegisterDTO testEntity = new RegisterDTO();

@@ -9,6 +9,7 @@ import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -20,13 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets")
 @ActiveProfiles(profiles = "test")
 public class UserControllerTest {
 
@@ -44,11 +57,22 @@ public class UserControllerTest {
         final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
         final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
+        this.mockMvc.perform(post(CREATE_ADMIN_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("create-admin", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("Email of new user"),
+                                fieldWithPath("username").description("Username of new user"),
+                                fieldWithPath("password").description("Password of new user"),
+                                fieldWithPath("name").description("Name od new user"),
+                                fieldWithPath("imageUrl").ignored(),
+                                fieldWithPath("phoneNumbers").ignored(),
+                                fieldWithPath("contactEmails").ignored(),
+                                fieldWithPath("companyId").ignored()
+                        )));
     }
 
     @Test
@@ -59,7 +83,7 @@ public class UserControllerTest {
         final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
+        this.mockMvc.perform(post(CREATE_ADMIN_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
@@ -75,7 +99,7 @@ public class UserControllerTest {
         final RegisterDTO testEntityWithExistingEmail = UserTestData.registerDTOTestEntity();
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_ADMIN_URL)
+        this.mockMvc.perform(post(CREATE_ADMIN_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
@@ -89,7 +113,7 @@ public class UserControllerTest {
         final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
         final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+        this.mockMvc.perform(post(CREATE_VERIFIER_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -103,7 +127,7 @@ public class UserControllerTest {
         final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+        this.mockMvc.perform(post(CREATE_VERIFIER_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
@@ -118,33 +142,59 @@ public class UserControllerTest {
         final RegisterDTO testEntityWithExistingEmail = UserTestData.registerDTOTestEntity();
         testEntityWithExistingEmail.setEmail("admin@admin.com");
 
-        this.mockMvc.perform(MockMvcRequestBuilders.post(CREATE_VERIFIER_URL)
+        this.mockMvc.perform(post(CREATE_VERIFIER_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."));
+                .andExpect(content().string("Username or email taken."))
+                .andDo(document("create-verifier", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("Email of new user"),
+                                        fieldWithPath("username").description("Username of new user"),
+                                        fieldWithPath("password").description("Password of new user"),
+                                        fieldWithPath("name").description("Name od new user"),
+                                        fieldWithPath("imageUrl").ignored(),
+                                        fieldWithPath("phoneNumbers").ignored(),
+                                        fieldWithPath("contactEmails").ignored(),
+                                        fieldWithPath("companyId").ignored()
+                                )));
     }
 
     @Test
     @Transactional
     public void findOneShouldReturnOkWhenUserExists() throws Exception {
+        final String FIND_ONE_USER = BASE_URL + UserTestData.ID_PATH_VARIABLE;
+
+        this.mockMvc.perform(get(FIND_ONE_USER, UserTestData.CURRENT_USER_ID))
+                .andExpect(status().isOk())
+                .andDo(document("find-one-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user to be found")
+                        )));
 
     }
 
     @Test
     @Transactional
     public void findOneShouldReturnNotFoundWhenNonExistingUser() throws Exception {
+        final String FIND_ONE_USER = BASE_URL + UserTestData.ID_PATH_VARIABLE;
 
+        this.mockMvc.perform(get(FIND_ONE_USER, UserTestData.NON_EXISTING_ID))
+                .andExpect(status().isNotFound())
+                .andDo(document("find-one-user-bad-id", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user to be found")
+                        )));
     }
 
     @Test
     @Transactional
     public void editShouldReturnOkWhenCurrentUserIsUserToEdit() throws Exception {
-        final String EDIT_USER = BASE_URL + UserTestData.CURRENT_USER_ID_PATH;
+        final String EDIT_USER = BASE_URL + UserTestData.ID_PATH_VARIABLE;
         final UserDTO testEntity = UserTestData.userDTOTestEntity();
 
-        this.mockMvc.perform(put(EDIT_USER)
+        this.mockMvc.perform(put(EDIT_USER, UserTestData.CURRENT_USER_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -153,16 +203,25 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name", is(testEntity.getName())))
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.phoneNumbers", is(testEntity.getPhoneNumbers())))
-                .andExpect(jsonPath("$.contactEmails", is(testEntity.getContactEmails())));
+                .andExpect(jsonPath("$.contactEmails", is(testEntity.getContactEmails())))
+                .andDo(document("edit-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user to be edited")),
+                        requestFields(
+                                fieldWithPath("name").description("Name of user to be potentially edited"),
+                                fieldWithPath("imageUrl").description("Image of user to be potentially edited"),
+                                fieldWithPath("phoneNumbers").description("Phone numbers as contact details to be potentially edited"),
+                                fieldWithPath("contactEmails").description("Emails as contact details to be potentially edited")
+                        )));
     }
 
     @Test
     @Transactional
     public void editShouldReturnForbiddenWhenCurrentUserIsNotUserToEdit() throws Exception {
-        final String EDIT_USER = BASE_URL + UserTestData.CURRENT_USER_ID_PATH;
+        final String EDIT_USER = BASE_URL + UserTestData.ID_PATH_VARIABLE;
         final UserDTO testEntity = UserTestData.userDTOTestEntity();
 
-        this.mockMvc.perform(put(EDIT_USER)
+        this.mockMvc.perform(put(EDIT_USER, UserTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -173,20 +232,24 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void findRealEstatesShouldReturnOkWhenUserExists() throws Exception {
-        final String FIND_REAL_ESTATES = BASE_URL + UserTestData.CURRENT_USER_ID_PATH + REAL_ESTATES_PATH;
+        final String FIND_REAL_ESTATES = BASE_URL + UserTestData.ID_PATH_VARIABLE + REAL_ESTATES_PATH;
 
-        this.mockMvc.perform(get(FIND_REAL_ESTATES))
+        this.mockMvc.perform(get(FIND_REAL_ESTATES, UserTestData.CURRENT_USER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andDo(document("find-real-estates-of-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user")
+                        )));
     }
 
     @Test
     @Transactional
     public void findRealEstatesShouldReturnNotFoundWhenNonExistingUser() throws Exception {
-        final String FIND_REAL_ESTATES = BASE_URL + UserTestData.NON_EXISTING_ID_PATH + REAL_ESTATES_PATH;
+        final String FIND_REAL_ESTATES = BASE_URL + UserTestData.ID_PATH_VARIABLE + REAL_ESTATES_PATH;
 
-        this.mockMvc.perform(get(FIND_REAL_ESTATES))
+        this.mockMvc.perform(get(FIND_REAL_ESTATES, UserTestData.NON_EXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -195,20 +258,24 @@ public class UserControllerTest {
     @Transactional
     public void findMembershipsShouldReturnOkWhenUserExists() throws Exception {
         //TODO: Change size with constant from user test data
-        final String FIND_MEMBERSHIPS = BASE_URL + UserTestData.CURRENT_USER_ID_PATH + MEMBERSHIPS_PATH;
+        final String FIND_MEMBERSHIPS = BASE_URL + UserTestData.ID_PATH_VARIABLE + MEMBERSHIPS_PATH;
 
-        this.mockMvc.perform(get(FIND_MEMBERSHIPS))
+        this.mockMvc.perform(get(FIND_MEMBERSHIPS, UserTestData.CURRENT_USER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andDo(document("find-memberships of user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user")
+                        )));
     }
 
     @Test
     @Transactional
     public void findMembershipsShouldReturnNotFoundWhenNonExistingUser() throws Exception {
-        final String FIND_MEMBERSHIPS = BASE_URL + UserTestData.NON_EXISTING_ID_PATH + MEMBERSHIPS_PATH;
+        final String FIND_MEMBERSHIPS = BASE_URL + UserTestData.ID_PATH_VARIABLE + MEMBERSHIPS_PATH;
 
-        this.mockMvc.perform(get(FIND_MEMBERSHIPS))
+        this.mockMvc.perform(get(FIND_MEMBERSHIPS, UserTestData.NON_EXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -216,10 +283,10 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void createReviewShouldReturnCreatedWhenTargetUserExistsAndCurrentUserIsNotTarget() throws Exception {
-        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.CURRENT_USER_ID_PATH + REVIEWS_PATH;
+        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_OWNER_REVIEW)
+        this.mockMvc.perform(post(CREATE_OWNER_REVIEW, UserTestData.CURRENT_USER_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -227,16 +294,23 @@ public class UserControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.comment", is(testEntity.getComment())))
                 .andExpect(jsonPath("$.rating", is(testEntity.getRating())))
-                .andExpect(jsonPath("$.target.id", is(UserTestData.CURRENT_USER_ID)));
+                .andExpect(jsonPath("$.target.id", is(UserTestData.CURRENT_USER_ID)))
+                .andDo(document("create-review-for-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user")
+                        ), requestFields(
+                                fieldWithPath("comment").description("Comment of review for user"),
+                                fieldWithPath("rating").description("Rating of review for user")
+                        )));
     }
 
     @Test
     @Transactional
-    public void createReviewShouldReturnNotFoundWhenNNonExistingTargetUser() throws Exception {
-        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.NON_EXISTING_ID_PATH + REVIEWS_PATH;
+    public void createReviewShouldReturnNotFoundWhenNonExistingTargetUser() throws Exception {
+        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_OWNER_REVIEW)
+        this.mockMvc.perform(post(CREATE_OWNER_REVIEW, UserTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -246,10 +320,10 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void createReviewShouldReturnForbiddenWhenCurrentUserIsTarget() throws Exception {
-        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.CURRENT_USER_ID_PATH + REVIEWS_PATH;
+        final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_OWNER_REVIEW)
+        this.mockMvc.perform(post(CREATE_OWNER_REVIEW, UserTestData.CURRENT_USER_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -259,20 +333,24 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void findReviewsShouldReturnOkWhenUserExists() throws Exception {
-        final String FIND_REVIEWS = BASE_URL + UserTestData.CURRENT_USER_ID_PATH + REVIEWS_PATH;
+        final String FIND_REVIEWS = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
 
-        this.mockMvc.perform(get(FIND_REVIEWS))
+        this.mockMvc.perform(get(FIND_REVIEWS, UserTestData.CURRENT_USER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andDo(document("find-reviews-for-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of user")
+                        )));
     }
 
     @Test
     @Transactional
     public void findReviewsShouldReturnNotFoundWhenNonExistingUser() throws Exception {
-        final String FIND_REVIEWS = BASE_URL + UserTestData.NON_EXISTING_ID_PATH + REVIEWS_PATH;
+        final String FIND_REVIEWS = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
 
-        this.mockMvc.perform(get(FIND_REVIEWS))
+        this.mockMvc.perform(get(FIND_REVIEWS, UserTestData.NON_EXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

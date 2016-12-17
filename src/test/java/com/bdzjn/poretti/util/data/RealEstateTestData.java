@@ -10,9 +10,9 @@ import java.util.List;
 public class RealEstateTestData {
 
     public static final int EXISTING_ID = 1;
-    public static final int NON_EXISTING_ID = 2;
-    public static final String EXISTING_ID_PATH = "/1";
-    public static final String NON_EXISTING_ID_PATH = "/212";
+    public static final int NON_EXISTING_ID = 212;
+    public static final String EXISTING_ID_PATH = "/{id}";
+    public static final String NON_EXISTING_ID_PATH = "/{id}";
     public static final String EXISTING_NAME = "Test name";
     public static final String EXISTING_DESCRIPTION = "Test description";
     public static final double EXISTING_AREA = 500d;
@@ -27,6 +27,7 @@ public class RealEstateTestData {
     public static final String EXISTING_TYPE = RealEstateType.APARTMENT.name();
     public static final int OWNER_ID = 2;
     public static final int OCCURRENCE_IN_ADVERTISEMENTS = 1;
+    public static final String ID_PATH_VARIABLE = "/{id}";
 
     public static RealEstateDTO testEntity() {
         final Location location = new Location();

@@ -10,6 +10,7 @@ import com.bdzjn.poretti.util.data.UserTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -20,13 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets")
 @ActiveProfiles(profiles = "test")
 public class RealEstateControllerTest {
 
@@ -39,9 +50,9 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void findOneShouldReturnOkWhenRealEstateExists() throws Exception {
-        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
+        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
-        this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE))
+        this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE, RealEstateTestData.EXISTING_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andDo(print())
@@ -52,16 +63,32 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.location.id", is(RealEstateTestData.LOCATION_ID)))
                 .andExpect(jsonPath("$.imageUrl", is(RealEstateTestData.EXISTING_IMAGE)))
                 .andExpect(jsonPath("$.type", is(RealEstateTestData.EXISTING_TYPE)))
-                .andExpect(jsonPath("$.owner.id", is(RealEstateTestData.OWNER_ID)));
+                .andExpect(jsonPath("$.owner.id", is(RealEstateTestData.OWNER_ID)))
+                .andDo(document("find-one-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of real estate to be found")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").ignored(),
+                                fieldWithPath("name").description("Name of real estate"),
+                                fieldWithPath("description").description("Description of real estate"),
+                                fieldWithPath("area").description("Area of real estate"),
+                                fieldWithPath("location").description("Location of real estate"),
+                                fieldWithPath("imageUrl").description("Image of real estate"),
+                                fieldWithPath("type").description("Type of real estate"),
+                                fieldWithPath("owner").description("Owner of real estate"),
+                                fieldWithPath("technicalEquipment").description("Technical equipment of real estate")
+                        )));
     }
 
     @Test
     @Transactional
     public void findOneShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
+        final String FIND_ONE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
-        this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE))
-                .andExpect(status().isNotFound());
+        this.mockMvc.perform(get(FIND_ONE_REAL_ESTATE, RealEstateTestData.NON_EXISTING_ID))
+                .andExpect(status().isNotFound())
+                .andDo(document("find-one-real-estate"));
     }
 
     @Test
@@ -82,17 +109,27 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
                 .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
-                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)));
+                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
+                .andDo(document("create-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("id").ignored(),
+                                fieldWithPath("area").description("Area of real estate"),
+                                fieldWithPath("name").description("Name of real estate"),
+                                fieldWithPath("imageUrl").description("Image of real estate"),
+                                fieldWithPath("description").description("Description of real estate"),
+                                fieldWithPath("technicalEquipment").description("Technical equipment in real estate"),
+                                fieldWithPath("realEstateType").description("Type of real estate"),
+                                fieldWithPath("location").description("Location of real estate"))));
     }
 
     @Test
     @Transactional
     public void editShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
-        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
         testEntity.setName("Real estate new test name");
 
-        this.mockMvc.perform(put(EDIT_REAL_ESTATE)
+        this.mockMvc.perform(put(EDIT_REAL_ESTATE, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -105,17 +142,30 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
                 .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
-                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)));
+                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
+                .andDo(document("edit-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of real estate to be edited")
+                        ),
+                        requestFields(
+                                fieldWithPath("id").ignored(),
+                                fieldWithPath("area").description("Area of real estate to be potentially edited"),
+                                fieldWithPath("name").description("Name of real estate to be potentially edited"),
+                                fieldWithPath("imageUrl").description("Image of real estate to be potentially edited"),
+                                fieldWithPath("description").description("Description of real estate to be potentially edited"),
+                                fieldWithPath("technicalEquipment").description("Technical equipment in real estate to be potentially edited"),
+                                fieldWithPath("realEstateType").description("Type of real estate to be potentially edited"),
+                                fieldWithPath("location").description("Location of real estate to be potentially edited"))));
     }
 
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
-        this.mockMvc.perform(put(EDIT_REAL_ESTATE)
+        this.mockMvc.perform(put(EDIT_REAL_ESTATE, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -125,10 +175,10 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
-        this.mockMvc.perform(put(EDIT_REAL_ESTATE)
+        this.mockMvc.perform(put(EDIT_REAL_ESTATE, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -138,11 +188,11 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void editShouldReturnNotFoundWhenCurrentUserIsNotOwnerAndNonExistingRealEstate() throws Exception {
-        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
+        final String EDIT_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
 
-        this.mockMvc.perform(put(EDIT_REAL_ESTATE)
+        this.mockMvc.perform(put(EDIT_REAL_ESTATE, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -152,19 +202,23 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void deleteShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
-        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
-        this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
+        this.mockMvc.perform(delete(DELETE_REAL_ESTATE, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("delete-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of advertisement to be deleted")
+                        )));
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH;
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
-        this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
+        this.mockMvc.perform(delete(DELETE_REAL_ESTATE, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isNotFound());
     }
@@ -172,9 +226,9 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.EXISTING_ID_PATH;
+        final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
 
-        this.mockMvc.perform(delete(DELETE_REAL_ESTATE)
+        this.mockMvc.perform(delete(DELETE_REAL_ESTATE, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN))
                 .andExpect(status().isNotFound());
     }
@@ -182,31 +236,46 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void findAdvertisementsShouldReturnOkWhenRealEstateExists() throws Exception {
-        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
-        this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS))
+        this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS, RealEstateTestData.EXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(RealEstateTestData.OCCURRENCE_IN_ADVERTISEMENTS)));
+                .andExpect(jsonPath("$", hasSize(RealEstateTestData.OCCURRENCE_IN_ADVERTISEMENTS)))
+                .andDo(document("delete-advertisement", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("[].id").description("Id of advertisement"),
+                                fieldWithPath("[].title").description("Title of advertisement"),
+                                fieldWithPath("[].announcedOn").description("Date when advertisement is announced"),
+                                fieldWithPath("[].editedOn").description("Date when advertisement is edited"),
+                                fieldWithPath("[].endsOn").description("Date when advertisements is ending"),
+                                fieldWithPath("[].status").description("Status of advertisement"),
+                                fieldWithPath("[].advertiser").description("Advertiser of advertisement"),
+                                fieldWithPath("[].type").description("Type of advertisement"),
+                                fieldWithPath("[].price").description("Price of advertisement"),
+                                fieldWithPath("[].currency").description("Currency of price"),
+                                fieldWithPath("[].realEstate").description("Real estate which belongs to this advertisement"),
+                                fieldWithPath("[].averageRating").description("Average rating of advertisement. Based on reviews.")
+                        )));
     }
 
     @Test
     @Transactional
     public void findAdvertisementsShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String FIND_REAL_ESTATE_ADVERTISEMENTS = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
-        this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS))
+        this.mockMvc.perform(get(FIND_REAL_ESTATE_ADVERTISEMENTS, RealEstateTestData.NON_EXISTING_ID))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void createAdvertisementShouldReturnCreatedWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
+        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -219,17 +288,28 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.type", is(testEntity.getType().toString())))
                 .andExpect(jsonPath("$.price", is(testEntity.getPrice())))
                 .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
-                .andExpect(jsonPath("$.realEstate.id", is(RealEstateTestData.EXISTING_ID)));
+                .andExpect(jsonPath("$.realEstate.id", is(RealEstateTestData.EXISTING_ID)))
+                .andDo(document("create-advertisement-for-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("Id of existing real estate")
+                        ),
+                        requestFields(
+                                fieldWithPath("id").ignored(),
+                                fieldWithPath("price").description("Price of advertisement"),
+                                fieldWithPath("currency").description("Currency of price"),
+                                fieldWithPath("title").description("Title of advertisement"),
+                                fieldWithPath("endsOn").description("Date when advertisement ends"),
+                                fieldWithPath("type").description("Type of advertisement"))));
     }
 
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
+        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -239,11 +319,11 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenCurrentUserIsNotOwner() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
+        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
@@ -253,11 +333,11 @@ public class RealEstateControllerTest {
     @Test
     @Transactional
     public void createAdvertisementShouldReturnNotFoundWhenCurrentIsNotOwnerAndNonExistingRE() throws Exception {
-        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.NON_EXISTING_ID_PATH + ADVERTISEMENTS_PATH;
+        final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
 
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT)
+        this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
