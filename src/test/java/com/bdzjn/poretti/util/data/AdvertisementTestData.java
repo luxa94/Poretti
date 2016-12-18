@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class AdvertisementTestData {
 
+    public static final String ID_PATH_VARIABLE = "/{id}";
     public static final int EXISTING_ID = 1;
     public static final int NON_EXISTING_ID = 212;
     public static final String EXISTING_ID_PATH = "/1";

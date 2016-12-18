@@ -9,6 +9,7 @@ import java.util.List;
 
 public class CompanyTestData {
 
+    public static final String ID_PATH_VARIABLE = "/{id}";
     public static final String REAL_ESTATES_PATH = "/realEstates";
     public static final String REAL_ESTATES_ID_PATH = "/realEstates/{realEstateId}";
     public static final String ADVERTISEMENTS_PATH = "/advertisements";

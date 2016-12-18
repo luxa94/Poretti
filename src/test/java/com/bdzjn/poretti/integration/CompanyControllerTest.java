@@ -19,7 +19,10 @@ import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -112,14 +115,14 @@ public class CompanyControllerTest {
     public void editShouldReturnOkWithConfirmedMember() throws Exception {
         final CompanyDTO companyDTO = CompanyTestData.getCompanyDTO();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID)
+        this.mockMvc.perform(put(BASE_URL_ID,CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .content(TestUtil.json(companyDTO)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID))
+        this.mockMvc.perform(get(BASE_URL_ID, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -131,7 +134,7 @@ public class CompanyControllerTest {
     public void editShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
         final CompanyDTO companyDTO = CompanyTestData.getCompanyDTO();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID)
+        this.mockMvc.perform(put(BASE_URL_ID, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .content(TestUtil.json(companyDTO)))
@@ -143,14 +146,14 @@ public class CompanyControllerTest {
     public void createRealEstateShouldReturnCreatedWhenConfirmedMember() throws Exception {
         final RealEstateDTO realEstateDTO = RealEstateTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(realEstateDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -160,14 +163,14 @@ public class CompanyControllerTest {
     public void createRealEstateShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
         final RealEstateDTO realEstateDTO = RealEstateTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(realEstateDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
@@ -177,7 +180,7 @@ public class CompanyControllerTest {
     public void editRealEstateShouldReturnOkWhenConfirmedMember() throws Exception {
         final RealEstateDTO realEstateDTO = CompanyTestData.editedRealEstate();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(realEstateDTO)))
@@ -196,7 +199,7 @@ public class CompanyControllerTest {
     public void editRealEstateShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
         final RealEstateDTO realEstateDTO = CompanyTestData.editedRealEstate();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(realEstateDTO)))
@@ -206,17 +209,17 @@ public class CompanyControllerTest {
 
     @Test
     public void deleteRealEstateShouldReturnOkWhenConfirmedMember() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID ))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)));
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -224,7 +227,7 @@ public class CompanyControllerTest {
 
     @Test
     public void deleteRealEstateShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -234,14 +237,14 @@ public class CompanyControllerTest {
     public void createAdvertisementForRealEstateShouldReturnCreatedWhenConfirmedMember() throws Exception {
         final AdvertisementDTO advertisementDTO = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID + CompanyTestData.ADVERTISEMENTS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(advertisementDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
@@ -251,14 +254,14 @@ public class CompanyControllerTest {
     public void createAdvertisementForRealEstateShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
         final AdvertisementDTO advertisementDTO = AdvertisementTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH + CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID + CompanyTestData.ADVERTISEMENTS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REAL_ESTATES_ID_PATH + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID,CompanyTestData.EXISTING_COMPANY_REAL_ESTATE_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(advertisementDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
@@ -268,19 +271,19 @@ public class CompanyControllerTest {
     public void createAdvertisementAndRealEstateShouldReturnCreatedWhenConfirmedMember() throws Exception {
         final AdvertisementRealEstateDTO advertisementRealEstateDTO = AdvertisementTestData.realEstateAdvertisementTestEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(advertisementRealEstateDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(2)));
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -290,19 +293,19 @@ public class CompanyControllerTest {
     public void createAdvertisementAndRealEstateShouldReturnNotFoundWhenConfirmedMember() throws Exception {
         final AdvertisementRealEstateDTO advertisementRealEstateDTO = AdvertisementTestData.realEstateAdvertisementTestEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(advertisementRealEstateDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REAL_ESTATES_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REAL_ESTATES_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
@@ -312,7 +315,7 @@ public class CompanyControllerTest {
     public void editAdvertisementShouldReturnOkWhenConfirmedMember() throws Exception {
         final AdvertisementDTO advertisementDTO = CompanyTestData.editedAdvertisementDTO();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .content(TestUtil.json(advertisementDTO))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -325,7 +328,7 @@ public class CompanyControllerTest {
 
     @Test
     public void doneAdvertisementShouldReturnOkWhenConfirmedMember() throws Exception {
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID + "/done")
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH+ "/done", CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -333,7 +336,7 @@ public class CompanyControllerTest {
 
     @Test
     public void doneAdvertisementShouldReturnNotFoundWhenNoneConfirmedMember() throws Exception {
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID + "/done")
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH+ "/done", CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -343,7 +346,7 @@ public class CompanyControllerTest {
     public void editAdvertisementShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
         final AdvertisementDTO advertisementDTO = CompanyTestData.editedAdvertisementDTO();
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .content(TestUtil.json(advertisementDTO))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -355,31 +358,31 @@ public class CompanyControllerTest {
     public void deleteAdvertisementShouldReturnOkWhenConfirmedMember() throws Exception {
         final ReviewDTO reviewDTO = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(reviewDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)));
     }
 
     @Test
     public void deleteAdvertisementShouldReturnNotFoundWhenNonConfirmedMember() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH + CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.EXISTING_COMPANY_ADVERTISEMENT_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.ADVERTISEMENTS_PATH))
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.ADVERTISEMENTS_PATH, CompanyTestData.EXISTING_COMPANY_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
@@ -389,21 +392,21 @@ public class CompanyControllerTest {
     public void createReviewShouldReturnOkWhenCompanyExists() throws Exception {
         final ReviewDTO reviewDTO = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(reviewDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(reviewDTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -413,14 +416,14 @@ public class CompanyControllerTest {
     public void createReviewShouldReturnNotFoundWhenCompanyDoesNotExist() throws Exception {
         final ReviewDTO reviewDTO = ReviewTestData.testEntity();
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.NON_EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.NON_EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(reviewDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.NON_EXISTING_COMPANY_ID + CompanyTestData.REVIEWS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.REVIEWS_PATH, CompanyTestData.NON_EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(reviewDTO)))
@@ -430,7 +433,7 @@ public class CompanyControllerTest {
 
     @Test
     public void companyShouldHaveTwoMemberships() throws Exception {
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -438,13 +441,13 @@ public class CompanyControllerTest {
 
     @Test
     public void createMembershipShouldReturnForbiddenWhenAlreadyMember() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -452,13 +455,13 @@ public class CompanyControllerTest {
 
     @Test
     public void createMembershipShouldReturnForbiddenWhenMembershipExists() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -466,13 +469,13 @@ public class CompanyControllerTest {
 
     @Test
     public void createMembershipShouldReturnCreatedWhenMembershipDoesNotExist() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NO_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(3)));
@@ -480,13 +483,13 @@ public class CompanyControllerTest {
 
     @Test
     public void approveMembershipShouldReturnOkWhenConfirmedMember() throws Exception {
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -495,13 +498,13 @@ public class CompanyControllerTest {
 
     @Test
     public void approveMembershipShouldReturnNotFoundWhenApprovingSelf() throws Exception {
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(get(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(get(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -509,13 +512,13 @@ public class CompanyControllerTest {
 
     @Test
     public void approveMembershipShouldReturnNotFoundWhenMemberNotConfirmed() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH)
+        this.mockMvc.perform(post(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_PATH, CompanyTestData.EXISTING_COMPANY_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NO_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NO_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -524,7 +527,7 @@ public class CompanyControllerTest {
 
     @Test
     public void approveMembershipShouldReturnConflictWhenMembershipAlreadyActive() throws Exception {
-        this.mockMvc.perform(put(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(put(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -533,7 +536,7 @@ public class CompanyControllerTest {
 
     @Test
     public void deleteMembershipShouldReturnOkWhenDeletingOwnConfirmed() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -542,7 +545,7 @@ public class CompanyControllerTest {
 
     @Test
     public void deleteMembershipShouldReturnOkWhenDeletingOwnNotConfirmed() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.UNCONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -551,7 +554,7 @@ public class CompanyControllerTest {
 
     @Test
     public void deleteMembershipShouldReturnForbiddenWhenNotConfirmedUserDeleting() throws Exception {
-        this.mockMvc.perform(delete(BASE_URL + CompanyTestData.EXISTING_COMPANY_ID + CompanyTestData.MEMBERSHIPS_PATH + CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
+        this.mockMvc.perform(delete(BASE_URL_ID + CompanyTestData.MEMBERSHIPS_ID_PATH, CompanyTestData.EXISTING_COMPANY_ID, CompanyTestData.CONFIRMED_MEMBERSHIP_ID)
                 .header(UserTestData.AUTHORIZATION, CompanyTestData.USER_NOT_CONFIRMED_MEMBERSHIP)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

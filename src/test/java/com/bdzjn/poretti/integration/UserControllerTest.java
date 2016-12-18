@@ -6,6 +6,9 @@ import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.ReviewTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
+import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
+import com.bdzjn.poretti.util.snippets.ReviewSnippets;
+import com.bdzjn.poretti.util.snippets.UserSnippets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,16 +66,8 @@ public class UserControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated())
                 .andDo(document("create-admin", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("email").description("Email of new user"),
-                                fieldWithPath("username").description("Username of new user"),
-                                fieldWithPath("password").description("Password of new user"),
-                                fieldWithPath("name").description("Name od new user"),
-                                fieldWithPath("imageUrl").ignored(),
-                                fieldWithPath("phoneNumbers").ignored(),
-                                fieldWithPath("contactEmails").ignored(),
-                                fieldWithPath("companyId").ignored()
-                        )));
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(UserSnippets.REGISTER_DTO)));
     }
 
     @Test
@@ -117,7 +112,10 @@ public class UserControllerTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("create-verifier", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(UserSnippets.REGISTER_DTO)));
     }
 
     @Test
@@ -147,18 +145,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."))
-                .andDo(document("create-verifier", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                                requestFields(
-                                        fieldWithPath("email").description("Email of new user"),
-                                        fieldWithPath("username").description("Username of new user"),
-                                        fieldWithPath("password").description("Password of new user"),
-                                        fieldWithPath("name").description("Name od new user"),
-                                        fieldWithPath("imageUrl").ignored(),
-                                        fieldWithPath("phoneNumbers").ignored(),
-                                        fieldWithPath("contactEmails").ignored(),
-                                        fieldWithPath("companyId").ignored()
-                                )));
+                .andExpect(content().string("Username or email taken."));
     }
 
     @Test
@@ -168,10 +155,10 @@ public class UserControllerTest {
 
         this.mockMvc.perform(get(FIND_ONE_USER, UserTestData.CURRENT_USER_ID))
                 .andExpect(status().isOk())
-                .andDo(document("find-one-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user to be found")
-                        )));
+                .andDo(document("find-one-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID),
+                        responseFields(UserSnippets.USER)));
 
     }
 
@@ -182,10 +169,9 @@ public class UserControllerTest {
 
         this.mockMvc.perform(get(FIND_ONE_USER, UserTestData.NON_EXISTING_ID))
                 .andExpect(status().isNotFound())
-                .andDo(document("find-one-user-bad-id", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user to be found")
-                        )));
+                .andDo(document("find-one-user-bad-id",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID)));
     }
 
     @Test
@@ -204,15 +190,11 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
                 .andExpect(jsonPath("$.phoneNumbers", is(testEntity.getPhoneNumbers())))
                 .andExpect(jsonPath("$.contactEmails", is(testEntity.getContactEmails())))
-                .andDo(document("edit-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user to be edited")),
-                        requestFields(
-                                fieldWithPath("name").description("Name of user to be potentially edited"),
-                                fieldWithPath("imageUrl").description("Image of user to be potentially edited"),
-                                fieldWithPath("phoneNumbers").description("Phone numbers as contact details to be potentially edited"),
-                                fieldWithPath("contactEmails").description("Emails as contact details to be potentially edited")
-                        )));
+                .andDo(document("edit-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(UserSnippets.USER_DTO)));
     }
 
     @Test
@@ -238,10 +220,9 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andDo(document("find-real-estates-of-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user")
-                        )));
+                .andDo(document("find-real-estates-of-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID)));
     }
 
     @Test
@@ -264,10 +245,9 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andDo(document("find-memberships-of-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user")
-                        )));
+                .andDo(document("find-memberships-of-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID)));
     }
 
     @Test
@@ -295,13 +275,11 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.comment", is(testEntity.getComment())))
                 .andExpect(jsonPath("$.rating", is(testEntity.getRating())))
                 .andExpect(jsonPath("$.target.id", is(UserTestData.CURRENT_USER_ID)))
-                .andDo(document("create-review-for-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user")
-                        ), requestFields(
-                                fieldWithPath("comment").description("Comment of review for user"),
-                                fieldWithPath("rating").description("Rating of review for user")
-                        )));
+                .andDo(document("create-review-for-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(ReviewSnippets.OWNER_REVIEW)));
     }
 
     @Test
@@ -339,10 +317,9 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andDo(document("find-reviews-for-user", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of user")
-                        )));
+                .andDo(document("find-reviews-for-user",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        pathParameters(UserSnippets.USER_ID)));
     }
 
     @Test

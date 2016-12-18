@@ -3,6 +3,9 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.repository.OwnerReviewRepository;
 import com.bdzjn.poretti.util.data.ReviewTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
+import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
+import com.bdzjn.poretti.util.snippets.ReportSnippets;
+import com.bdzjn.poretti.util.snippets.ReviewSnippets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,10 +55,10 @@ public class OwnerReviewControllerTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("delete-owner-review", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                              parameterWithName("id").description("Id of owner review to be deleted")
-                        )));
+                .andDo(document("delete-owner-review",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        pathParameters(ReviewSnippets.OWNER_REVIEW_ID)));
 
         final int numberOfElementsAfter = reviewRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));

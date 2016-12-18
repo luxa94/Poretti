@@ -28,6 +28,10 @@ A `GET` method for finding advertisement by id.
 
 include::{snippets}/find-one-advertisement/http-request.adoc[]
 
+==== Path parameters
+
+include::{snippets}/find-one-advertisement/path-parameters.adoc[]
+
 ==== Example response
 
 include::{snippets}/find-one-advertisement/http-response.adoc[]
@@ -39,6 +43,10 @@ A `POST` method for creating new advertisement.
 ==== Example request
 
 include::{snippets}/create-advertisement/http-request.adoc[]
+
+There must be a header for authorization in request.
+
+include::{snippets}/create-advertisement/request-headers.adoc[]
 
 ==== Request parameters
 
@@ -55,6 +63,13 @@ A `PUT` method for editing *existing* advertisement.
 ==== Example request
 
 include::{snippets}/edit-advertisement/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/edit-advertisement/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/edit-advertisement/path-parameters.adoc[]
 
 ==== Request parameters
 
@@ -71,6 +86,13 @@ A `DELETE` method for deleting *existing* advertisement.
 ==== Example request
 
 include::{snippets}/delete-advertisement/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/delete-advertisement/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/delete-advertisement/path-parameters.adoc[]
 
 ==== Example response
 
@@ -83,6 +105,13 @@ A `POST` method for creating new report on *existing* advertisement.
 ==== Example request
 
 include::{snippets}/create-advertisement-report/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/create-advertisement-report/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/create-advertisement-report/path-parameters.adoc[]
 
 ==== Request parameters
 
@@ -100,17 +129,28 @@ A `GET` method for getting reports on *existing* advertisement.
 
 include::{snippets}/find-advertisement-reports/http-request.adoc[]
 
+==== Path parameters
+
+include::{snippets}/find-advertisement-reports/path-parameters.adoc[]
+
 ==== Example response
 
 include::{snippets}/find-advertisement-reports/http-response.adoc[]
 
 [[resource-create-advertisement-review]]
-=== Create report for advertisement
+=== Create review for advertisement
 A `POST` method for creating new review on *existing* advertisement.
 
 ==== Example request
 
 include::{snippets}/create-advertisement-review/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/create-advertisement-review/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/create-advertisement-review/path-parameters.adoc[]
 
 ==== Request parameters
 
@@ -121,12 +161,16 @@ include::{snippets}/create-advertisement-review/request-fields.adoc[]
 include::{snippets}/create-advertisement-review/http-response.adoc[]
 
 [[resource-find-advertisement-reviews]]
-=== Find reports for advertisement
+=== Find reviews for advertisement
 A `GET` method for getting reviews on *existing* advertisement.
 
 ==== Example request
 
 include::{snippets}/find-advertisement-reviews/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/find-advertisement-reviews/path-parameters.adoc[]
 
 ==== Example response
 
@@ -139,6 +183,9 @@ A `GET` method for getting all currently reported advertisements.
 ==== Example request
 
 include::{snippets}/find-reported-advertisements/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/find-reported-advertisements/request-headers.adoc[]
 
 ==== Example response
 
@@ -153,6 +200,13 @@ acceptable.
 ==== Example request
 
 include::{snippets}/approve-advertisement/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/approve-advertisement/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/approve-advertisement/path-parameters.adoc[]
 
 ==== Example response
 
@@ -166,6 +220,13 @@ Used by verifier when advertisement is reported and it's improper because of som
 ==== Example request
 
 include::{snippets}/invalidate-advertisement/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/invalidate-advertisement/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/invalidate-advertisement/path-parameters.adoc[]
 
 ==== Example response
 
@@ -179,6 +240,13 @@ Used by advertiser when it wants to _end_ advertisement.
 ==== Example request
 
 include::{snippets}/end-advertisement/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/end-advertisement/request-headers.adoc[]
+
+==== Path parameters
+
+include::{snippets}/end-advertisement/path-parameters.adoc[]
 
 ==== Example response
 
@@ -199,10 +267,6 @@ include::{snippets}/find-one-real-estate/http-request.adoc[]
 ==== Path parameters
 
 include::{snippets}/find-one-real-estate/path-parameters.adoc[]
-
-==== Request parameters
-
-include::{snippets}/find-one-real-estate/request-fields.adoc[]
 
 ==== Example response
 
@@ -231,6 +295,9 @@ A `PUT` method for editing *existing* real estate.
 ==== Example request
 
 include::{snippets}/edit-real-estate/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/edit-real-estate/request-headers.adoc[]
 
 ==== Path parameters
 
@@ -251,14 +318,13 @@ A `DELETE` method for deleting *existing* real estate.
 ==== Example request
 
 include::{snippets}/delete-real-estate/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/delete-real-estate/request-headers.adoc[]
 
 ==== Path parameters
 
 include::{snippets}/delete-real-estate/path-parameters.adoc[]
-
-==== Request parameters
-
-include::{snippets}/delete-real-estate/request-fields.adoc[]
 
 ==== Example response
 
@@ -271,6 +337,9 @@ A `POST` method for creating advertisement which contains *existing* real estate
 ==== Example request
 
 include::{snippets}/create-advertisement-for-real-estate/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/create-advertisement-for-real-estate/request-headers.adoc[]
 
 ==== Path parameters
 
@@ -284,6 +353,22 @@ include::{snippets}/create-advertisement-for-real-estate/request-fields.adoc[]
 
 include::{snippets}/create-advertisement-for-real-estate/http-response.adoc[]
 
+[[resource-find-advertisements-of-real-estate]]
+=== Find advertisements for real estate
+A `GET` method for finding advertisements of specified real estate.
+
+==== Example request
+
+include::{snippets}/find-advertisement-for-real-estate/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/find-advertisements-of-real-estate/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/find-advertisements-of-real-estate/http-response.adoc[]
+
 [[resources-advertisement-review]]
 == Advertisement Review
   Advertisement review
@@ -295,6 +380,9 @@ A `DELETE` method for deleting advertisement review.
 ==== Example request
 
 include::{snippets}/delete-advertisement-review/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/delete-advertisement-review/request-headers.adoc[]
 
 ==== Path parameters
 
@@ -315,6 +403,9 @@ A `DELETE` method for deleting owner review.
 ==== Example request
 
 include::{snippets}/delete-owner-review/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/delete-owner-review/request-headers.adoc[]
 
 ==== Path parameters
 
@@ -358,14 +449,13 @@ A `POST` method for creating system admin.
 ==== Example request
 
 include::{snippets}/create-admin/http-request.adoc[]
+There must be a header for authorization in request.
 
-==== Path parameters
-
-include::{snippets}/create-admin/path-parameters.adoc[]
+include::{snippets}/create-admin/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/create-admin/request-parameters.adoc[]
+include::{snippets}/create-admin/request-fields.adoc[]
 
 ==== Example response
 
@@ -378,26 +468,32 @@ A `POST` method for creating verifier.
 ==== Example request
 
 include::{snippets}/create-verifier/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/create-verifier/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/create-verifier/request-parameters.adoc[]
+include::{snippets}/create-verifier/request-fields.adoc[]
 
 ==== Example response
 
 include::{snippets}/create-verifier/http-response.adoc[]
 
 [[resource-edit-user]]
-=== Create verifier
+=== Edit user
 A `PUT` method for editing *existing* user.
 
 ==== Example request
 
 include::{snippets}/edit-user/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/edit-user/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/edit-user/request-parameters.adoc[]
+include::{snippets}/edit-user/request-fields.adoc[]
 
 ==== Path parameters
 
@@ -405,19 +501,22 @@ include::{snippets}/edit-user/path-parameters.adoc[]
 
 ==== Example response
 
-include::{snippets}/edi-user/http-response.adoc[]
+include::{snippets}/edit-user/http-response.adoc[]
 
 [[resource-review-for-user]]
-=== User review
+=== Create user review
 A `POST` method for creating user review.
 
 ==== Example request
 
 include::{snippets}/create-review-for-user/http-request.adoc[]
+There must be a header for authorization in request.
+
+include::{snippets}/create-review-for-user/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/create-review-for-user/request-parameters.adoc[]
+include::{snippets}/create-review-for-user/request-fields.adoc[]
 
 ==== Path parameters
 
@@ -437,7 +536,7 @@ include::{snippets}/find-reviews-for-user/http-request.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/find-reviews-for-user/request-parameters.adoc[]
+include::{snippets}/find-reviews-for-user/request-fields.adoc[]
 
 ==== Path parameters
 
@@ -457,7 +556,7 @@ include::{snippets}/find-memberships-of-user/http-request.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/find-memberships-of-user/request-parameters.adoc[]
+include::{snippets}/find-memberships-of-user/request-fields.adoc[]
 
 ==== Path parameters
 

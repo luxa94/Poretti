@@ -7,6 +7,9 @@ import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.AdvertisementTestData;
 import com.bdzjn.poretti.util.data.RealEstateTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
+import com.bdzjn.poretti.util.snippets.AdvertisementSnippets;
+import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
+import com.bdzjn.poretti.util.snippets.RealEstateSnippets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +26,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -111,15 +110,7 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
                 .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("create-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("id").ignored(),
-                                fieldWithPath("area").description("Area of real estate"),
-                                fieldWithPath("name").description("Name of real estate"),
-                                fieldWithPath("imageUrl").description("Image of real estate"),
-                                fieldWithPath("description").description("Description of real estate"),
-                                fieldWithPath("technicalEquipment").description("Technical equipment in real estate"),
-                                fieldWithPath("realEstateType").description("Type of real estate"),
-                                fieldWithPath("location").description("Location of real estate"))));
+                        requestFields(RealEstateSnippets.REAL_ESTATE_DTO)));
     }
 
     @Test
@@ -144,18 +135,9 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
                 .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("edit-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of real estate to be edited")
-                        ),
-                        requestFields(
-                                fieldWithPath("id").ignored(),
-                                fieldWithPath("area").description("Area of real estate to be potentially edited"),
-                                fieldWithPath("name").description("Name of real estate to be potentially edited"),
-                                fieldWithPath("imageUrl").description("Image of real estate to be potentially edited"),
-                                fieldWithPath("description").description("Description of real estate to be potentially edited"),
-                                fieldWithPath("technicalEquipment").description("Technical equipment in real estate to be potentially edited"),
-                                fieldWithPath("realEstateType").description("Type of real estate to be potentially edited"),
-                                fieldWithPath("location").description("Location of real estate to be potentially edited"))));
+                        pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(RealEstateSnippets.REAL_ESTATE_DTO)));
     }
 
     @Test
@@ -208,9 +190,8 @@ public class RealEstateControllerTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isOk())
                 .andDo(document("delete-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of advertisement to be deleted")
-                        )));
+                        pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
+                        AuthorizationSnippets.AUTH_HEADER));
     }
 
     @Test
@@ -242,21 +223,10 @@ public class RealEstateControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(RealEstateTestData.OCCURRENCE_IN_ADVERTISEMENTS)))
-                .andDo(document("delete-advertisement", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        responseFields(
-                                fieldWithPath("[].id").description("Id of advertisement"),
-                                fieldWithPath("[].title").description("Title of advertisement"),
-                                fieldWithPath("[].announcedOn").description("Date when advertisement is announced"),
-                                fieldWithPath("[].editedOn").description("Date when advertisement is edited"),
-                                fieldWithPath("[].endsOn").description("Date when advertisements is ending"),
-                                fieldWithPath("[].status").description("Status of advertisement"),
-                                fieldWithPath("[].advertiser").description("Advertiser of advertisement"),
-                                fieldWithPath("[].type").description("Type of advertisement"),
-                                fieldWithPath("[].price").description("Price of advertisement"),
-                                fieldWithPath("[].currency").description("Currency of price"),
-                                fieldWithPath("[].realEstate").description("Real estate which belongs to this advertisement"),
-                                fieldWithPath("[].averageRating").description("Average rating of advertisement. Based on reviews.")
-                        )));
+                .andDo(document("find-advertisements-of-real-estate",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                        responseFields(fieldWithPath("[]").description("An array of advertisements"))
+                                .andWithPrefix("[].", AdvertisementSnippets.ADVERTISEMENT)));
     }
 
     @Test
@@ -290,16 +260,9 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
                 .andExpect(jsonPath("$.realEstate.id", is(RealEstateTestData.EXISTING_ID)))
                 .andDo(document("create-advertisement-for-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of existing real estate")
-                        ),
-                        requestFields(
-                                fieldWithPath("id").ignored(),
-                                fieldWithPath("price").description("Price of advertisement"),
-                                fieldWithPath("currency").description("Currency of price"),
-                                fieldWithPath("title").description("Title of advertisement"),
-                                fieldWithPath("endsOn").description("Date when advertisement ends"),
-                                fieldWithPath("type").description("Type of advertisement"))));
+                        pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
+                        AuthorizationSnippets.AUTH_HEADER,
+                        requestFields(AdvertisementSnippets.ADVERTISEMENT_DTO)));
     }
 
     @Test
