@@ -3,12 +3,15 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.dto.UserDTO;
+import com.bdzjn.poretti.repository.OwnerReviewRepository;
+import com.bdzjn.poretti.repository.UserRepository;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.ReviewTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
 import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
 import com.bdzjn.poretti.util.snippets.ReviewSnippets;
 import com.bdzjn.poretti.util.snippets.UserSnippets;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +57,18 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OwnerReviewRepository reviewRepository;
+
     @Test
     @Transactional
     public void createAdminShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception {
         final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
         final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
+        final int numberOfElementsBefore = userRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADMIN_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
@@ -68,15 +78,18 @@ public class UserControllerTest {
                 .andDo(document("create-admin", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(UserSnippets.REGISTER_DTO)));
+
+        final int numberOfElementsAfter = userRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
     @Test
     @Transactional
     public void createAdminShouldReturnWhenUnprocessableWhenUsernameIsTaken() throws Exception {
         final String CREATE_ADMIN_URL = BASE_URL + "/createSysAdmin";
-
         final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
+        final int numberOfElementsBefore = userRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADMIN_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
@@ -84,6 +97,9 @@ public class UserControllerTest {
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("Username or email taken."));
+
+        final int numberOfElementsAfter = userRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -107,6 +123,7 @@ public class UserControllerTest {
     public void createVerifierShouldReturnCreatedWhenUsernameOrEmailAreNotTaken() throws Exception {
         final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
         final RegisterDTO testEntity = UserTestData.registerDTOTestEntity();
+        final int numberOfElementsBefore = userRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_VERIFIER_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
@@ -116,6 +133,9 @@ public class UserControllerTest {
                 .andDo(document("create-verifier", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(UserSnippets.REGISTER_DTO)));
+
+        final int numberOfElementsAfter = userRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
     @Test
@@ -124,6 +144,7 @@ public class UserControllerTest {
         final String CREATE_VERIFIER_URL = BASE_URL + "/createVerifier";
         final RegisterDTO testEntityWithExistingUsername = UserTestData.registerDTOTestEntity();
         testEntityWithExistingUsername.setUsername("admin");
+        final int numberOfElementsBefore = userRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_VERIFIER_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.ADMIN_TOKEN_VALUE)
@@ -131,6 +152,9 @@ public class UserControllerTest {
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("Username or email taken."));
+
+        final int numberOfElementsAfter = userRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -265,6 +289,7 @@ public class UserControllerTest {
     public void createReviewShouldReturnCreatedWhenTargetUserExistsAndCurrentUserIsNotTarget() throws Exception {
         final String CREATE_OWNER_REVIEW = BASE_URL + UserTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_OWNER_REVIEW, UserTestData.CURRENT_USER_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN)
@@ -280,6 +305,10 @@ public class UserControllerTest {
                         pathParameters(UserSnippets.USER_ID),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(ReviewSnippets.OWNER_REVIEW)));
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
+
     }
 
     @Test

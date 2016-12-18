@@ -4,6 +4,7 @@ import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.exception.BadDateException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.controller.exception.UnprocessableEntityException;
 import com.bdzjn.poretti.model.Advertisement;
 import com.bdzjn.poretti.model.RealEstate;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
@@ -114,6 +115,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public void changeStatus(long id, AdvertisementStatus status) {
         final Advertisement advertisement = findById(id).orElseThrow(NotFoundException::new);
+        if (advertisement.getStatus() == status){
+            throw new UnprocessableEntityException("Status is same");
+        }
         advertisement.setStatus(status);
         advertisementRepository.save(advertisement);
     }

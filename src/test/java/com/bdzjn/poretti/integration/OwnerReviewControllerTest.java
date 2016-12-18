@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class OwnerReviewControllerTest {
 
     private static final String BASE_URL = "/api/ownerReviews";
+    private final String DELETE_REVIEW = BASE_URL + ReviewTestData.ID_PATH_VARIABLE;
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +49,6 @@ public class OwnerReviewControllerTest {
     @Test
     @Transactional
     public void deleteShouldReturnOkWhenReviewExistsAndCurrentUserIsAuthor() throws Exception {
-        final String DELETE_REVIEW = BASE_URL + ReviewTestData.ID_PATH_VARIABLE;
         final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_REVIEW, ReviewTestData.EXISTING_OWNER_REVIEW_ID)
@@ -67,33 +67,42 @@ public class OwnerReviewControllerTest {
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenNonExistingReview() throws Exception {
-        final String DELETE_REVIEW = BASE_URL + ReviewTestData.ID_PATH_VARIABLE;
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_REVIEW, ReviewTestData.NON_EXISTING_OWNER_REVIEW_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_OWNER_TOKEN))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenCurrentUserIsNotAuthor() throws Exception {
-        final String DELETE_REVIEW = BASE_URL + ReviewTestData.ID_PATH_VARIABLE;
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_REVIEW, ReviewTestData.EXISTING_OWNER_REVIEW_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenNonExistingReviewAndCurrentUserIsNotAuthor() throws Exception {
-        final String DELETE_REVIEW = BASE_URL + ReviewTestData.ID_PATH_VARIABLE;
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_REVIEW, ReviewTestData.NON_EXISTING_OWNER_REVIEW_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 }

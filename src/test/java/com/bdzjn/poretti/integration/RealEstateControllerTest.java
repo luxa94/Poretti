@@ -3,6 +3,8 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.dto.RealEstateDTO;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
+import com.bdzjn.poretti.repository.AdvertisementRepository;
+import com.bdzjn.poretti.repository.RealEstateRepository;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.AdvertisementTestData;
 import com.bdzjn.poretti.util.data.RealEstateTestData;
@@ -10,6 +12,7 @@ import com.bdzjn.poretti.util.data.UserTestData;
 import com.bdzjn.poretti.util.snippets.AdvertisementSnippets;
 import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
 import com.bdzjn.poretti.util.snippets.RealEstateSnippets;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,12 @@ public class RealEstateControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private RealEstateRepository realEstateRepository;
+
+    @Autowired
+    private AdvertisementRepository advertisementRepository;
+
     @Test
     @Transactional
     public void findOneShouldReturnOkWhenRealEstateExists() throws Exception {
@@ -64,9 +73,7 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.type", is(RealEstateTestData.EXISTING_TYPE)))
                 .andExpect(jsonPath("$.owner.id", is(RealEstateTestData.OWNER_ID)))
                 .andDo(document("find-one-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("id").description("Id of real estate to be found")
-                        ),
+                        pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
                         responseFields(
                                 fieldWithPath("id").ignored(),
                                 fieldWithPath("name").description("Name of real estate"),
@@ -94,6 +101,7 @@ public class RealEstateControllerTest {
     @Transactional
     public void createShouldReturnCreated() throws Exception {
         final RealEstateDTO testEntity = RealEstateTestData.testEntity();
+        final int numberOfElementsBefore = realEstateRepository.findAll().size();
 
         this.mockMvc.perform(post(BASE_URL)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -111,6 +119,9 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("create-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestFields(RealEstateSnippets.REAL_ESTATE_DTO)));
+
+        final int numberOfElementsAfter = realEstateRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
     @Test
@@ -185,19 +196,29 @@ public class RealEstateControllerTest {
     @Transactional
     public void deleteShouldReturnOkWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
         final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
+        final int numberOfElementsBefore = realEstateRepository.findAll().size();
+        final int numberOfAdvertisementsBefore = advertisementRepository.findAll().size();
+        final int numberOfAdvertisement = realEstateRepository.findById(RealEstateTestData.EXISTING_ID).get().getAdvertisements().size();
 
         this.mockMvc.perform(delete(DELETE_REAL_ESTATE, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
                 .andExpect(status().isOk())
                 .andDo(document("delete-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
-                        pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
+                        pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
                         AuthorizationSnippets.AUTH_HEADER));
+
+        final int numberOfElementsAfter = realEstateRepository.findAll().size();
+        final int numberOfAdvertisementsAfter = advertisementRepository.findAll().size();
+
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore - 1));
+        Assert.assertThat(numberOfAdvertisementsAfter, is(numberOfAdvertisementsBefore - numberOfAdvertisement));
     }
 
     @Test
     @Transactional
     public void deleteShouldReturnNotFoundWhenNonExistingRealEstate() throws Exception {
         final String DELETE_REAL_ESTATE = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE;
+        final int numberOfElementsBefore = realEstateRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_REAL_ESTATE, RealEstateTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
@@ -242,8 +263,8 @@ public class RealEstateControllerTest {
     @Transactional
     public void createAdvertisementShouldReturnCreatedWhenRealEstateExistsAndCurrentUserIsOwner() throws Exception {
         final String CREATE_REAL_ESTATE_ADVERTISEMENT = BASE_URL + RealEstateTestData.ID_PATH_VARIABLE + ADVERTISEMENTS_PATH;
-
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_REAL_ESTATE_ADVERTISEMENT, RealEstateTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
@@ -263,6 +284,9 @@ public class RealEstateControllerTest {
                         pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(AdvertisementSnippets.ADVERTISEMENT_DTO)));
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore + 1));
     }
 
     @Test

@@ -11,6 +11,8 @@ import com.bdzjn.poretti.model.enumeration.AdvertisementType;
 import com.bdzjn.poretti.model.enumeration.Currency;
 import com.bdzjn.poretti.model.enumeration.RealEstateType;
 import com.bdzjn.poretti.repository.AdvertisementRepository;
+import com.bdzjn.poretti.repository.AdvertisementReviewRepository;
+import com.bdzjn.poretti.repository.ImproperAdvertisementReportRepository;
 import com.bdzjn.poretti.util.TestUtil;
 import com.bdzjn.poretti.util.data.*;
 import com.bdzjn.poretti.util.snippets.AdvertisementSnippets;
@@ -67,6 +69,12 @@ public class AdvertisementControllerTest {
 
     @Autowired
     private AdvertisementRepository advertisementRepository;
+
+    @Autowired
+    private ImproperAdvertisementReportRepository reportRepository;
+
+    @Autowired
+    private AdvertisementReviewRepository reviewRepository;
 
     @Test
     @Transactional
@@ -600,12 +608,16 @@ public class AdvertisementControllerTest {
     public void editShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
         final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -613,12 +625,16 @@ public class AdvertisementControllerTest {
     public void editShouldReturnNotFoundWhenCurrentUserIsNotAdvertiser() throws Exception {
         final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -626,12 +642,16 @@ public class AdvertisementControllerTest {
     public void editShouldReturnNotFoundWhenCurrentUserIsNotAdvertiserAndNonExistingAdv() throws Exception {
         final String EDIT_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -641,12 +661,16 @@ public class AdvertisementControllerTest {
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
         final Date yesterday = DateUtils.yesterday();
         testEntity.setEndsOn(yesterday);
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(put(EDIT_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isUnprocessableEntity());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -673,12 +697,16 @@ public class AdvertisementControllerTest {
     public void deleteShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
         final String DELETE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_ADVERTISEMENT, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -686,12 +714,16 @@ public class AdvertisementControllerTest {
     public void deleteShouldReturnNotFoundWhenCurrentUserIsNotAdvertiser() throws Exception {
         final String DELETE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -699,12 +731,16 @@ public class AdvertisementControllerTest {
     public void deleteShouldReturnNotFoundWhenCurrentUserIsNotAdvertiserAndNonExistingAdv() throws Exception {
         final String DELETE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE;
         final AdvertisementDTO testEntity = AdvertisementTestData.testEntity();
+        final int numberOfElementsBefore = advertisementRepository.findAll().size();
 
         this.mockMvc.perform(delete(DELETE_ADVERTISEMENT, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = advertisementRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -712,6 +748,7 @@ public class AdvertisementControllerTest {
     public void createReportShouldReturnCreatedWhenAdvertisementExistsAndCurrentUserIsNotAdvertiser() throws Exception {
         final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REPORTS_PATH;
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final int numberOfElementsBefore = reportRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REPORT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
@@ -728,20 +765,26 @@ public class AdvertisementControllerTest {
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(ReportSnippets.AD_REPORT)));
+
+        final int numberOfElementsAfter = reportRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore+1));
     }
 
     @Test
     @Transactional
     public void createReportShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
         final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REPORTS_PATH;
-
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final int numberOfElementsBefore = reportRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REPORT, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = reportRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -749,12 +792,16 @@ public class AdvertisementControllerTest {
     public void createReportShouldReturnForbiddenWhenCurrentUserIsAdvertiser() throws Exception {
         final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REPORTS_PATH;
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final int numberOfElementsBefore = reportRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REPORT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isForbidden());
+
+        final int numberOfElementsAfter = reportRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -762,6 +809,7 @@ public class AdvertisementControllerTest {
     public void createReportShouldReturnUnprocessableWhenAdvertisementStatusIsNotActive() throws Exception {
         final String CREATE_ADVERTISEMENT_REPORT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REPORTS_PATH;
         final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final int numberOfElementsBefore = reportRepository.findAll().size();
 
         //TODO: change this to use test suite (if you have time :) )
         final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
@@ -774,6 +822,9 @@ public class AdvertisementControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
+
+        final int numberOfElementsAfter = reportRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -804,6 +855,7 @@ public class AdvertisementControllerTest {
     public void createReviewShouldReturnCreatedWhenAdvertisementExistsAndCurrentUserIsNotAdvertiser() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN)
@@ -819,6 +871,9 @@ public class AdvertisementControllerTest {
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
                         AuthorizationSnippets.AUTH_HEADER,
                         requestFields(ReviewSnippets.AD_REVIEW)));
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore+1));
     }
 
     @Test
@@ -826,25 +881,33 @@ public class AdvertisementControllerTest {
     public void createReviewShouldReturnNotFoundWhenNonExistingAdvertisement() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW, AdvertisementTestData.NON_EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isNotFound());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
     @Transactional
     public void createReviewShouldReturnForbiddenWhenCurrentUserIsAdvertiser() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
-        final AdvertisementReportDTO testEntity = AdvertisementReportTestData.testEntity();
+        final ReviewDTO testEntity = ReviewTestData.testEntity();
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         this.mockMvc.perform(post(CREATE_ADVERTISEMENT_REVIEW, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isForbidden());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -852,6 +915,7 @@ public class AdvertisementControllerTest {
     public void createReviewShouldReturnUnprocessableWhenAdvertisementStatusIsNotActive() throws Exception {
         final String CREATE_ADVERTISEMENT_REVIEW = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + REVIEWS_PATH;
         final ReviewDTO testEntity = ReviewTestData.testEntity();
+        final int numberOfElementsBefore = reviewRepository.findAll().size();
 
         //TODO: change this alo to use test suite
         final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
@@ -864,6 +928,9 @@ public class AdvertisementControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
+
+        final int numberOfElementsAfter = reviewRepository.findAll().size();
+        Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
     }
 
     @Test
@@ -917,6 +984,9 @@ public class AdvertisementControllerTest {
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
                         AuthorizationSnippets.AUTH_HEADER));
+
+        final AdvertisementStatus shouldBeInvalid = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).get().getStatus();
+        Assert.assertThat(shouldBeInvalid, is(AdvertisementStatus.INVALID));
     }
 
     @Test
@@ -928,12 +998,32 @@ public class AdvertisementControllerTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    @Transactional
+    public void invalidateShouldReturnUnprocessableWhenNewAdvertisementStatusIsSameAsOld() throws Exception {
+        final String INVALIDATE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + INVALIDATE_PATH;
+
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.INVALID);
+        advertisementRepository.save(advertisement);
+
+        this.mockMvc.perform(put(INVALIDATE_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
     @Transactional
     public void approveShouldReturnOkWhenAdvertisementExists() throws Exception {
         final String APPROVE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + APPROVE_PATH;
+
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.INVALID);
+        advertisementRepository.save(advertisement);
 
         this.mockMvc.perform(put(APPROVE_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
                 .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
@@ -943,6 +1033,9 @@ public class AdvertisementControllerTest {
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
                         AuthorizationSnippets.AUTH_HEADER));
+
+        final AdvertisementStatus shouldBeApproved = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).get().getStatus();
+        Assert.assertThat(shouldBeApproved, is(AdvertisementStatus.ACTIVE));
     }
 
     @Test
@@ -958,6 +1051,21 @@ public class AdvertisementControllerTest {
 
     @Test
     @Transactional
+    public void approveShouldReturnUnprocessableWhenNewAdvertisementStatusIsSameAsOld() throws Exception {
+        final String APPROVE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + APPROVE_PATH;
+
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.ACTIVE);
+        advertisementRepository.save(advertisement);
+
+        this.mockMvc.perform(put(APPROVE_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
+                .header(UserTestData.AUTHORIZATION, UserTestData.VERIFIER_TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional
     public void doneShouldReturnOkWhenExistingAdvertisementAndCurrentUserIsAdvertiser() throws Exception {
         final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + DONE_PATH;
 
@@ -969,6 +1077,9 @@ public class AdvertisementControllerTest {
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
                         AuthorizationSnippets.AUTH_HEADER));
+
+        final AdvertisementStatus shouldBeApproved = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).get().getStatus();
+        Assert.assertThat(shouldBeApproved, is(AdvertisementStatus.DONE));
     }
 
     @Test
@@ -1002,6 +1113,21 @@ public class AdvertisementControllerTest {
                 .header(UserTestData.AUTHORIZATION, UserTestData.NOT_ADVERTISER_TOKEN))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void doneShouldReturnUnprocessableWhenNewAdvertisementStatusIsSameAsOld() throws Exception {
+        final String DONE_ADVERTISEMENT = BASE_URL + AdvertisementTestData.ID_PATH_VARIABLE + DONE_PATH;
+
+        final Advertisement advertisement = advertisementRepository.findById(AdvertisementTestData.EXISTING_ID).orElseThrow(NotFoundException::new);
+        advertisement.setStatus(AdvertisementStatus.DONE);
+        advertisementRepository.save(advertisement);
+
+        this.mockMvc.perform(put(DONE_ADVERTISEMENT, AdvertisementTestData.EXISTING_ID)
+                .header(UserTestData.AUTHORIZATION, UserTestData.TOKEN_VALUE))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
 }
