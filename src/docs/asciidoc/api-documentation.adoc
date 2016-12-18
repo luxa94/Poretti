@@ -566,12 +566,76 @@ include::{snippets}/find-memberships-of-user/path-parameters.adoc[]
 
 include::{snippets}/find-memberships-of-user/http-response.adoc[]
 
+[[resource-authentication]]
+== Authentication
+   Authentication
+
+[[authentication-register]]
+=== Register
+
+A `POST` method for registering to the system.
+
+==== Example request
+
+include::{snippets}/authentication-register/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/authentication-register/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/authentication-register/http-response.adoc[]
 
 
+[[authentication-login]]
+=== Login
+
+A `POST` method for logging in to the system.
+
+==== Example request
+
+include::{snippets}/authentication-login/http-request.adoc[]
+
+==== Request parameters
+
+include::{snippets}/authentication-login/request-fields.adoc[]
+
+==== Example response
+
+include::{snippets}/authentication-login/http-response.adoc[]
 
 
+[[authentication-verify]]
+=== Verify
+
+A `PUT` method for verifying ones self to the system.
+
+==== Example request
+
+include::{snippets}/authentication-verify/http-request.adoc[]
+
+==== Path parameters
+
+include::{snippets}/authentication-verify/path-parameters.adoc[]
+
+==== Example response
+
+include::{snippets}/authentication-verify/http-response.adoc[]
 
 
+[[authentication-logout]]
+=== Logout
+
+A `DELETE` method for logging out.
+
+==== Example request
+
+include::{snippets}/authentication-logout/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/authentication-logout/http-response.adoc[]
 
 
 
