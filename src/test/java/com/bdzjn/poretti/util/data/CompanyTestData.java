@@ -9,19 +9,10 @@ import java.util.List;
 
 public class CompanyTestData {
 
-    public static final String ID_PATH_VARIABLE = "/{id}";
-    public static final String REAL_ESTATES_PATH = "/realEstates";
-    public static final String REAL_ESTATES_ID_PATH = "/realEstates/{realEstateId}";
-    public static final String ADVERTISEMENTS_PATH = "/advertisements";
-    public static final String ADVERTISEMENTS_ID_PATH = "/advertisements/{advertisementId}";
-    public static final String MEMBERSHIPS_PATH = "/memberships";
-    public static final String MEMBERSHIPS_ID_PATH = "/memberships/{membershipId}";
-    public static final String REVIEWS_PATH = "/reviews";
-
     public static final int EXISTING_COMPANY_ID = 5;
     public static final int NON_EXISTING_COMPANY_ID = 123;
-    public static final int EXISTING_COMPANY_REAL_ESTATE_ID = 2;
-    public static final int EXISTING_COMPANY_ADVERTISEMENT_ID = 2;
+    public static final int EXISTING_REAL_ESTATE_ID = 2;
+    public static final int EXISTING_ADVERTISEMENT_ID = 2;
     public static final int UNCONFIRMED_MEMBERSHIP_ID = 2;
     public static final int CONFIRMED_MEMBERSHIP_ID = 1;
 
