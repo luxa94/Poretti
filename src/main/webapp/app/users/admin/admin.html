@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="poretti">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+    <div>{{vm.admin.username}} | {{vm.admin.email}}</div>
+
+    <h2>Create admin</h2>
+    <input placeholder="Username" type="text" ng-model="vm.nadmin.username"/>
+    <input placeholder="Email" type="text" ng-model="vm.nadmin.email"/>
+    <input placeholder="Password" type="password" ng-model="vm.nadmin.password"/>
+    <input placeholder="Name" type="text" ng-model="vm.nadmin.name"/>
+    <input type="button" value="Register" ng-click="vm.createAdmin()"/>
+
+    <h2>Create admin</h2>
+    <input placeholder="Username" type="text" ng-model="vm.verifier.username"/>
+    <input placeholder="Email" type="text" ng-model="vm.verifier.email"/>
+    <input placeholder="Password" type="password" ng-model="vm.verifier.password"/>
+    <input placeholder="Name" type="text" ng-model="vm.verifier.name"/>
+    <input type="button" value="Register" ng-click="vm.createVerifier()"/>
+</body>
+</html>

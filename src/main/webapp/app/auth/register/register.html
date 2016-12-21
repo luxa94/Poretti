@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <input placeholder="Username" type="text" ng-model="vm.user.username"/>
+    <input placeholder="Email" type="text" ng-model="vm.user.email"/>
+    <input placeholder="Password" type="password" ng-model="vm.user.password"/>
+    <input placeholder="Name" type="text" ng-model="vm.user.name"/>
+    <input type="button" value="Register" ng-click="vm.register()"/>
+
+    <div ng-if="vm.status">Congratulations! You're now one awesome person.
+        But first confirm your account, we have already sent you an...ee..what? When I say E you scream EMAILL!!</div>
+</body>
+</html>
