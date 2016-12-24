@@ -24,6 +24,16 @@
                         }
                     }
                 })
+                .state('verifyAccount', {
+                    url: '/verifyAccount/:id',
+                    views: {
+                        'body' : {
+                            templateUrl: 'app/auth/verifyAccount/verifyAccount.html',
+                            controller: 'VerifyAccountCtrlAs',
+                            controllerAs: 'vm'
+                        }
+                    }
+                });
         });
 
 })(angular);

@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
             final String password = "lunjomazobozavanje";
             final String subject = "Verifikacija naloga";
 
-            final String messageText = String.format("Uspešno ste se registrovali na Poretti.\n\nhttp://localhost:8080/#!/confirm_account/%d.\n\nMolimo Vas da klikom na link iznad potvrdite svoju registraciju.", user.getId());
+            final String messageText = String.format("Uspešno ste se registrovali na Poretti.\n\nhttp://localhost:8080/#!/verifyAccount/%d.\n\nMolimo Vas da klikom na link iznad potvrdite svoju registraciju.", user.getId());
 
             final Session session = Session.getDefaultInstance(properties, new Authenticator() {
                 @Override

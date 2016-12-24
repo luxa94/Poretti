@@ -5,15 +5,15 @@
         .module('poretti')
         .config(function ($stateProvider) {
             $stateProvider
-                .state('admin', {
-                    url: '/admin/:id',
+                .state('user', {
+                    url: '/user/:id',
                     views: {
                         'body': {
-                            templateUrl: 'app/users/admin/admin.html',
-                            controller: 'AdminCtrlAs',
+                            templateUrl: 'app/users/advertiser/advertiser.html',
+                            controller: 'AdvertiserCtrlAs',
                             controllerAs: 'vm'
                         }
                     }
-                })
-        })
+                });
+        });
 })(angular);

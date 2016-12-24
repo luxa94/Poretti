@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>{{vm.advertisement.title}}</h1>
+    <h1>Reviews of advertisement</h1>
+    <table>
+        <tbody>
+            <tr ng-repeat="review in vm.advertisement.reviews">
+                <td>{{review.comment}}</td>
+                <td>{{review.rating}}</td>
+                <td>{{review.author.name}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1>Reports of advertisement</h1>
+    <table>
+        <tbody>
+        <tr ng-repeat="report in vm.advertisement.reports">
+            <td>{{report.reason}}</td>
+            <td>{{report.description}}</td>
+            <td>{{report.author.name}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>Create review</h1>
+    <input type="text" placeholder="Comment" ng-model="vm.newReview.comment"/>
+    <input type="number" placeholder="Rating" ng-model="vm.newReview.rating"/>
+    <input type="button" ng-click="vm.createReview()" value="Ok"/>
+
+    <h1>Create report</h1>
+    <input type="text" placeholder="Reason" ng-model="vm.newReport.reason"/>
+    <input type="text" placeholder="Description" ng-model="vm.newReport.description"/>
+    <input type="button" ng-click="vm.createReport()" value="Ok"/>
+</body>
+</html>

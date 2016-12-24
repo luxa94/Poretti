@@ -10,11 +10,36 @@
     <h2>Advertisements</h2>
     <table>
        <tbody>
-        <tr ng-repeat="advertisement in vm.user.advertisements">
+        <tr ng-repeat="advertisement in vm.advertisements">
             <td>{{advertisement.title}}</td>
             <td>{{advertisement.price}}</td>
         </tr>
        </tbody>
     </table>
+
+    <h2>Reviews</h2>
+    <table>
+        <tbody>
+        <tr ng-repeat="review in vm.reviews">
+            <td>{{review.comment}}</td>
+            <td>{{review.reating}}</td>
+            <td>{{review.author.name}}</td>
+            <td>{{review.target.name}}</td>
+            <td ng-if="review.canBeErased"><input type="button" ng-click="vm.deleteReview(review)" value="Delete"/></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Create review</h3>
+    <input type="text" placeholder="Write your comment..." ng-model="vm.review.comment"/>
+    <input type="number" placeholder="Rating" ng-model="vm.review.rating"/>
+    <input type="button" ng-click="vm.createReview()" value="Ok"/>
+
+    <div ng-if="vm.canEdit">
+        <h3>Edit your data</h3>
+        <input type="text" placeholder="Edit name" ng-model="vm.userToEdit.name"/>
+        <input type="button" ng-click="vm.edit()" value="Ok"/>
+    </div>
+
 </body>
 </html>

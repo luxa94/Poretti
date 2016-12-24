@@ -10,7 +10,7 @@
         var vm = this;
 
         vm.admin = {};
-        vm.nadmin = {};
+        vm.newAdmin = {};
         vm.verifier = {};
         vm.createAdmin = createAdmin;
         vm.createVerifier = createVerifier;
@@ -25,7 +25,7 @@
         }
 
         function createAdmin () {
-            userService.createAdmin(vm.nadmin).then(function(response) {
+            userService.createAdmin(vm.newAdmin).then(function(response) {
                 console.log(response.data);
             }).catch(function(response) {
                 console.log(response.status);

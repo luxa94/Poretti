@@ -14,18 +14,18 @@
         return {
             getUser: getUser,
             setUser: setUser,
-            removeUser: removeUser
+            removeUser: removeUser,
         };
 
         function getUser() {
-            var loggedIn
+            var loggedInUser = {};
             if (LOCAL_STORAGE_INSTANCE) {
-                var loggedInUser = LOCAL_STORAGE_INSTANCE.getItem(LOCAL_STORAGE_KEY);
+                loggedInUser = LOCAL_STORAGE_INSTANCE.getItem(LOCAL_STORAGE_KEY);
                 if (loggedInUser) {
                     return JSON.parse(loggedInUser);
                 }
-                return {};
             }
+            return loggedInUser;
         }
 
         function setUser(user) {
@@ -37,5 +37,6 @@
         function removeUser() {
             LOCAL_STORAGE_INSTANCE && LOCAL_STORAGE_INSTANCE.removeItem(LOCAL_STORAGE_KEY);
         }
+
     }
 })(angular);

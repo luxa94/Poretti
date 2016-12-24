@@ -4,9 +4,9 @@
     angular.module('poretti')
         .service('authInterceptor', authInterceptor)
 
-    authInterceptor.$inject = ['sessionService'];
+    authInterceptor.$inject = ['$q', '$location', 'sessionService'];
 
-    function authInterceptor(sessionService) {
+    function authInterceptor($q, $location, sessionService) {
 
         return {
             request: request,
@@ -15,19 +15,22 @@
 
         function request(config) {
             var currentUser = sessionService.getUser();
-            var authToken = currentUser.token;
-            if (authToken) {
-                config.headers["X-AUTH-TOKEN"] = authToken;
+            if (currentUser) {
+                var authToken = currentUser.token;
+                if (authToken) {
+                    config.headers["X-AUTH-TOKEN"] = authToken;
+                }
             }
             return config;
         }
 
         function responseError(response) {
+            debugger;
             if (response.status === 401) {
-                console.log('401');
+                $location.path("/login");
+                return $q.reject(response);
             }
-
-            return response;
+            return $q.reject(response);
         }
     }
 })(angular);

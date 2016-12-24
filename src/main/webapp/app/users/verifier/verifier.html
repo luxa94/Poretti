@@ -5,6 +5,31 @@
     <title>Title</title>
 </head>
 <body>
-
+    <h1>Reported advertisements</h1>
+    <table>
+        <tbody>
+            <tr ng-repeat="reportedAdv in vm.reported">
+                <td>{{reportedAdv.title}}</td>
+                <td>{{reportedAdv.advertiser.name}}</td>
+                <td>
+                    <md-button ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div ng-if="vm.showReports">
+        <h4>{{vm.chosenAdvertisement.title}}</h4>
+        <table>
+            <tbody>
+                <tr ng-repeat="report in vm.chosenAdvertisement.reports">
+                    <td>{{report.reason}}</td>
+                    <td>{{report.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <md-button ng-click="vm.hideReports()">Hide reports</md-button>
+        <md-button ng-click="vm.changeStatus()">{{vm.actionNameBasedOnStatus()}}</md-button>
+    </div>
 </body>
 </html>

@@ -1,9 +1,9 @@
 (function (angular) {
-    'use strict'
+    'use strict';
 
     angular
         .module('poretti')
-        .service(ownerReviewService, ['$http', ownerReviewService])
+        .service('ownerReviewService', ['$http', ownerReviewService])
 
     function ownerReviewService($http) {
         var BASE_URL = "/api/ownerReviews";

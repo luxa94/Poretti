@@ -17,5 +17,34 @@
                     }
                 });
         })
+        .run(function ($rootScope, $location, sessionService, roleService) {
+
+            var publicRoutes = ["/register", "/login"];
+            var adminRoutes = ["/admin"];
+            var verifierRoutes = ["/verifier"];
+
+            var routeIsIn = function (routes, currentRoute) {
+                return _.find(routes, function (route) {
+                    return _.startsWith(currentRoute, route);
+                });
+            };
+
+            $rootScope.$on('$stateChangeStart', function (ev, to, toParams, from, fromParams) {
+                var loggedUser = sessionService.getUser();
+
+                if (!routeIsIn(publicRoutes, $location.url()) && !loggedUser) {
+                    ev.preventDefault();
+                    $location.path('/login');
+                }
+                else if (routeIsIn(adminRoutes, $location.url()) && !roleService.isAdmin(loggedUser)) {
+                    ev.preventDefault();
+                    $location.path("/login");
+                }
+                else if (routeIsIn(verifierRoutes, $location.url()) && !roleService.isVerifier(loggedUser)) {
+                    ev.preventDefault();
+                    $location.path("/login");
+                }
+            });
+        });
 
 }(angular));

@@ -26,6 +26,7 @@
     "alertifyjs": "^1.0.11",
     "angular-route": "^1.5.9",
     "angular-file-upload": "^2.4.0",
-    "angular-resource": "^1.6.0"
+    "angular-resource": "^1.6.0",
+    "lodash": "^4.17.3"
   }
 }

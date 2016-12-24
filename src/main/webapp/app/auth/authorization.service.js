@@ -9,10 +9,15 @@
     function authorizationService($http) {
         var BASE_URL = "api/authentication";
 
+        function pathWithId(id) {
+            return BASE_URL + '/' + id;
+        }
+
         return {
             login: login,
             register: register,
             logout: logout,
+            verifyAccount: verifyAccount,
         };
 
         function login(user) {
@@ -27,6 +32,10 @@
             if (loggedInUser) {
                 return $http.post(BASE_URL + "/logout", loggedInUser.token);
             }
+        }
+
+        function verifyAccount(userId) {
+            return $http.put(pathWithId(userId) + "/verify");
         }
     }
 }(angular));

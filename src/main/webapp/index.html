@@ -1,6 +1,13 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+</head>
+
+<body ng-app="poretti">
+
+    <div ui-view="body"></div>
+    <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
@@ -12,35 +19,39 @@
     <script src="bower_components/restangular/src/restangular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
-</head>
 
-<body ng-app="poretti">
+    <script src="app.js"></script>
+
+    <script src="app/advertisements/advertisementReview.service.js"></script>
+    <script src="app/users/company/company.service.js"></script>
+    <script src="app/realEstate/realEstate.service.js"></script>
+
+    <script src="app/advertisements/advertisement.service.js"></script>
+    <script src="app/advertisements/advertisements.controller.js"></script>
+
+    <script src="app/advertisements/advertisement/advertisement.state.js"></script>
+    <script src="app/advertisements/advertisement/advertisement.controller.js"></script>
+
+    <script src="app/auth/auth.state.js"></script>
+    <script src="app/auth/session.service.js"></script>
+    <script src="app/auth/role.service.js"></script>
+    <script src="app/auth/authorization.service.js"></script>
+    <script src="app/auth/auth.interceptor.js"></script>
+    <script src="app/auth/login/login.controller.js"></script>
+    <script src="app/auth/register/register.controller.js"></script>
+    <script src="app/auth/verifyAccount/verifyAccount.controller.js"></script>
 
 
-<div ui-view="body"></div>
+    <script src="app/users/user.service.js"></script>
+    <script src="app/users/admin/admin.state.js"></script>
+    <script src="app/users/admin/admin.controller.js"></script>
+    <script src="app/users/verifier/verifier.state.js"></script>
+    <script src="app/users/verifier/verifier.controller.js"></script>
+    <script src="app/users/advertiser/advertiser.state.js"></script>
+    <script src="app/users/advertiser/advertiser.controller.js"></script>
+
+    <script src="app/users/ownerReview.service.js"></script>
 
 
-<script src="app.js"></script>
-
-
-<script src="app/auth/authorization.service.js"></script>
-<script src="app/advertisements/advertisement.service.js"></script>
-<script src="app/advertisements/advertisementReview.service.js"></script>
-<script src="app/users/company/company.service.js"></script>
-<script src="app/users/ownerReview.service.js"></script>
-<script src="app/realEstate/realEstate.service.js"></script>
-<script src="app/users/user.service.js"></script>
-
-<script src="app/advertisements/advertisements.controller.js"></script>
-
-<script src="app/users/admin/admin.state.js"></script>
-<script src="app/users/admin/admin.controller.js"></script>
-
-<script src="app/auth/auth.state.js"></script>
-<script src="app/auth/session.service.js"></script>
-<script src="app/auth/auth.interceptor.js"></script>
-<script src="app/auth/login/login.controller.js"></script>
-<script src="app/auth/register/register.controller.js"></script>
 </body>
 </html>

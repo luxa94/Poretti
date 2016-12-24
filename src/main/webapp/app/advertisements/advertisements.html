@@ -9,9 +9,11 @@
     <h1>{{vm.heading}}</h1>
     <table>
         <tbody>
-            <tr ng-repeat="a in vm.advertisements">
-                <td>{{a.title}}</td>
-                <td>{{a.price}}</td>
+            <tr ng-repeat="advertisement in vm.advertisements">
+                <td>{{advertisement.title}}</td>
+                <td>{{advertisement.price}}</td>
+                <td><md-button ng-click="vm.toAdvertiserOf(advertisement)">Advertiser's profile</md-button></td>
+                <td><md-button ng-click="vm.toAdvertisement(advertisement)">Advertisement</md-button></td>
             </tr>
         </tbody>
     </table>
