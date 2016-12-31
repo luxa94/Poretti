@@ -27,6 +27,7 @@
     "angular-route": "^1.5.9",
     "angular-file-upload": "^2.4.0",
     "angular-resource": "^1.6.0",
-    "lodash": "^4.17.3"
+    "lodash": "^4.17.3",
+    "angular-material-icons": "^0.7.1"
   }
 }

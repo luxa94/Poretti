@@ -8,9 +8,14 @@
                 .state('advertisement', {
                     url: '/advertisement/:id',
                     views: {
-                        'body' : {
+                        'content' : {
                             templateUrl: 'app/advertisements/advertisement/advertisement.html',
                             controller: 'AdvertisementCtrlAs',
+                            controllerAs: 'vm',
+                        },
+                        'navbar' : {
+                            templateUrl: 'app/navbar/navbar.html',
+                            controller: 'NavbarCtrlAs',
                             controllerAs: 'vm',
                         }
                     }

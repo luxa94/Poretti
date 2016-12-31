@@ -7,7 +7,7 @@
                 .state('login', {
                     url: '/login',
                     views: {
-                        'body': {
+                        'content': {
                             templateUrl: 'app/auth/login/login.html',
                             controller: 'LoginCtrlAs',
                             controllerAs: 'vm'
@@ -17,7 +17,7 @@
                 .state('register', {
                     url: '/register',
                     views: {
-                        'body': {
+                        'content': {
                             templateUrl: 'app/auth/register/register.html',
                             controller: 'RegisterCtrlAs',
                             controllerAs: 'vm'
@@ -27,7 +27,7 @@
                 .state('verifyAccount', {
                     url: '/verifyAccount/:id',
                     views: {
-                        'body' : {
+                        'content' : {
                             templateUrl: 'app/auth/verifyAccount/verifyAccount.html',
                             controller: 'VerifyAccountCtrlAs',
                             controllerAs: 'vm'

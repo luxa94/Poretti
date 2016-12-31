@@ -6,14 +6,15 @@
 
 <body ng-app="poretti">
 
-    <div ui-view="body"></div>
+    <div ui-view="navbar"></div>
+    <div ui-view="content"></div>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/angular-aria/angular-aria.min.js"></script>
     <script src="bower_components/angular-messages/angular-messages.min.js"></script>
-    <script src="bower_components/angular-material/angular-material.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="bower_components/alertifyjs/dist/js/alertify.js"></script>
     <script src="bower_components/restangular/src/restangular.js"></script>
@@ -22,15 +23,23 @@
 
     <script src="app.js"></script>
 
+    <script src="app/navbar/navbar.controller.js"></script>
+
     <script src="app/advertisements/advertisementReview.service.js"></script>
     <script src="app/users/company/company.service.js"></script>
-    <script src="app/realEstate/realEstate.service.js"></script>
+
 
     <script src="app/advertisements/advertisement.service.js"></script>
     <script src="app/advertisements/advertisements.controller.js"></script>
 
     <script src="app/advertisements/advertisement/advertisement.state.js"></script>
     <script src="app/advertisements/advertisement/advertisement.controller.js"></script>
+    <script src="app/advertisements/dialogs/advertisement.dialog.controller.js"></script>
+    <script src="app/advertisements/dialogs/review.dialog.controller.js"></script>
+    <script src="app/advertisements/dialogs/report.dialog.controller.js"></script>
+
+    <script src="app/realEstate/realEstate.service.js"></script>
+    <script src="app/realEstate/dialogs/realEstate.dialog.controller.js"></script>
 
     <script src="app/auth/auth.state.js"></script>
     <script src="app/auth/session.service.js"></script>

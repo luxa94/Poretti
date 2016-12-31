@@ -5,9 +5,9 @@
         .module('poretti')
         .service('sessionService', sessionService)
 
-    sessionService.$inject = ['$window'];
+    sessionService.$inject = ['$window', '$q'];
 
-    function sessionService($window) {
+    function sessionService($window, $q) {
         var LOCAL_STORAGE_KEY = 'porettiUser';
         var LOCAL_STORAGE_INSTANCE = $window.localStorage;
 

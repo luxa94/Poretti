@@ -1,41 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1>{{vm.advertisement.title}}</h1>
-    <h1>Reviews of advertisement</h1>
-    <table>
-        <tbody>
-            <tr ng-repeat="review in vm.advertisement.reviews">
-                <td>{{review.comment}}</td>
-                <td>{{review.rating}}</td>
-                <td>{{review.author.name}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h1>Reports of advertisement</h1>
-    <table>
-        <tbody>
-        <tr ng-repeat="report in vm.advertisement.reports">
-            <td>{{report.reason}}</td>
-            <td>{{report.description}}</td>
-            <td>{{report.author.name}}</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <h1>Create review</h1>
-    <input type="text" placeholder="Comment" ng-model="vm.newReview.comment"/>
-    <input type="number" placeholder="Rating" ng-model="vm.newReview.rating"/>
-    <input type="button" ng-click="vm.createReview()" value="Ok"/>
-
-    <h1>Create report</h1>
-    <input type="text" placeholder="Reason" ng-model="vm.newReport.reason"/>
-    <input type="text" placeholder="Description" ng-model="vm.newReport.description"/>
-    <input type="button" ng-click="vm.createReport()" value="Ok"/>
-</body>
-</html>
+<section>
+   <div layout="row" flex-md flex-gt-md="100" layout-align="center center">
+       <md-content>
+           <md-card>
+               <md-card-header>
+                   <md-card-header-text layout>
+                       <div layout="column" flex>
+                           <span class="md-title">{{vm.advertisement.title}}</span>
+                           <span class="md-subhead">FOR {{vm.advertisement.type}}</span>
+                       </div>
+                       <div layout="column" flex layout-align="start end">
+                           <span class="md-title">{{vm.advertisement.price}} {{vm.advertisement.currency}}</span>
+                           <span class="md-subhead">Average rating {{vm.advertisement.averageRating}}</span>
+                       </div>
+                   </md-card-header-text>
+               </md-card-header>
+               <img ng-src="{{vm.advertisement.realEstate.imageUrl}}"/>
+               <div layout="row">
+                   <div flex layout="column" layout-padding="start start">
+                       <span class="md-headline">Description</span>
+                       <p>{{vm.advertisement.realEstate.description}}</p>
+                   </div>
+                   <div flex layout="column" layout-align="start end">
+                       <md-card-actions>
+                           <md-button class="md-primary" ng-click="vm.openDialogForReport($event)">Create report</md-button>
+                           <md-button class="md-primary" ng-click="vm.openDialogForReview($event)">Create review</md-button>
+                       </md-card-actions>
+                   </div>
+               </div>
+               <md-card-content>
+                    <div layout="row" layout-margin>
+                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                            <span class="md-title">Details</span>
+                            <span>Announced on: {{vm.advertisement.announcedOn}}</span>
+                            <span>Edited on: {{vm.advertisement.editedOn}}</span>
+                            <span>Ends on: {{vm.advertisement.endsOn}}</span>
+                            <span>Advertiser: {{vm.advertisement.advertiser.name}}</span>
+                        </div>
+                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                            <span class="md-title">About real estate</span>
+                            <span>Name: {{vm.advertisement.realEstate.name}}</span>
+                            <span>Type: {{vm.advertisement.realEstate.type}}</span>
+                            <span>Technical equipment: {{vm.advertisement.realEstate.tehnicalEquipment}}</span>
+                            <span>Address:
+                                {{vm.advertisement.realEstate.location.street}} {{vm.advertisement.realEstate.location.streetNumber}},
+                                {{vm.advertisement.realEstate.location.city}}, {{vm.advertisement.realEstate.location.zipCode}},
+                            </span>
+                        </div>
+                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                            <span class="md-title">About advertiser</span>
+                            <span>Name: {{vm.advertisement.advertiser.name}}</span>
+                            <span>Phone numbers: {{vm.advertisement.advertiser.phoneNumbers}}</span>
+                            <span>Contact emails: {{vm.advertisement.advertiser.contactEmails}}</span>
+                        </div>
+                    </div>
+               </md-card-content>
+           </md-card>
+       </md-content>
+   </div>
+    <div layout="row" layout-margin>
+        <div flex-md flex-gt-md="50">
+           <md-toolbar>
+               <div class="md-toolbar-tools" layout-align="center center">Reviews</div>
+           </md-toolbar>
+           <md-content>
+               <md-list>
+                   <md-list-item class="md-3-line md-long-text" ng-repeat="review in vm.advertisement.reviews">
+                       <img ng-src="{{review.author.imageUrl}}?25" class="md-avatar" alt="{{review.author.name}}" />
+                       <div class="md-list-item-text">
+                           <h3>{{review.author.name}}</h3>
+                           <p>{{review.comment}}</p>
+                           <p>Rating: {{review.rating}}</p>
+                       </div>
+                   </md-list-item>
+               </md-list>
+           </md-content>
+        </div>
+        <div flex-md flex-gt-md="50">
+            <md-toolbar>
+                <div class="md-toolbar-tools" layout-align="center center">Reports</div>
+            </md-toolbar>
+            <md-content>
+                <md-list>
+                    <md-list-item class="md-3-line md-long-text" ng-repeat="report in vm.advertisement.reports">
+                        <img ng-src="{{report.author.imageUrl}}?25" class="md-avatar" alt="{{review.author.name}}" />
+                        <div class="md-list-item-text">
+                            <h3>{{report.author.name}}</h3>
+                            <p>{{report.comment}}</p>
+                            <p>Rating: {{report.rating}}</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </div>
+   </div>
+</section>

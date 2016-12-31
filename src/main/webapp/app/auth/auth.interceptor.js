@@ -25,11 +25,6 @@
         }
 
         function responseError(response) {
-            debugger;
-            if (response.status === 401) {
-                $location.path("/login");
-                return $q.reject(response);
-            }
             return $q.reject(response);
         }
     }

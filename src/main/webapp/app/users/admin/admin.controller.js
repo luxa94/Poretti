@@ -1,43 +1,71 @@
-(function(angular){
+(function (angular) {
     'use strict';
 
     angular.module('poretti')
         .controller('AdminCtrlAs', AdminCtrlAs)
 
-    AdminCtrlAs.$inject = ['userService'];
+    AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService'];
 
-    function AdminCtrlAs(userService) {
+    function AdminCtrlAs($stateParams, userService, companyService) {
         var vm = this;
 
         vm.admin = {};
-        vm.newAdmin = {};
-        vm.verifier = {};
-        vm.createAdmin = createAdmin;
-        vm.createVerifier = createVerifier;
+        vm.newUser = {};
+        vm.newCompany = {};
+        vm.companyUser = {};
+        vm.newCompany.phoneNumbers= [];
+        vm.newCompany.contactEmails = [];
+        vm.companyUser.phoneNumbers = [];
+        vm.companyUser.contactEmails = [];
+        vm.newUserRole = "";
+        vm.createCompany = createCompany;
+        vm.creatingCompanyUser = false;
+        vm.createAdminOfVerifier = createAdminOrVerifier;
 
         activate();
 
         function activate() {
-            userService.findOne(1)
-                .then(function(response) {
+            userService.findOne($stateParams.id)
+                .then(function (response) {
                     vm.admin = response.data;
                 })
         }
 
-        function createAdmin () {
-            userService.createAdmin(vm.newAdmin).then(function(response) {
+        function createCompany() {
+            var registerCompanyDTO = {};
+            registerCompanyDTO.company = vm.newCompany;
+            registerCompanyDTO.user = vm.companyUser;
+            companyService.create(registerCompanyDTO).then(function(response) {
+                vm.newCompany = {};
+                vm.companyUser = {};
+            }).catch(function(error) {
+                console.log(error);
+            })
+        }
+
+        function createAdminOrVerifier() {
+            if (vm.role === "ADMIN") {
+                createAdmin();
+            } else if (vm.role === "VERIFIER") {
+                createVerifier();
+            }
+        }
+
+        function createAdmin() {
+            userService.createAdmin(vm.newUser).then(function (response) {
                 console.log(response.data);
-            }).catch(function(response) {
+            }).catch(function (response) {
                 console.log(response.status);
             })
         }
 
         function createVerifier() {
-            userService.createVerifier(vm.verifier).then(function(response) {
+            userService.createVerifier(vm.newUser).then(function (response) {
                 console.log(response.data);
-            }).catch(function(response) {
+            }).catch(function (response) {
                 console.log(response.status);
             })
         }
+
     }
 })(angular);

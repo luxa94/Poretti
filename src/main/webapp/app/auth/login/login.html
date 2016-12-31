@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="poretti">
-<head>
-    <meta charset="UTF-8">
-
-</head>
-</body>
-    <span>You're on login page! Say HI! :D</span>
-    <input type="text" ng-model="vm.user.username"/>
-    <input type="password" ng-model="vm.user.password"/>
-    <input type="button" ng-click="vm.login()" value="Login"/>
-</body>
-</html>
+<section>
+    <md-content layout-padding layout="row" layout-align="center center">
+        <div flex-md flex-gt-md="50" md-whiteframe="3">
+            <form name="loginForm" layout="column" ng-submit="vm.login()">
+                <md-input-container>
+                    <label>Username</label>
+                    <input required ng-model="vm.user.username"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" required ng-model="vm.user.password"/>
+                </md-input-container>
+            </form>
+            <md-button class="md-raised md-primary" ng-click="vm.login()">Log in</md-button>
+        </div>
+    </md-content>
+</section>

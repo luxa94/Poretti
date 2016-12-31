@@ -1,21 +1,111 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="poretti">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<div layout="row" layout-padding>
+    <div flex="35" flux-offset="5">
+        <mg-content class="md-padding" layout="row" layout-align="start center">
+            <div layout="column">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h3>Filter by</h3>
+                    </div>
+                </md-toolbar>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Advertisement title</label>
+                        <input ng-model="vm.filter.advertisementTitle"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Advertisement type</label>
+                        <md-select ng-model="vm.filter.advertisementType">
+                            <md-option>SALE</md-option>
+                            <md-option>RENT</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Price from</label>
+                        <input type="number" ng-model="vm.filter.priceFrom"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Price to</label>
+                        <input type="number" ng-model="vm.filter.priceTo"/>
+                    </md-input-container>
+                </div>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Real estate name</label>
+                        <input ng-model="vm.filter.realEstateName"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Real estate name</label>
+                        <md-select ng-model="vm.filter.realEstateType">
+                            <md-option>APARTMENT</md-option>
+                            <md-option>HOUSE</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <md-button class="md-raised md-accent" ng-click="vm.searchByFilters()">Search</md-button>
+                <md-button class="md-raised md-accent" ng-click="vm.clearFilters()">Clear</md-button>
+            </div>
+        </mg-content>
+    </div>
+    <div flex="80">
+        <md-content class="md-padding list-card" layout="row" layout-align="center stretch">
+            <div flex-md flex-gt-md="70" layout="column">
+                <md-card ng-repeat="advertisement in vm.advertisements" md-whiteframe="2">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{advertisement.title}}</span>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <div class="md-media-gt-xs card-media">
+                                <img ng-src="{{advertisement.realEstate.imageUrl}}"/>
+                            </div>
+                        </md-card-title-media>
+                    </md-card-title>
+                    <md-card-content layout="row">
+                        <span>{{advertisement.price}}</span>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-primary" ng-click="vm.toAdvertisement(advertisement)">Details
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+                <md-content layout="row" layout-align="center center">
+                    <md-button class="md-raised" ng-click="vm.previousPage()">Previous</md-button>
+                    <md-button class="md-raised" ng-repeat="pageNumber in vm.getNumberOfPages()"
+                               ng-click="vm.toPage(pageNumber)">{{pageNumber+1}}
+                    </md-button>
+                    <md-button class="md-raised" ng-click="vm.nextPage()">Next</md-button>
+                </md-content>
+            </div>
+            <md-fab-speed-dial ng-hide="vm.hidden" md-direction="up" md-open="vm.isOpen"
+                               class="md-scale md-fab-bottom-right" ng-class="{ 'md-hover-full': true }"
+                               ng-mouseenter="vm.isOpen=true" ng-mouseleave="vm.isOpen=false">
+                <md-fab-trigger>
+                    <md-button aria-label="menu" class="md-fab md-primary">
+                    </md-button>
+                </md-fab-trigger>
 
-</head>
-<body>
-    <h1>{{vm.heading}}</h1>
-    <table>
-        <tbody>
-            <tr ng-repeat="advertisement in vm.advertisements">
-                <td>{{advertisement.title}}</td>
-                <td>{{advertisement.price}}</td>
-                <td><md-button ng-click="vm.toAdvertiserOf(advertisement)">Advertiser's profile</md-button></td>
-                <td><md-button ng-click="vm.toAdvertisement(advertisement)">Advertisement</md-button></td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
+                <md-fab-actions>
+                    <md-button aria-label="Create real estate" class="md-fab md-raised md-mini"
+                               ng-click="vm.openDialogForRealEstate($event)">
+                        <md-tooltip md-direction="left" md-visible="tooltipVisible"
+                                    md-autohide="false">
+                            Create real estate
+                        </md-tooltip>
+                        New real estate
+                    </md-button>
+                    <md-button aria-label="Create advertisement" class="md-fab md-raised md-mini"
+                               ng-click="vm.openDialogForAdvertisement($event)">
+                        <md-tooltip md-direction="left" md-visible="tooltipVisible"
+                                    md-autohide="false">
+                            Create advertisement
+                        </md-tooltip>
+                        New advertisement
+                    </md-button>
+                </md-fab-actions>
+            </md-fab-speed-dial>
+        </md-content>
+    </div>
+</div>
+</div>

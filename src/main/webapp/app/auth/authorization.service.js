@@ -30,7 +30,7 @@
 
         function logout(loggedInUser) {
             if (loggedInUser) {
-                return $http.post(BASE_URL + "/logout", loggedInUser.token);
+                return $http.delete(BASE_URL + "/logout", loggedInUser.token);
             }
         }
 

@@ -8,7 +8,7 @@
                 .state('verifier', {
                     url: '/verifier/:id',
                     views: {
-                        'body' : {
+                        'content' : {
                             templateUrl: 'app/users/verifier/verifier.html',
                             controller: 'VerifierCtrlAs',
                             controllerAs: 'vm',

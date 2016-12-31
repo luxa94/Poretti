@@ -8,7 +8,7 @@
                 .state('user', {
                     url: '/user/:id',
                     views: {
-                        'body': {
+                        'content': {
                             templateUrl: 'app/users/advertiser/advertiser.html',
                             controller: 'AdvertiserCtrlAs',
                             controllerAs: 'vm'

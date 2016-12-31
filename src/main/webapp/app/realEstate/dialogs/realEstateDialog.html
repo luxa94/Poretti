@@ -1,0 +1,51 @@
+<md-dialog aria-label="Create realEstate" flex-md flex-gt-md="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Add real estate</div>
+    </md-toolbar>
+    <md-dialog-content layout-padding layout-maring>
+        <form flex ng-cloak layout="column">
+            <md-input-container>
+                <label>Name</label>
+                <input type="text" ng-model="vm.realEstate.name" placeholder="Name"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Area</label>
+                <input type="text" placeholder="Area" ng-model="vm.realEstate.area"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea placeholder="Area" ng-model="vm.realEstate.description" rows="5"></textarea>
+            </md-input-container>
+            <md-chips ng-model="vm.realEstate.technicalEquipment" readonly="false" placeholder="Technical equipment"></md-chips>
+            <br/><br/>
+            <md-input-container>
+                <label>State</label>
+                <input ng-model="vm.realEstate.location.state"/>
+            </md-input-container>
+            <md-input-container>
+                <label>City</label>
+                <input required ng-model="vm.realEstate.location.city"/>
+            </md-input-container>
+            <md-input-container>
+                <label>City area</label>
+                <input ng-model="vm.realEstate.location.cityArea"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Zip code</label>
+                <input ng-model="vm.realEstate.location.zipCode"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Street</label>
+                <input ng-model="vm.realEstate.location.street"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Street number</label>
+                <input ng-model="vm.realEstate.location.streetNumber"/>
+            </md-input-container>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+    </md-dialog-actions>
+</md-dialog>

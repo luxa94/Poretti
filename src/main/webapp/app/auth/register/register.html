@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <input placeholder="Username" type="text" ng-model="vm.user.username"/>
-    <input placeholder="Email" type="text" ng-model="vm.user.email"/>
-    <input placeholder="Password" type="password" ng-model="vm.user.password"/>
-    <input placeholder="Name" type="text" ng-model="vm.user.name"/>
-    <input type="button" value="Register" ng-click="vm.register()"/>
-
-    <div ng-if="vm.status">Congratulations! You're now one awesome person.
-        But first confirm your account, we have already sent you an...ee..what? When I say E you scream EMAILL!!</div>
-</body>
-</html>
+<section>
+    <md-content layout-padding layout="row" layout-align="center center">
+        <div flex-md flex-gt-md="50" md-whiteframe="3">
+            <form name="loginForm" layout="column" ng-submit="vm.register()">
+                <md-input-container>
+                    <label>Username</label>
+                    <input required ng-model="vm.user.username"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Email</label>
+                    <input required ng-model="vm.user.email"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" required ng-model="vm.user.password"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Name</label>
+                    <input required ng-model="vm.user.name"/>
+                </md-input-container>
+                <md-input-container>
+                    <md-button type="submit" class="md-raised md-primary" ng-click="vm.register()">Register</md-button>
+                </md-input-container>
+            </form>
+        </div>
+    </md-content>
+    <div ng-if="vm.status">Check our email</div>
+</section>
