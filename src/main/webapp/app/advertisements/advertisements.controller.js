@@ -4,9 +4,9 @@
         .module('poretti')
         .controller('AdvertisementsCtrlAs', AdvertisementsCtrlAs)
 
-    AdvertisementsCtrlAs.$inject = ['$q', '$state', '$mdDialog', 'advertisementService']
+    AdvertisementsCtrlAs.$inject = ['$q', '$state', '$mdDialog', 'advertisementService', 'realEstateService']
 
-    function AdvertisementsCtrlAs($q, $state, $mdDialog, advertisementService) {
+    function AdvertisementsCtrlAs($q, $state, $mdDialog, advertisementService, realEstateService) {
 
         var vm = this;
         vm.advertisements = [];
@@ -20,7 +20,7 @@
             technicalEquipment : []
         };
         vm.newAdvertisement = {
-            endsOn: new Date(),
+            endsOn: new Date()
         };
         vm.advertisementDialog = {};
         vm.toAdvertiserOf = toAdvertiserOf;
@@ -32,7 +32,7 @@
         vm.searchByFilters = searchByFilters;
         vm.clearFilters = clearFilters;
         vm.openDialogForAdvertisement = openDialogForAdvertisement;
-        vm.openDialogForRealEstate = openDialogForRealEstate;
+        vm.openStandaloneDialogForRealEstate = openStandaloneDialogForRealEstate;
 
         activate();
 
@@ -111,14 +111,18 @@
                 clickOutsideToClose: true,
                 locals: {
                     advertisement: vm.newAdvertisement,
-                    realEstateDialog: vm.openDialogForRealEstate,
-                    advertisementDialog: vm.openDialogForAdvertisement,
+                    realEstate: vm.newRealEstate,
+                    realEstateDialog: openDialogForRealEstate,
+                    advertisementDialog: vm.openDialogForAdvertisement
                 }
-            }).then(function (advertisement) {
-                vm.advertisement = advertisement;
-
+            }).then(function (response) {
+                if (response.realEstateIsChosen) {
+                    createAdvertisementForRealEstate(_.omit(response, ['realEstateIsChosen']));
+                } else {
+                    createAdvertisementAndRealEstate(_.omit(response, ['realEstateIsChosen']));
+                }
             }).catch(function(data) {
-                console.log("catch");
+                console.log("Error in dialog");
             })
         }
 
@@ -143,6 +147,43 @@
 
             return deferred.promise;
         }
+
+        function openStandaloneDialogForRealEstate(ev) {
+            openDialogForRealEstate(ev).then(function(realEstate) {
+                createRealEstate();
+            }).catch(function(error) {
+                console.log("console log");
+            });
+        }
+
+        function createAdvertisementAndRealEstate(advertisementRealEstate) {
+            advertisementService.create(advertisementRealEstate).then(function(response) {
+                console.log(response.data);
+                findAdvertisements();
+            }).catch(function(error) {
+                console.log("Server error");
+            })
+        }
+
+        function createAdvertisementForRealEstate(advertisementRealEstate) {
+            realEstateService.createAdvertisement(advertisementRealEstate.realEstateId, advertisementRealEstate.advertisement)
+                .then(function(response) {
+                    console.log(response.data);
+                    findAdvertisements();
+                }).catch(function(error) {
+                    console.log(error);
+            })
+        }
+
+        function createRealEstate() {
+            realEstateService.create(vm.newRealEstate).then(function(response) {
+                //TODO: add alertify
+                console.log(response);
+            }).catch(function(error) {
+                console.log("Server error");
+            })
+        }
+
     }
 
 

@@ -84,7 +84,7 @@ public class AdvertisementController {
 
         final RealEstate realEstate = realEstateService.create(realEstateDTO, user);
         final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+        return new ResponseEntity<>(advertisement.getId(), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")

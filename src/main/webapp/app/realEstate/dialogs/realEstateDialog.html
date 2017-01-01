@@ -6,16 +6,20 @@
         <form flex ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
-                <input type="text" ng-model="vm.realEstate.name" placeholder="Name"/>
+                <input type="text" ng-model="vm.realEstate.name"/>
             </md-input-container>
             <md-input-container>
                 <label>Area</label>
-                <input type="text" placeholder="Area" ng-model="vm.realEstate.area"/>
+                <input type="text" ng-model="vm.realEstate.area"/>
             </md-input-container>
             <md-input-container>
                 <label>Description</label>
-                <textarea placeholder="Area" ng-model="vm.realEstate.description" rows="5"></textarea>
+                <textarea ng-model="vm.realEstate.description" rows="5"></textarea>
             </md-input-container>
+            <md-select ng-model="vm.realEstate.realEstateType">
+                <md-option value="APARTMENT">APARTMENT</md-option>
+                <md-option value="HOUSE">HOUSE</md-option>
+            </md-select>
             <md-chips ng-model="vm.realEstate.technicalEquipment" readonly="false" placeholder="Technical equipment"></md-chips>
             <br/><br/>
             <md-input-container>

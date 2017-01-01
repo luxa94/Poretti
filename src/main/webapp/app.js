@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular
-        .module('poretti', ['ngRoute', 'ngResource', 'ui.router', 'ngMaterial', 'angularFileUpload'])
+        .module('poretti', ['ngRoute', 'ui.router', 'ngMaterial', 'angularFileUpload'])
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
             $mdThemingProvider
                 .theme('default')
@@ -20,7 +20,7 @@
                             controller: 'AdvertisementsCtrlAs',
                             controllerAs: 'vm'
                         },
-                        'navbar' : {
+                        'navbar': {
                             templateUrl: 'app/navbar/navbar.html',
                             controller: 'NavbarCtrlAs',
                             controllerAs: 'vm',
@@ -43,7 +43,7 @@
             $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
                 var loggedUser = sessionService.getUser();
                 if (!routeIsIn(publicRoutes, $location.url()) && !loggedUser) {
-                   // ev.preventDefault();
+                    // ev.preventDefault();
                     $location.path('/home');
                 }
                 else if (routeIsIn(adminRoutes, $location.url()) && !roleService.isAdmin(loggedUser)) {

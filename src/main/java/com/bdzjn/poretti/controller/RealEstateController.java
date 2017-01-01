@@ -45,7 +45,7 @@ public class RealEstateController {
     public ResponseEntity create(@RequestBody RealEstateDTO realEstateDTO,
                                  @AuthenticationPrincipal User user) {
         final RealEstate realEstate = realEstateService.create(realEstateDTO, user);
-        return new ResponseEntity<>(realEstate, HttpStatus.CREATED);
+        return new ResponseEntity<>(realEstate.getId(), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
@@ -89,7 +89,7 @@ public class RealEstateController {
         final RealEstate realEstate = realEstateService.findByIdAndOwnerId(id, user.getId()).orElseThrow(NotFoundException::new);
         final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
 
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+        return new ResponseEntity<>(advertisement.getId(), HttpStatus.CREATED);
     }
 
 }
