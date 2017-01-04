@@ -1,16 +1,16 @@
-(function (angular) {
+(function(angular) {
     'use strict';
 
     angular
         .module('poretti')
-        .config(function ($stateProvider) {
+        .config(function($stateProvider) {
             $stateProvider
-                .state('user', {
-                    url: '/user/:id',
+                .state('company', {
+                    url: '/company/:id',
                     views: {
                         'content': {
-                            templateUrl: 'app/users/advertiser/advertiser.html',
-                            controller: 'AdvertiserCtrlAs',
+                            templateUrl: 'app/users/company/company.html',
+                            controller: 'CompanyCtrlAs',
                             controllerAs: 'vm'
                         },
                         'navbar': {

@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('LoginCtrlAs', LoginCtrlAs);
 
-    LoginCtrlAs.$inject = ['$q', '$state', 'authorizationService', 'sessionService', 'roleService'];
+    LoginCtrlAs.$inject = ['$q', '$state', 'authorizationService', 'sessionService', 'roleService', 'alertify'];
 
-    function LoginCtrlAs($q, $state, authorizationService, sessionService, roleService) {
+    function LoginCtrlAs($q, $state, authorizationService, sessionService, roleService, alertify) {
 
         var vm = this;
 
@@ -17,8 +17,8 @@
             authorizationService.login(vm.user).then(function (response) {
                 sessionService.setUser(response.data);
                 redirectToPath();
-            }).catch(function (reject) {
-                console.log("Bad credentials");
+            }).catch(function (error) {
+                alertify.delay(5000).error("Username/password wrong.")
             });
         }
 

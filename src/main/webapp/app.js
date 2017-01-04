@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular
-        .module('poretti', ['ngRoute', 'ui.router', 'ngMaterial', 'angularFileUpload'])
+        .module('poretti', ['ngRoute', 'ui.router', 'ngMaterial', 'angularFileUpload', 'ngAlertify'])
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
             $mdThemingProvider
                 .theme('default')

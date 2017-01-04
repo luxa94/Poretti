@@ -10,6 +10,7 @@ import com.bdzjn.poretti.model.Membership;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.model.enumeration.Role;
 import com.bdzjn.poretti.repository.CompanyRepository;
+import com.bdzjn.poretti.repository.MembershipRepository;
 import com.bdzjn.poretti.repository.UserRepository;
 import com.bdzjn.poretti.service.EmailService;
 import com.bdzjn.poretti.service.UserService;
@@ -26,15 +27,18 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final MembershipRepository membershipRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(EmailService emailService, UserRepository userRepository,
-                           CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+                           CompanyRepository companyRepository,
+                           MembershipRepository membershipRepository, PasswordEncoder passwordEncoder) {
         this.emailService = emailService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
+        this.membershipRepository = membershipRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,10 +70,10 @@ public class UserServiceImpl implements UserService {
             final Membership membership = new Membership();
             membership.setCompany(company);
             membership.setMember(user);
-            user.addMembership(membership);
+            membershipRepository.save(membership);
         });
 
-        return userRepository.save(user);
+        return user;
     }
 
     @Override

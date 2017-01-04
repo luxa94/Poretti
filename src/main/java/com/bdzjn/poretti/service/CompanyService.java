@@ -4,6 +4,7 @@ import com.bdzjn.poretti.controller.dto.CompanyDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
 import com.bdzjn.poretti.model.Company;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CompanyService {
@@ -22,4 +23,6 @@ public interface CompanyService {
      * @param companyDTO
      */
     void edit(long id, CompanyDTO companyDTO);
+
+    List<Company> findAll();
 }

@@ -15,8 +15,8 @@
                     <md-input-container>
                         <label>Advertisement type</label>
                         <md-select ng-model="vm.filter.advertisementType">
-                            <md-option>SALE</md-option>
-                            <md-option>RENT</md-option>
+                            <md-option value="SALE">SALE</md-option>
+                            <md-option value="RENT">RENT</md-option>
                         </md-select>
                     </md-input-container>
                 </div>
@@ -38,8 +38,8 @@
                     <md-input-container>
                         <label>Real estate name</label>
                         <md-select ng-model="vm.filter.realEstateType">
-                            <md-option>APARTMENT</md-option>
-                            <md-option>HOUSE</md-option>
+                            <md-option value="APARTMENT">APARTMENT</md-option>
+                            <md-option value="HOUSE">HOUSE</md-option>
                         </md-select>
                     </md-input-container>
                 </div>
@@ -50,15 +50,15 @@
     </div>
     <div flex="80">
         <md-content class="md-padding list-card" layout="row" layout-align="center stretch">
-            <div flex-md flex-gt-md="70" layout="column">
+            <div flex-md flex-gt-md="60" layout="column">
                 <md-card ng-repeat="advertisement in vm.advertisements" md-whiteframe="2">
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{advertisement.title}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
-                            <div class="md-media-gt-xs card-media">
-                                <img ng-src="{{advertisement.realEstate.imageUrl}}"/>
+                            <div class="md-media-md card-media">
+                                <img layout-fill ng-src="{{advertisement.realEstate.imageUrl}}"/>
                             </div>
                         </md-card-title-media>
                     </md-card-title>
@@ -78,34 +78,6 @@
                     <md-button class="md-raised" ng-click="vm.nextPage()">Next</md-button>
                 </md-content>
             </div>
-            <md-fab-speed-dial ng-hide="vm.hidden" md-direction="up" md-open="vm.isOpen"
-                               class="md-scale md-fab-bottom-right" ng-class="{ 'md-hover-full': true }"
-                               ng-mouseenter="vm.isOpen=true" ng-mouseleave="vm.isOpen=false">
-                <md-fab-trigger>
-                    <md-button aria-label="menu" class="md-fab md-primary">
-                    </md-button>
-                </md-fab-trigger>
-
-                <md-fab-actions>
-                    <md-button aria-label="Create real estate" class="md-fab md-raised md-mini"
-                               ng-click="vm.openStandaloneDialogForRealEstate($event)">
-                        <md-tooltip md-direction="left" md-visible="tooltipVisible"
-                                    md-autohide="false">
-                            Create real estate
-                        </md-tooltip>
-                        New real estate
-                    </md-button>
-                    <md-button aria-label="Create advertisement" class="md-fab md-raised md-mini"
-                               ng-click="vm.openDialogForAdvertisement($event)">
-                        <md-tooltip md-direction="left" md-visible="tooltipVisible"
-                                    md-autohide="false">
-                            Create advertisement
-                        </md-tooltip>
-                        New advertisement
-                    </md-button>
-                </md-fab-actions>
-            </md-fab-speed-dial>
         </md-content>
     </div>
-</div>
 </div>

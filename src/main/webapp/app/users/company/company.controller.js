@@ -1,22 +1,22 @@
-(function (angualar) {
+(function (angular) {
     'use strict';
 
     angular
         .module('poretti')
-        .controller('AdvertiserCtrlAs', AdvertiserCtrlAs)
+        .controller('CompanyCtrlAs', CompanyCtrlAs);
 
-    AdvertiserCtrlAs.$inject = ['$q', '$stateParams', 'userService', 'sessionService', 'ownerReviewService', 'advertisementService', 'realEstateService', 'alertify', '$mdDialog'];
+    CompanyCtrlAs.$inject = ['$q', '$stateParams', 'companyService', 'sessionService', 'alertify', '$mdDialog'];
 
-    function AdvertiserCtrlAs($q, $stateParams, userService, sessionService, ownerReviewService, advertisementService, realEstateService, alertify, $mdDialog) {
+    function CompanyCtrlAs($q, $stateParams, companyService, sessionService, alertify, $mdDialog) {
 
         var vm = this;
 
-        vm.user = {};
+        vm.company = {};
+        vm.companyMemberships = [];
         vm.advertisements = [];
-        vm.userToEdit = {};
-        vm.newReview = {};
-        vm.reviews = [];
-        vm.canEdit = false;
+        vm.companyMembersCriteria = "";
+        vm.canJoinCompany = false;
+        vm.canLeaveCompany = false;
         vm.newRealEstate = {
             technicalEquipment: []
         };
@@ -24,70 +24,72 @@
             endsOn: new Date()
         };
         vm.advertisementDialog = {};
-        vm.canAdd = false;
-        vm.edit = edit;
-        vm.createReview = createReview;
-        vm.deleteReview = deleteReview;
+        vm.approveMembership = approveMembership;
+        vm.leaveCompany = leaveCompany;
+        vm.filteredMemberships = filteredMemberships;
+        vm.createMembership = createMembership;
         vm.openDialogForReview = openDialogForReview;
         vm.openDialogForAdvertisement = openDialogForAdvertisement;
         vm.openStandaloneDialogForRealEstate = openStandaloneDialogForRealEstate;
 
-
         activate();
 
         function activate() {
-            userService.findOne($stateParams.id).then(function (response) {
-                vm.user = response.data;
-                if (vm.user.id === sessionService.getUser().id) {
-                    vm.canEdit = true;
-                    vm.canAdd = true;
-                }
-                return userService.findAdvertisements(vm.user.id);
+            var companyId = $stateParams.id;
+            companyService.findOne(companyId).then(function (response) {
+                vm.company = response.data;
+                return companyService.findMemberships(companyId);
             }).then(function (response) {
-                vm.advertisements = response.data.content;
-                return userService.findRealEstates(vm.user.id);
-            }).then(function (response) {
-                vm.realEstates = response.data;
-                return userService.findReviews(vm.user.id);
-            }).then(function (response) {
-                debugger;
-                if (response.data) {
-                    vm.reviews = response.data;
-                    vm.reviews = _.forEach(vm.reviews, function (review) {
-                        review.canBeErased = review.author.id === sessionService.getUser().id;
-                    });
-                    vm.reviews = _.orderBy(vm.reviews, ['editedOn'], ['desc']);
-                }
+                vm.companyMemberships = response.data;
+                vm.canJoinCompany = !_.some(vm.companyMemberships, function (membership) {
+                    return membership.member.id === sessionService.getUser().id;
+                });
+                vm.canLeaveCompany = _.some(vm.companyMemberships, function (membership) {
+                    return membership.member.id === sessionService.getUser().id;
+                });
+
             }).catch(function (error) {
-                alertify.delay(3000).error("Server error");
-                console.log(error);
+                alertify.delay(2000).error("Server error");
             });
         }
 
-        function edit() {
-            userService.edit(vm.user.id, vm.userToEdit).then(function (response) {
-                vm.user = response.data;
+        function approveMembership(membership) {
+            companyService.approveMembership(vm.company.id, membership.id).then(function (response) {
+                activate();
             }).catch(function (error) {
-                alertify.delay(2000).error("Server error");
+                alert(error);
             })
         }
 
-        function createReview() {
-            userService.createReview(vm.user.id, vm.newReview).then(function (response) {
-                return userService.findReviews(vm.user.id);
-            }).then(function (response) {
-                vm.reviews = response.data;
+        function leaveCompany() {
+            var membership = _.find(vm.companyMemberships, function (membership) {
+                return sessionService.getUser().id === membership.member.id;
+            });
+            companyService.leaveCompany(vm.company.id, membership.id).then(function (response) {
+                vm.canLeaveCompany = false;
+                activate();
             }).catch(function (error) {
-                alertify.delay(2000).error("Server error");
+                alert(error);
             });
         }
 
-        function deleteReview(review) {
-            ownerReviewService.delete(review.id).then(function (response) {
-                var index = vm.reviews.indexOf(review);
-                vm.reviews.splice(index);
+        function filteredMemberships() {
+            return _.filter(vm.companyMemberships, function (membership) {
+                if (vm.companyMembersCriteria === "confirmed") {
+                    return membership.confirmed;
+                } else if (vm.companyMembersCriteria === "notConfirmed") {
+                    return !membership.confirmed;
+                }
+                return membership;
+            });
+        }
+
+        function createMembership() {
+            companyService.createMembership(vm.company.id).then(function (response) {
+                vm.canJoinCompany = false;
+                activate();
             }).catch(function (error) {
-                console.log(error);
+                alert(error);
             })
         }
 
@@ -103,7 +105,6 @@
                     review: vm.newReview
                 }
             }).then(function (review) {
-                debugger;
                 vm.newReview = review;
                 createReview();
             }).catch(function (error) {
@@ -112,7 +113,7 @@
         }
 
         function createReview() {
-            userService.createReview(vm.user.id, vm.newReview).then(function (response) {
+            companyService.createReview(vm.user.id, vm.newReview).then(function (response) {
                 alertify.delay(2000).success("You added new review");
                 return userService.findReviews(vm.user.id);
             }).then(function (response) {
@@ -170,7 +171,7 @@
                 deferred.resolve(vm.newRealEstate);
             }).catch(function (data) {
                 console.log("catch");
-            })
+            });
 
             return deferred.promise;
         }
@@ -184,33 +185,32 @@
         }
 
         function createAdvertisementAndRealEstate(advertisementRealEstate) {
-            advertisementService.create(advertisementRealEstate).then(function (response) {
+            companyService.createAdvertisementAndRealEstate(advertisementRealEstate).then(function (response) {
                 alertify.delay(3000).success('You successfully added new advertisement!');
-                findAdvertisements();
             }).catch(function (error) {
                 alertify.delay(2000).error('Server error.');
             })
         }
 
         function createAdvertisementForRealEstate(advertisementRealEstate) {
-            realEstateService.createAdvertisement(advertisementRealEstate.realEstateId, advertisementRealEstate.advertisement)
+            companyService.createAdvertisement(advertisementRealEstate.realEstateId, advertisementRealEstate.advertisement)
                 .then(function (response) {
                     alertify.delay(3000).success('You successfully added new advertisement!');
                     findAdvertisements();
                 }).catch(function (error) {
-                alertify.delay(2000).error('Server error.');
-            })
+                    alertify.delay(2000).error('Server error.');
+                });
         }
 
         function createRealEstate() {
-            realEstateService.create(vm.newRealEstate).then(function (response) {
+            companyService.createRealEstate(vm.company.id, vm.newRealEstate).then(function (response) {
                 alertify.delay(3000).success('You successfully added new real estate!');
-                return userService.findRealEstates(vm.user.id);
+                return companyService.findRealEstates(vm.company.id);
             }).then(function (response) {
                 vm.realEstates = response.data;
             }).catch(function (error) {
                 alertify.delay(2000).error('Server error.');
-            })
+            });
         }
 
     }

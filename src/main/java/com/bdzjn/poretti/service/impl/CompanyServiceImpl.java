@@ -8,6 +8,7 @@ import com.bdzjn.poretti.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,6 +54,11 @@ public class CompanyServiceImpl implements CompanyService {
         company.setName(companyDTO.getName());
 
         companyRepository.save(company);
+    }
+
+    @Override
+    public List<Company> findAll() {
+        return companyRepository.findAll();
     }
 
 }
