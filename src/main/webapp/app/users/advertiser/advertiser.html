@@ -16,7 +16,7 @@
         </div>
         <md-toolbar class="md-accent">
             <div class="md-toolbar-tools">
-                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini">
+                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingData($event)">
                     <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
                     <md-tooltip>Edit your profile</md-tooltip>
                 </md-button>

@@ -7,7 +7,9 @@
 
     AdvertiserCtrlAs.$inject = ['$q', '$stateParams', 'userService', 'sessionService', 'ownerReviewService', 'advertisementService', 'realEstateService', 'alertify', '$mdDialog'];
 
-    function AdvertiserCtrlAs($q, $stateParams, userService, sessionService, ownerReviewService, advertisementService, realEstateService, alertify, $mdDialog) {
+    function AdvertiserCtrlAs($q, $stateParams,
+                              userService, sessionService, ownerReviewService,
+                              advertisementService, realEstateService, alertify, $mdDialog) {
 
         var vm = this;
 
@@ -31,6 +33,7 @@
         vm.openDialogForReview = openDialogForReview;
         vm.openDialogForAdvertisement = openDialogForAdvertisement;
         vm.openStandaloneDialogForRealEstate = openStandaloneDialogForRealEstate;
+        vm.openDialogForEditingData = openDialogForEditingData;
 
 
         activate();
@@ -210,6 +213,25 @@
                 vm.realEstates = response.data;
             }).catch(function (error) {
                 alertify.delay(2000).error('Server error.');
+            })
+        }
+
+        function openDialogForEditingData(ev) {
+            $mdDialog.show({
+                controller: 'UserEditDialogCtrlAs',
+                controllerAs: 'vm',
+                templateUrl: 'app/users/dialogs/userEditDialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            }).then(function (user) {
+                vm.userToEdit = user;
+                var loggedUser = sessionService.getUser().id;
+                return userService.edit(loggedUser, vm.userToEdit);
+            }).then(function (response) {
+                vm.user = response.data;
+            }).catch(function (error) {
+                alertify.delay(2000).error("Server error.")
             })
         }
 
