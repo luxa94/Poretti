@@ -11,9 +11,11 @@
 
         var vm = this;
 
+        vm.advertisements = [];
+        vm.canAdd = false;
+        vm.canEdit = false;
         vm.company = {};
         vm.companyMemberships = [];
-        vm.advertisements = [];
         vm.companyMembersCriteria = "";
         vm.canJoinCompany = false;
         vm.canLeaveCompany = false;
@@ -24,6 +26,8 @@
             endsOn: new Date()
         };
         vm.advertisementDialog = {};
+        vm.realEstates = [];
+        vm.reviews = [];
         vm.approveMembership = approveMembership;
         vm.leaveCompany = leaveCompany;
         vm.filteredMemberships = filteredMemberships;
@@ -36,41 +40,80 @@
 
         function activate() {
             var companyId = $stateParams.id;
-            companyService.findOne(companyId).then(function (response) {
-                vm.company = response.data;
-                return companyService.findMemberships(companyId);
-            }).then(function (response) {
-                vm.companyMemberships = response.data;
-                vm.canJoinCompany = !_.some(vm.companyMemberships, function (membership) {
-                    return membership.member.id === sessionService.getUser().id;
-                });
-                vm.canLeaveCompany = _.some(vm.companyMemberships, function (membership) {
-                    return membership.member.id === sessionService.getUser().id;
-                });
+            findCompany(companyId)
+                .then(findMemberships)
+                .then(findAdvertisements)
+                .then(findRealEstates)
+                .then(findReviews)
+                .then(canEditOrAdd)
+                .catch(handleError);
+        }
 
-            }).catch(function (error) {
-                alertify.delay(2000).error("Server error");
-            });
+        function findCompany(companyId) {
+            return companyService.find(companyId)
+                .then(function (data) {
+                    vm.company = data;
+                })
+        }
+
+        function findMemberships() {
+            return companyService.findMemberships(vm.company.id)
+                .then(function (data) {
+                    vm.companyMemberships = data;
+                    vm.canJoinCompany = companyService.canJoinCompany(sessionService.getUser(), vm.companyMemberships);
+                    vm.canLeaveCompany = !vm.canJoinCompany;
+                });
+        }
+
+        function findAdvertisements() {
+            return companyService.findAdvertisements(vm.company.id)
+                .then(function(response) {
+                    vm.advertisements = response.data.content;
+                });
+        }
+
+        function findRealEstates() {
+            return companyService.findRealEstates(vm.company.id)
+                .then(function(data) {
+                    vm.realEstates = data;
+                });
+        }
+
+        function findReviews() {
+            return companyService.findReviews(vm.company.id)
+                .then(function(data) {
+                    vm.reviews = data;
+                });
+        }
+
+        function canEditOrAdd() {
+            vm.canAdd = false;
+            vm.canEdit = false;
+            var membership = companyService.findMembershipForUser(vm.companyMemberships, sessionService.getUser());
+            if (membership.confirmed) {
+                vm.canAdd = true;
+                vm.canEdit = true;
+            }
         }
 
         function approveMembership(membership) {
-            companyService.approveMembership(vm.company.id, membership.id).then(function (response) {
-                activate();
-            }).catch(function (error) {
-                alert(error);
-            })
+            companyService.approveMembership(vm.company, membership)
+                .then(function (response) {
+                    findMemberships();
+                }).then(canEditOrAdd)
+                .catch(handleError);
+
         }
 
         function leaveCompany() {
-            var membership = _.find(vm.companyMemberships, function (membership) {
-                return sessionService.getUser().id === membership.member.id;
-            });
-            companyService.leaveCompany(vm.company.id, membership.id).then(function (response) {
-                vm.canLeaveCompany = false;
-                activate();
-            }).catch(function (error) {
-                alert(error);
-            });
+            var membership = companyService.findMembershipForUser(vm.companyMemberships, sessionService.getUser());
+            companyService.leaveCompany(vm.company, membership)
+                .then(function (response) {
+                    vm.canLeaveCompany = false;
+                    vm.canJoinCompany = !vm.canLeaveCompany;
+                    findMemberships();
+                }).then(canEditOrAdd)
+                .catch(handleError);
         }
 
         function filteredMemberships() {
@@ -85,12 +128,12 @@
         }
 
         function createMembership() {
-            companyService.createMembership(vm.company.id).then(function (response) {
-                vm.canJoinCompany = false;
-                activate();
-            }).catch(function (error) {
-                alert(error);
-            })
+            companyService.createMembership(vm.company.id)
+                .then(function (response) {
+                    vm.canJoinCompany = false;
+                    findMemberships();
+                }).then(canEditOrAdd)
+                .catch(handleError);
         }
 
         function openDialogForReview(ev) {
@@ -198,8 +241,8 @@
                     alertify.delay(3000).success('You successfully added new advertisement!');
                     findAdvertisements();
                 }).catch(function (error) {
-                    alertify.delay(2000).error('Server error.');
-                });
+                alertify.delay(2000).error('Server error.');
+            });
         }
 
         function createRealEstate() {
@@ -211,6 +254,10 @@
             }).catch(function (error) {
                 alertify.delay(2000).error('Server error.');
             });
+        }
+
+        function handleError(error) {
+            //TODO handle error
         }
 
     }

@@ -16,16 +16,18 @@
         </div>
         <md-toolbar class="md-accent">
             <div class="md-toolbar-tools">
-                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini">Edit profile</md-button>
+                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini">
+                    <md-icon aria-label="Edit company" class="md-primary md-hue-2 md-mini">edit</md-icon>
+                </md-button>
                 <md-button ng-hide="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForReview($event)">
                     <md-icon aria-label="Insert comment" class="material-icons">insert_comment</md-icon>
                     <md-tooltip>Create review for company</md-tooltip>
                 </md-button>
-                <md-button aria-label="Create real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event)">
+                <md-button ng-show="vm.canAdd" aria-label="Create real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event)">
                     <md-icon aria-label="Home" class="material-icons">home</md-icon>
                     <md-tooltip>Create real estate</md-tooltip>
                 </md-button>
-                <md-button aria-label="Create advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForAdvertisement($event)">
+                <md-button ng-show="vm.canAdd" aria-label="Create advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForAdvertisement($event)">
                     <md-icon aria-label="Announcement" class="material-icons">announcement</md-icon>
                     <md-tooltip>Create advertisement</md-tooltip>
                 </md-button>
@@ -45,7 +47,8 @@
             <md-tabs md-dynamic-height md-border-bottom>
                 <md-tab label="Advertisements">
                     <md-content class="md-padding">
-                        <div layout-padding ng-repeat="advertisement in vm.advertisements">
+                        <h3 ng-if="!vm.advertisements.length" class="md-display-3 md-accent md-hue-3">No advertisements</h3>
+                        <div ng-show = "vm.advertisements.length" layout-padding ng-repeat="advertisement in vm.advertisements">
                             <div layout>
                                 <div flex>
                                     <div>
@@ -69,7 +72,8 @@
                 </md-tab>
                 <md-tab label="Real estates">
                     <md-content class="md-padding">
-                        <div layout-padding ng-repeat="realEstate in vm.realEstates">
+                        <h3 ng-if="!vm.realEstates.length" class="md-display-3 md-accent md-hue-3">No real estates</h3>
+                        <div ng-show="vm.realEstates.length" layout-padding ng-repeat="realEstate in vm.realEstates">
                             <div layout>
                                 <div flex>
                                     <div>

@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('LoginCtrlAs', LoginCtrlAs);
 
-    LoginCtrlAs.$inject = ['$q', '$state', 'authorizationService', 'sessionService', 'roleService', 'alertify'];
+    LoginCtrlAs.$inject = ['$state', 'authorizationDataService', 'sessionService', 'roleService'];
 
-    function LoginCtrlAs($q, $state, authorizationService, sessionService, roleService, alertify) {
+    function LoginCtrlAs($state, authorizationDataService, sessionService, roleService) {
 
         var vm = this;
 
@@ -14,12 +14,11 @@
         vm.login = login;
 
         function login() {
-            authorizationService.login(vm.user).then(function (response) {
-                sessionService.setUser(response.data);
-                redirectToPath();
-            }).catch(function (error) {
-                alertify.delay(5000).error("Username/password wrong.")
-            });
+            authorizationDataService.login(vm.user)
+                .then(function (response) {
+                    sessionService.setUser(response.data);
+                    redirectToPath();
+                }).catch(handleError);
         }
 
         function redirectToPath() {
@@ -31,6 +30,10 @@
             } else if (roleService.isUser(loggedUser)) {
                 $state.go('home');
             }
+        }
+
+        function handleError(error) {
+            //TODO error handler
         }
     }
 

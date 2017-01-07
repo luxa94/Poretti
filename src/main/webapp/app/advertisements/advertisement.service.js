@@ -1,83 +1,130 @@
-(function () {
+(function (angular) {
     'use strict';
+
     angular
         .module('poretti')
-        .service('advertisementService', ['$http', advertisementService]);
+        .service('advertisementService', advertisementService);
 
-    function advertisementService($http) {
-        var BASE_URL = '/api/advertisements';
+    advertisementService.$inject = ['advertisementDataService'];
 
-        function pathWithId(id) {
-            return BASE_URL + '/' + id;
-        }
+    function advertisementService(advertisementDataService) {
 
         return {
-            find: findAll,
+            findAll: findAll,
             findOne: findOne,
-            findReported: findReported,
-            create: createOne,
-            edit: edit,
-            delete: deleteOne,
-            invalidate: invalidate,
-            approve: approve,
-            done: done,
-            createReport: createReport,
+            findReviews: findReviews,
             findReports: findReports,
+            findReported: findReported,
             createReview: createReview,
-            findReviews: findReviews
+            createReport: createReport,
+            determineIfCanBeErased: determineIfCanBeErased,
+            changeStatus: changeStatus,
+            actionBasedOnStatus: actionBasedOnStatus,
+            edit: edit,
+            createAdvertisementAndRealEstate: createAdvertisementAndRealEstate
         };
 
         function findAll(params) {
-            return $http.get(BASE_URL, {params: params});
+            return advertisementDataService.find(params)
+                .then(findAdvertisementsSuccess);
+        }
+
+        function findAdvertisementsSuccess(response) {
+            return response;
         }
 
         function findOne(id) {
-            return $http.get(pathWithId(id));
+            return advertisementDataService.findOne(id)
+                .then(findAdvertisementSuccess);
+        }
+
+        function findAdvertisementSuccess(response) {
+            return response.data;
+        }
+
+        function findReviews(advertisementId) {
+            return advertisementDataService.findReviews(advertisementId)
+                .then(findReviewsSuccess);
+        }
+
+        function findReviewsSuccess(response) {
+            var reviews = orderReviewsByDate(response.data);
+            return reviews;
+        }
+
+        function findReports(advertisementId) {
+            return advertisementDataService.findReports(advertisementId)
+                .then(findReportsSuccess);
+        }
+
+        function findReportsSuccess(response) {
+            return response.data;
+        }
+
+        function createReview(advertisementId, reviewDTO) {
+            return advertisementDataService.createReview(advertisementId, reviewDTO);
+        }
+
+        function createReport(advertisementId, reportDTO) {
+            return advertisementDataService.createReport(advertisementId, reportDTO);
         }
 
         function findReported() {
-            return $http.get(BASE_URL + '/reported');
+            return advertisementDataService.findReported()
+                .then(findReportedSuccess);
         }
 
-        function createOne(advertisementRealEstateDTO) {
-            return $http.post(BASE_URL, advertisementRealEstateDTO);
+        function findReportedSuccess(response) {
+            return response.data;
         }
 
-        function edit(id, advertisementDTO) {
-            return $http.put(pathWithId(id), advertisementDTO);
+        function changeStatus(advertisement) {
+            if (advertisement.status === "INVALID" || advertisement.status === "PENDING_APPROVAL") {
+                return approve(advertisement.id);
+            }else if (advertisement.status === "ACTIVE") {
+                return invalidate(advertisement.id);
+            }
         }
 
-        function deleteOne(id) {
-            return $http.delete(pathWithId(id));
+        function approve(advertisementId) {
+            return advertisementDataService.approve(advertisementId)
         }
 
-        function invalidate(id) {
-            return $http.put(pathWithId(id) + '/invalidate');
+        function invalidate(advertisementId){
+            return advertisementDataService.invalidate(advertisementId);
         }
 
-        function approve(id) {
-            return $http.put(pathWithId(id) + '/approve');
+        function actionBasedOnStatus(advertisement) {
+            if (advertisement.status === "INVALID" || advertisement.status === "PENDING_APPROVAL") {
+                return "APPROVE";
+            } else if(advertisement.status === "ACTIVE") {
+                return "INVALIDATE";
+            }
+            //TODO what to do with DONE status?
         }
 
-        function done(id) {
-            return $http.put(pathWithId(id) + '/done');
+        function edit(advertisement) {
+            return advertisementDataService.edit(advertisement.id, advertisement);
         }
 
-        function createReport(id, reportDTO) {
-            return $http.post(pathWithId(id) + '/reports', reportDTO);
+        function createAdvertisementAndRealEstate(advertisementRealEstate) {
+            return advertisementDataService.create(advertisementRealEstate);
         }
 
-        function findReports(id) {
-            return $http.get(pathWithId(id) + '/reports');
+        function handleError(error) {
+            //TODO PorettiError
+            console.log(error);
         }
 
-        function createReview(id, reviewDTO) {
-            return $http.post(pathWithId(id) + '/reviews', reviewDTO);
+        function orderReviewsByDate(data) {
+            return _.orderBy(data, ['editedOn'], ['desc']);
         }
 
-        function findReviews(id) {
-            return $http.get(pathWithId(id) + '/reviews');
+        function determineIfCanBeErased() {
+            //TODO
         }
+
+
     }
-}());
 
+})(angular);

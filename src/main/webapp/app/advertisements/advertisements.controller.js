@@ -4,33 +4,56 @@
         .module('poretti')
         .controller('AdvertisementsCtrlAs', AdvertisementsCtrlAs)
 
-    AdvertisementsCtrlAs.$inject = ['$q', '$state', '$mdDialog', 'advertisementService', 'realEstateService', 'alertify']
+    AdvertisementsCtrlAs.$inject = ['$state', 'advertisementService', 'pagingFilterService']
 
-    function AdvertisementsCtrlAs($q, $state, $mdDialog, advertisementService, realEstateService, alertify) {
+    function AdvertisementsCtrlAs($state, advertisementService, pagingFilterService) {
 
         var vm = this;
+
         vm.advertisements = [];
         vm.activePageNumber = 0;
-        vm.size = 5;
-        vm.numberOfPages = -1;
-        vm.hidden = false;
-        vm.isOpen = false;
         vm.filter = {};
-        vm.toAdvertiserOf = toAdvertiserOf;
-        vm.toAdvertisement = toAdvertisement;
+        vm.numberOfPages = -1;
+        vm.clearFilters = clearFilters;
         vm.nextPage = nextPage;
         vm.previousPage = previousPage;
-        vm.toPage = toPage;
-        vm.getNumberOfPages = getNumberOfPages;
         vm.searchByFilters = searchByFilters;
-        vm.clearFilters = clearFilters;
+        vm.toAdvertiserOf = toAdvertiserOf;
+        vm.toAdvertisement = toAdvertisement;
+        vm.toPage = toPage;
 
         activate();
 
         function activate() {
-            var params = {};
-            params.page = vm.activePageNumber;
-            params.size = vm.size;
+            var params = pagingFilterService.setUpPagingFilterParams(vm.activePageNumber);
+            findAdvertisements(params);
+        }
+
+        function findAdvertisements(params) {
+            advertisementService.findAll(params)
+                .then(function (response) {
+                    vm.advertisements = response.data.content;
+                    vm.numberOfPages = pagingFilterService.getNumberOfPages(response.data.totalPages);
+                });
+        }
+
+        function clearFilters() {
+            var params = pagingFilterService.setUpPagingFilterParams(vm.activePageNumber);
+            findAdvertisements(params);
+        }
+
+        function nextPage() {
+            var params = pagingFilterService.pageNext(vm.activePageNumber, vm.filter);
+            findAdvertisements(params);
+        }
+
+        function previousPage() {
+            var params = pagingFilterService.pageBack(vm.activePageNumber, vm.filter);
+            findAdvertisements(params);
+        }
+
+        function searchByFilters() {
+            var params = pagingFilterService.setUpPagingFilterParams(vm.activePageNumber, vm.filter);
             findAdvertisements(params);
         }
 
@@ -42,56 +65,14 @@
             $state.go('advertisement', {id: advertisement.id});
         }
 
-        function nextPage() {
-            ++vm.activePageNumber;
-            var params = {};
-            params.page = vm.activePageNumber;
-            params.size = vm.size;
-            findAdvertisements(params);
-        }
-
-        function previousPage() {
-            --vm.activePageNumber;
-            var params = {};
-            params.page = vm.activePageNumber;
-            params.size = vm.size;
-            findAdvertisements(params);
-        }
-
-        function findAdvertisements(params) {
-            advertisementService.find(params).then(function (response) {
-                vm.advertisements = response.data.content;
-                vm.numberOfPages = Math.ceil(response.data.totalElements / response.data.size);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-
         function toPage(number) {
-            vm.activePageNumber = number;
-            var params = {};
-            params.page = vm.activePageNumber;
-            params.size = vm.size;
+            var params = pagingFilterService.toExactPage(number, vm.filter);
             findAdvertisements(params);
         }
 
-        function getNumberOfPages() {
-            return _.range(vm.numberOfPages);
+        function handleError() {
+            //TODO
         }
-
-        function searchByFilters() {
-            findAdvertisements(vm.filter);
-        }
-
-        function clearFilters() {
-            vm.filter = {};
-            var params = {};
-            params.page = vm.activePageNumber;
-            params.size = vm.size;
-            findAdvertisements(params);
-        }
-
-
     }
 
 

@@ -1,142 +1,124 @@
 (function (angular) {
     'use strict';
+
     angular
         .module('poretti')
-        .service('companyService', ['$http', companyService]);
+        .service('companyService', companyService);
 
-    function companyService($http) {
+    companyService.$inject = ['companyDataService'];
+
+    function companyService(companyDataService) {
+
         return {
-            findOne: findOne,
+            find: findOne,
             findAll: findAll,
-            create: create,
-            edit: edit,
-            createRealEstate: createRealEstate,
-            findRealEstates: findRealEstates,
-            editRealEstate: editRealEstate,
-            deleteRealEstate: deleteRealEstate,
-            createAdvertisement: createAdvertisement,
-            findAdvertisements: findAdvertisements,
-            createAdvertisementAndRealEstate: createAdvertisementAndRealEstate,
-            editAdvertisement: editAdvertisement,
-            deleteAdvertisement: deleteAdvertisement,
-            createReview: createReview,
-            findReviews: findReviews,
             findMemberships: findMemberships,
-            createMembership: createMembership,
+            populateForRegister: populateForRegister,
+            create: create,
+            canJoinCompany: canJoinCompany,
+            canLeaveCompany: canLeaveCompany,
             approveMembership: approveMembership,
-            leaveCompany: leaveCompany
+            leaveCompany: leaveCompany,
+            findMembershipForUser: findMembershipForUser,
+            createMembership: createMembership,
+            findAdvertisements: findAdvertisements,
+            findRealEstates: findRealEstates,
+            findReviews: findReviews,
         };
 
-        function findOne(id) {
-            return $http.get(pathWithId(id));
+        function findOne(companyId) {
+            return companyDataService.findOne(companyId)
+                .then(findOneSuccess)
+        }
+
+        function findOneSuccess(response) {
+            return response.data;
         }
 
         function findAll() {
-            return $http.get(BASE_URL);
+            return companyDataService.findAll()
+                .then(findAllSuccess);
         }
 
-        function create(registerCompanyDTO) {
-            return $http.post(BASE_URL, registerCompanyDTO);
+        function findAllSuccess(response) {
+            return response.data;
         }
 
-        function edit(id, companyDTO) {
-            return $http.put(pathWithId(id), companyDTO);
+        function findMemberships(companyId) {
+            return companyDataService.findMemberships(companyId)
+                .then(findMembershipsSuccess);
         }
 
-        function createRealEstate(id, realEstateDTO) {
-            return $http.post(pathWithId(id) + REAL_ESTATE_PATH, realEstateDTO);
+        function findMembershipsSuccess(response) {
+            return response.data;
         }
 
-        function findRealEstates(id) {
-            return $http.get(pathWithId(id) + REAL_ESTATE_PATH);
+        function canJoinCompany(user, companyMemberships) {
+            return !_.some(companyMemberships, function (membership) {
+                return membership.member.id === user.id;
+            });
         }
 
-        function editRealEstate(id, realEstateId, realEstateDTO) {
-            return $http.put(companyAndRealEstate(id, realEstateId), realEstateDTO);
+        function canLeaveCompany(user, companyMemberships) {
+            return _.some(companyMemberships, function (membership) {
+                return membership.member.id === user.id;
+            });
         }
 
-        function deleteRealEstate(id, realEstateId) {
-            return $http.delete(companyAndRealEstate(id, realEstateId));
+        function approveMembership(company, membership) {
+            return companyDataService.approveMembership(company.id, membership.id);
         }
 
-        function createAdvertisement(id, realEstateId, advertisementDTO) {
-            return $http.post(companyAndRealEstate(id, realEstateId) + ADVERTISEMENT_PATH, advertisementDTO);
+        function leaveCompany(company, membership) {
+            return companyDataService.leaveCompany(company.id, membership.id);
         }
 
-        function findAdvertisements(id, params) {
-            return $http.get(pathWithId(id) + ADVERTISEMENT_PATH, {params: params});
+        function findMembershipForUser(memberships, user) {
+            return _.find(memberships, function (membership) {
+                return user.id === membership.member.id;
+            });
         }
 
-        function createAdvertisementAndRealEstate(id, advertisementRealEstateDTO) {
-            return $http.post(pathWithId(id) + ADVERTISEMENT_PATH, advertisementRealEstateDTO);
+        function createMembership(companyId) {
+            return companyDataService.createMembership(companyId);
         }
 
-        function editAdvertisement(id, advertisementId, advertisementDTO) {
-            return $http.put(companyAndAdvertisement(id, advertisementId), advertisementDTO);
+        function findAdvertisements(companyId) {
+            return companyDataService.findAdvertisements(companyId);
         }
 
-        function deleteAdvertisement(id, advertisementId) {
-            return $http.delete(companyAndAdvertisement(id, advertisementId));
+        function findRealEstates(companyId) {
+            return companyDataService.findRealEstates(companyId)
+                .then(findRealEstatesSuccess)
         }
 
-        function createReview(id, reviewDTO) {
-            return $http.post(pathWithId(id) + REVIEW_PATH, reviewDTO);
+        function findRealEstatesSuccess(response) {
+            return response.data;
         }
 
-        function findReviews(id) {
-            return $http.get(pathWithId(id) + REVIEW_PATH);
+        function findReviews(companyId) {
+            return companyDataService.findReviews(companyId)
+                .then(findReviewsSuccess);
         }
 
-        function findMemberships(id) {
-            return $http.get(pathWithId(id) + MEMBERSHIP_PATH);
+        function findReviewsSuccess(response) {
+            var reviews = orderReviewsByDate(response.data);
+            return reviews;
         }
 
-        function createMembership(id) {
-            return $http.post(pathWithId(id) + MEMBERSHIP_PATH);
+        function orderReviewsByDate(data) {
+            return _.orderBy(data, ['editedOn'], ['desc']);
         }
 
-        function approveMembership(id, membershipId) {
-            return $http.put(companyAndMembership(id, membershipId));
+        function populateForRegister(data) {
+            return _.chunk(data, 5);
         }
 
-        function leaveCompany(id, membershipId) {
-            return $http.delete(companyAndMembership(id, membershipId));
+        function create(companyDTO, userDTO) {
+            var registerCompanyDTO = {};
+            registerCompanyDTO.company = companyDTO;
+            registerCompanyDTO.user = userDTO;
+            return companyDataService.create(registerCompanyDTO);
         }
     }
-
-    var BASE_URL = '/api/companies';
-    var REAL_ESTATE_PATH = '/realEstates';
-    var ADVERTISEMENT_PATH = '/advertisements';
-    var REVIEW_PATH = '/reviews';
-    var MEMBERSHIP_PATH = '/memberships';
-
-    function pathWithId(id) {
-        return BASE_URL + '/' + id;
-    }
-
-    function realEstateWithId(realEstateId) {
-        return REAL_ESTATE_PATH + '/' + realEstateId;
-    }
-
-    function advertisementWithId(advertisementId) {
-        return ADVERTISEMENT_PATH + '/' + advertisementId;
-    }
-
-    function membershipWithId(membershipId) {
-        return MEMBERSHIP_PATH + '/' + membershipId;
-    }
-
-    function companyAndRealEstate(id, realEstateId) {
-        return pathWithId(id) + realEstateWithId(realEstateId);
-    }
-
-    function companyAndAdvertisement(id, advertisementId) {
-        return pathWithId(id) + advertisementWithId(advertisementId);
-    }
-
-    function companyAndMembership(id, membershipId) {
-        return pathWithId(id) + membershipWithId(membershipId);
-    }
-
-}(angular));
-
+})(angular);

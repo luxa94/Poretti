@@ -5,20 +5,16 @@
         .module('poretti')
         .controller('ReviewDialogCtrlAs', ReviewDialogCtrlAs);
 
-    ReviewDialogCtrlAs.$inject = ['$mdDialog', 'review'];
+    ReviewDialogCtrlAs.$inject = ['$mdDialog'];
 
-    function ReviewDialogCtrlAs($mdDialog, review) {
+    function ReviewDialogCtrlAs($mdDialog) {
 
         var vm = this;
 
-        vm.hide = hide;
+        vm.review = {};
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
-        vm.review = review;
-
-        function hide() {
-            $mdDialog.hide();
-        }
+        vm.hide = hide;
 
         function cancel() {
             $mdDialog.cancel();
@@ -27,5 +23,10 @@
         function confirmResponse() {
             $mdDialog.hide(vm.review);
         }
+
+        function hide() {
+            $mdDialog.hide();
+        }
+
     }
 })(angular);

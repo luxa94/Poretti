@@ -5,54 +5,37 @@
         .module('poretti')
         .controller('NavbarCtrlAs', NavbarCtrlAs);
 
-    NavbarCtrlAs.$inject = ['$state', 'sessionService', 'authorizationService', 'roleService', 'userService'];
+    NavbarCtrlAs.$inject = ['$state', 'sessionService', 'authorizationDataService', 'roleService', 'userService'];
 
-    function NavbarCtrlAs($state, sessionService, authorizationService, roleService, userService) {
+    function NavbarCtrlAs($state, sessionService, authorizationDataService, roleService, userService) {
 
         var vm = this;
 
         vm.loggedUser = {};
         vm.renderUIForLoggedUser = false;
-        vm.login = login;
-        vm.register = register;
-        vm.logout = logout;
         vm.goToProfile = goToProfile;
-
+        vm.login = login;
+        vm.logout = logout;
+        vm.register = register;
 
         activate();
 
         function activate() {
             var sessionUser = sessionService.getUser();
+            findLoggedUser(sessionUser);
+        }
+
+        function findLoggedUser(sessionUser) {
             if (sessionUser) {
-                userService.findOne(sessionUser.id).then(function(response) {
-                    vm.loggedUser = response.data;
-                }).catch(function(error) {
-                    console.log(error);
-                })
+                userService.findOne(sessionUser.id)
+                    .then(function(data) {
+                        vm.loggedUser = data;
+                    });
+                vm.renderUIForLoggedUser = true;
             }
-            vm.renderUIForLoggedUser = sessionUser ? true : false;
         }
 
-        function login() {
-            $state.go('login');
-        }
-
-        function register() {
-            $state.go('register');
-        }
-
-        function logout() {
-            var sessionUser = sessionService.getUser();
-            authorizationService.logout(sessionUser).then(function(response) {
-                debugger;
-                sessionService.removeUser();
-                $state.go('home', {}, {reload: true});
-            }).catch(function(error) {
-                console.log(error);
-            });
-
-        }
-
+        //routing logic-needs to be in controller?
         function goToProfile() {
             if (vm.loggedUser) {
                 if (roleService.isAdmin(vm.loggedUser)) {
@@ -65,6 +48,27 @@
             }
         }
 
+        function login() {
+            $state.go('login');
+        }
+
+        function logout() {
+            var sessionUser = sessionService.getUser();
+            authorizationDataService.logout(sessionUser)
+                .then(function(response) {
+                    sessionService.removeUser();
+                    $state.go('home', {}, {reload: true});
+                }).catch(handleError);
+
+        }
+
+        function register() {
+            $state.go('register');
+        }
+
+        function handleError(error) {
+            //TODO error
+        }
 
     }
 })(angular);

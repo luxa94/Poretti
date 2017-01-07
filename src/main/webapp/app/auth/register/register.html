@@ -1,6 +1,6 @@
 <section>
     <md-content layout-padding layout="row" layout-align="center center">
-        <div flex-md flex-gt-md="50" md-whiteframe="3">
+        <div ng-if="!vm.isRegistered" flex-md flex-gt-md="50" md-whiteframe="3">
             <form name="loginForm" layout="column">
                 <md-input-container>
                     <label>Username</label>
@@ -44,6 +44,9 @@
                 </md-input-container>
             </form>
         </div>
+        <div ng-if="vm.isRegistered">
+            <h2 class="md-display-2">Check our email</h2>
+        </div>
     </md-content>
-    <div ng-if="vm.status">Check our email</div>
+
 </section>

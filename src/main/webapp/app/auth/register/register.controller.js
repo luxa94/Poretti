@@ -4,42 +4,43 @@
     angular.module('poretti')
         .controller('RegisterCtrlAs', RegisterCtrlAs);
 
-    RegisterCtrlAs.$inject = ['$state', 'authorizationService', 'companyService', 'alertify']
+    RegisterCtrlAs.$inject = ['authorizationDataService', 'companyService', 'alertify']
 
-    function RegisterCtrlAs( $state, authorizationService, companyService, alertify) {
+    function RegisterCtrlAs(authorizationDataService, companyService, alertify) {
 
         var vm = this;
 
-        vm.user = {};
-        vm.status = false;
-        vm.isRegisteringForCompany = false;
         vm.companies = [];
         vm.currentDisplayingCompanies = [];
         vm.currentIndex = 0;
-        vm.register = register;
+        vm.isRegistered = false;
+        vm.isRegisteringForCompany = false;
+        vm.user = {};
+
         vm.getNextCompanies = getNextCompanies;
         vm.getPreviousCompanies = getPreviousCompanies;
+        vm.register = register;
 
         activate();
 
         function activate() {
-            companyService.findAll().then(function(response) {
-                vm.companies = _.chunk(response.data, 5);
-                vm.currentDisplayingCompanies = vm.companies[0];
-                vm.currentIndex = 0;
-            }).catch(function(error) {
-                alertify.delay(1000).error("Server error.")
-            });
+            findAllCompanies();
+        }
+
+        function findAllCompanies() {
+            companyService.findAll()
+                .then(companyService.populateForRegister)
+                .then(function(data) {
+                    vm.companies = data;
+                    vm.currentDisplayingCompanies = vm.companies[0];
+                }).catch(handleError);
         }
 
         function register() {
-            authorizationService.register(vm.user).then(function(response) {
-                vm.status = true;
-                return companyService.findAll();
-            }).catch(function(error) {
-                vm.user={};
-                alertify.delay(1000).error("Server error.")
-            });
+            authorizationDataService.register(vm.user)
+                .then(function(response) {
+                    vm.isRegistered = true;
+                }).catch(handleError);
         }
 
         function getNextCompanies() {
@@ -48,6 +49,10 @@
 
         function getPreviousCompanies() {
             vm.currentDisplayingCompanies = vm.companies[--vm.currentIndex];
+        }
+
+        function handleError(error) {
+            //TODO handle error;
         }
     }
 })(angular);

@@ -5,9 +5,9 @@
         .module('poretti')
         .service('roleService', roleService);
 
-    roleService.$inject = ['$http'];
+    roleService.$inject = [];
 
-    function roleService($http) {
+    function roleService() {
 
         var adminRoles = ["SYSTEM_ADMIN"];
         var verifierRoles = ["VERIFIER"];
@@ -21,8 +21,7 @@
 
         function isAdmin(loggedUser) {
             if (loggedUser) {
-                var d = _.includes(adminRoles, loggedUser.role);
-                return d;
+                return _.includes(adminRoles, loggedUser.role);
             }
             return false;
         }

@@ -1,35 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1>Reported advertisements</h1>
-    <table>
-        <tbody>
-            <tr ng-repeat="reportedAdv in vm.reported">
-                <td>{{reportedAdv.title}}</td>
-                <td>{{reportedAdv.advertiser.name}}</td>
-                <td>
-                    <md-button ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div ng-if="vm.showReports">
-        <h4>{{vm.chosenAdvertisement.title}}</h4>
-        <table>
-            <tbody>
-                <tr ng-repeat="report in vm.chosenAdvertisement.reports">
-                    <td>{{report.reason}}</td>
-                    <td>{{report.description}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <hr/>
-        <md-button ng-click="vm.hideReports()">Hide reports</md-button>
-        <md-button ng-click="vm.changeStatus()">{{vm.actionNameBasedOnStatus()}}</md-button>
+<div layout>
+    <div layout="column" flex-gt-md="40" layout-padding>
+        <div md-whiteframe="3" layout>
+            <div flex>
+                <div layout-fill class="md-media-md">
+                    <img style="height:20em" ng-src = {{vm.verifier.imageUrl}}/>
+                </div>
+            </div>
+            <div flex>
+                <div layout="column">
+                    <span class="md-headline">{{vm.verifier.name}}</span>
+                    <span>Phone numbers: {{vm.verifier.phoneNumbers}}</span>
+                    <span>Contact emails: {{vm.verifier.contactEmails}}</span>
+                </div>
+            </div>
+        </div>
+
     </div>
-</body>
-</html>
+    <div layout="column" flext-gt-md="80" layout-padding>
+            <div layout-padding ng-repeat="reportedAdv in vm.reported">
+                <div layout>
+                    <div flex>
+                        <div>
+                            <img layout-fill style="height: 10em; width:20em" ng-src="{{reportedAdv.realEstate.imageUrl}}"/>
+                        </div>
+                    </div>
+                    <div flex>
+                        <div layout="column">
+                            <span class="md-headline">{{reportedAdv.title}}</span>
+                            <span class="md-subhead">{{reportedAdv.price}}</span>
+                            <span class="md-subhead">{{reportedAdv.advertiser.name}}</span>
+                            <div layout>
+                                <md-button class="md-icon-button md-corner md-primary md-hue-2">
+                                    <md-icon aria-label="Details" class="material-icons">more_horiz</md-icon>
+                                </md-button>
+                                <md-button class="md-primary md-hue-2" ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+            </div>
+            <div ng-if="vm.showReports" layout-padding>
+                <md-button class="md-icon-button md-primary md-hue-2" ng-click="vm.showReports = !vm.showReports">
+                    <md-icon aria-label="Hide" class="material-icons">highlight_off</md-icon>
+                </md-button>
+                <div ng-repeat="report in vm.chosenAdvertisement.reports">
+                    <div layout>
+                        <div flex>
+                            <div layout="column">
+                                <span class="md-headline">{{report.reason}}</span>
+                                <span class="md-subhead">{{report.description}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <md-divider></md-divider>
+                </div>
+                <md-button class="md-raised md-primary md-hue-2" ng-click="vm.changeStatus()">{{vm.actionBasedOnStatus()}}</md-button>
+            </div>
+    </div>
+</div>
+

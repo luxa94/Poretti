@@ -5,75 +5,69 @@
         .module('poretti')
         .controller('VerifierCtrlAs', VerifierCtrlAs);
 
-    VerifierCtrlAs.$inject = ['userService', 'advertisementService'];
+    VerifierCtrlAs.$inject = ['$stateParams', 'userService', 'advertisementService', 'sessionService'];
 
-    function VerifierCtrlAs(userService, advertisementService) {
+    function VerifierCtrlAs($stateParams, userService, advertisementService, sessionService) {
 
         var vm = this;
 
-        vm.reported = [];
         vm.chosenAdvertisement = {};
+        vm.reported = [];
         vm.showReports = false;
-        vm.actionNameBasedOnStatus = actionNameBasedOnStatus;
-        vm.getReports = getReports;
-        vm.hideReports = hideReports;
+        vm.verifier = {};
+
+        vm.actionBasedOnStatus = actionBasedOnStatus;
         vm.changeStatus = changeStatus;
+        vm.getReports = getReports;
+
         activate();
 
         function activate() {
-            advertisementService.findReported().then(function(response) {
-                vm.reported = response.data;
-            }).catch(function(error) {
-                console.log(error);
-            });
+            var userId = $stateParams.id;
+            findUser(userId)
+                .then(findReported)
+                .catch(handleError);
+        }
+
+        function findUser(userId) {
+            console.log(userId);
+            return userService.findOne(userId)
+                .then(function(data) {
+                    vm.verifier = data;
+                });
+        }
+
+        function findReported() {
+            return advertisementService.findReported()
+                .then(function(data) {
+                    return vm.reported = data;
+                });
         }
 
         function getReports(advertisement) {
+            vm.showReports = true;
             vm.chosenAdvertisement = advertisement;
-            if (!vm.showReports) {
-                toggleShowReports();
-            }
-            advertisementService.findReports(advertisement.id).then(function(response) {
-                vm.chosenAdvertisement.reports = response.data;
-                vm.actionBasedOnStatus = vm.chosenAdvertisement.status;
-            });
-        }
-
-        function toggleShowReports() {
-            vm.showReports = !vm.showReports;
-        }
-
-        function hideReports() {
-            if (vm.showReports){
-                toggleShowReports();
-            }
+            advertisementService.findReports(vm.chosenAdvertisement.id)
+                .then(function(data) {
+                    vm.chosenAdvertisement.reports = data;
+                }).catch(handleError);
         }
 
         function changeStatus() {
-            if (vm.chosenAdvertisement.status === "INVALID" || vm.chosenAdvertisement.status === "PENDING_APPROVAL") {
-                advertisementService.approve(vm.chosenAdvertisement.id).then(function(response) {
-                   var index = vm.reported.indexOf(vm.chosenAdvertisement);
-                    vm.reported.splice(index,1);
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            } else if (vm.chosenAdvertisement.status === "ACTIVE") {
-                advertisementService.invalidate(vm.chosenAdvertisement.id).then(function(response) {
-                    console.log("invalidated");
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            }
+           advertisementService.changeStatus(vm.chosenAdvertisement)
+               .then(findReported)
+               .then(function() {
+                   vm.showReports = false;
+               }).catch(handleError);
         }
 
-        function actionNameBasedOnStatus() {
-            if (vm.chosenAdvertisement.status === "INVALID" || vm.chosenAdvertisement.status === "PENDING_APPROVAL") {
-                return "APPROVE";
-            }
-            else if(vm.chosenAdvertisement.status === "ACTIVE") {
-                return "INVALIDATE";
-            }
-            //TODO what to do with DONE status?
+        function actionBasedOnStatus() {
+            var action = advertisementService.actionBasedOnStatus(vm.chosenAdvertisement);
+            return action;
+        }
+
+        function handleError(error) {
+
         }
 
 

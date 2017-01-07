@@ -14,7 +14,18 @@
         vm.hide = hide;
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
-        vm.realEstate = realEstate;
+        vm.realEstate = {};
+
+        activate();
+
+        function activate() {
+            if (!realEstate) {
+                vm.realEstate.technicalEquipment = [];
+            } else {
+                vm.realEstate = realEstate;
+            }
+        }
+
 
         function hide() {
             $mdDialog.hide();

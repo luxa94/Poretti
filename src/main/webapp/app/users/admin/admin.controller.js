@@ -2,48 +2,55 @@
     'use strict';
 
     angular.module('poretti')
-        .controller('AdminCtrlAs', AdminCtrlAs)
+        .controller('AdminCtrlAs', AdminCtrlAs);
 
     AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService'];
 
     function AdminCtrlAs($stateParams, userService, companyService) {
+
         var vm = this;
 
         vm.admin = {};
+        vm.companyUser = {};
+        vm.creatingCompanyUser = false;
         vm.newUser = {};
         vm.newCompany = {};
-        vm.companyUser = {};
-        vm.newCompany.phoneNumbers= [];
-        vm.newCompany.contactEmails = [];
-        vm.companyUser.phoneNumbers = [];
-        vm.companyUser.contactEmails = [];
         vm.newUserRole = "";
+
         vm.createCompany = createCompany;
-        vm.creatingCompanyUser = false;
         vm.createAdminOfVerifier = createAdminOrVerifier;
 
         activate();
+        initializeFields();
 
         function activate() {
-            userService.findOne($stateParams.id)
-                .then(function (response) {
-                    vm.admin = response.data;
-                })
+            var userId = $stateParams.id;
+            findOne(userId);
+        }
+
+        function initializeFields() {
+            vm.newCompany.phoneNumbers = [];
+            vm.newCompany.contactEmails = [];
+            vm.companyUser.phoneNumbers = [];
+            vm.companyUser.contactEmails = [];
+        }
+
+        function findOne(userId) {
+            userService.findOne(userId)
+                .then(function (data) {
+                    vm.admin = data;
+                }).catch(handleError);
         }
 
         function createCompany() {
-            var registerCompanyDTO = {};
-            registerCompanyDTO.company = vm.newCompany;
-            registerCompanyDTO.user = vm.companyUser;
-            companyService.create(registerCompanyDTO).then(function(response) {
-                vm.newCompany = {};
-                vm.companyUser = {};
-            }).catch(function(error) {
-                console.log(error);
-            })
+            companyService.create(vm.newCompany, vm.companyUser)
+                .then(function(response) {
+                    alertify.success("Company is created");
+                }).catch(handleError);
         }
 
         function createAdminOrVerifier() {
+            debugger;
             if (vm.role === "ADMIN") {
                 createAdmin();
             } else if (vm.role === "VERIFIER") {
@@ -52,19 +59,21 @@
         }
 
         function createAdmin() {
-            userService.createAdmin(vm.newUser).then(function (response) {
-                console.log(response.data);
-            }).catch(function (response) {
-                console.log(response.status);
-            })
+            userService.createAdmin(vm.newUser)
+                .then(function(response) {
+                    alertify.success("Admin is created");
+                }).catch(handleError);
         }
 
         function createVerifier() {
-            userService.createVerifier(vm.newUser).then(function (response) {
-                console.log(response.data);
-            }).catch(function (response) {
-                console.log(response.status);
-            })
+            userService.createVerifier(vm.newUser)
+                .then(function(response) {
+                    alertify.success("Verifier is created");
+                }).catch(handleError);
+        }
+
+        function handleError(error) {
+            //TODO error handler
         }
 
     }

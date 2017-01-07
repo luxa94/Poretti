@@ -7,7 +7,7 @@
                 </div>
             </md-toolbar>
             <div md-whiteframe="3">
-                <form name="newUserForm" layout="column" ng-submit="vm.createAdminOrVerifier()">
+                <form name="newUserForm" layout="column">
                     <md-input-container>
                         <label>Username</label>
                         <input required ng-model="vm.newUser.username"/>
@@ -29,7 +29,7 @@
                         <md-option value="VERIFIER">VERIFIER</md-option>
                     </md-select>
                 </form>
-                <md-button class="md-raised md-primary" ng-click="creatingCompanyUser">Create</md-button>
+                <md-button class="md-raised md-primary" ng-click="vm.createAdminOfVerifier()">Create</md-button>
             </div>
         </div>
         <div flex-md flex-gt-md="40" layout-padding>

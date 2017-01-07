@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('VerifyAccountCtrlAs', VerifyAccountCtrlAs);
 
-    VerifyAccountCtrlAs.$inject = ['$stateParams', 'authorizationService'];
+    VerifyAccountCtrlAs.$inject = ['$stateParams', 'authorizationDataService'];
 
-    function VerifyAccountCtrlAs($stateParams, authorizationService) {
+    function VerifyAccountCtrlAs($stateParams, authorizationDataService) {
 
         var vm = this;
 
@@ -16,11 +16,14 @@
         activate();
 
         function activate() {
-            authorizationService.verifyAccount($stateParams.id).then(function(response) {
-                vm.confirmedStatus = true;
-            }).catch(function(error) {
-                console.log(error);
-            })
+            authorizationDataService.verifyAccount($stateParams.id)
+                .then(function(response) {
+                    vm.confirmedStatus = true;
+                }).catch(handleError);
+        }
+
+        function handleError() {
+            //TODO: handle error;
         }
     }
 })(angular);

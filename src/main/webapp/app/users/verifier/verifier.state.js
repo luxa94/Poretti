@@ -12,6 +12,11 @@
                             templateUrl: 'app/users/verifier/verifier.html',
                             controller: 'VerifierCtrlAs',
                             controllerAs: 'vm',
+                        },
+                        'navbar': {
+                            templateUrl: 'app/navbar/navbar.html',
+                            controller: 'NavbarCtrlAs',
+                            controllerAs: 'vm',
                         }
                     }
                 });

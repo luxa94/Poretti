@@ -72,7 +72,7 @@
                 </md-card>
                 <md-content layout="row" layout-align="center center">
                     <md-button class="md-raised" ng-click="vm.previousPage()">Previous</md-button>
-                    <md-button class="md-raised" ng-repeat="pageNumber in vm.getNumberOfPages()"
+                    <md-button class="md-raised" ng-repeat="pageNumber in vm.numberOfPages"
                                ng-click="vm.toPage(pageNumber)">{{pageNumber+1}}
                     </md-button>
                     <md-button class="md-raised" ng-click="vm.nextPage()">Next</md-button>

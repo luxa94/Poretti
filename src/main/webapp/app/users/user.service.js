@@ -1,71 +1,106 @@
 (function (angular) {
     'use strict';
+
     angular
         .module('poretti')
-        .service('userService', ['$http', userService]);
+        .service('userService', userService);
 
-    function userService($http) {
-        var BASE_URL = '/api/users';
+    userService.$inject = ['userDataService'];
 
-        function pathWithId(id) {
-            return BASE_URL + '/' + id;
-        }
+    function userService(userDataService) {
 
         return {
+            findOne: findOne,
             createAdmin: createAdmin,
             createVerifier: createVerifier,
-            findOne: findOne,
-            edit: edit,
             findAdvertisements: findAdvertisements,
             findRealEstates: findRealEstates,
-            findMemberships: findMemberships,
-            createReview: createReview,
             findReviews: findReviews,
+            reviewCanBeErased: reviewCanBeErased,
+            edit: edit,
+            createReview: createReview,
+            findMemberships: findMemberships
         };
 
-        function createAdmin(registerDTO) {
-            var adminPath = BASE_URL + "/createSysAdmin";
-            return $http.post(adminPath, registerDTO);
+        function findOne(userId) {
+            return userDataService.findOne(userId)
+                .then(findOneSuccess);
         }
 
-        function createVerifier(registerDTO) {
-            var verifierPath = BASE_URL + "/createVerifier";
-            return $http.post(verifierPath, registerDTO);
+        function findOneSuccess(response) {
+            return response.data;
         }
 
-        function findOne(id) {
-            return $http.get(pathWithId(id));
+        function createAdmin(userDTO) {
+            return userDataService.createAdmin(userDTO);
         }
 
-        function edit(id, userDTO) {
-            return $http.put(pathWithId(id), userDTO);
+        function createVerifier(userDTO) {
+            return userDataService.createVerifier(userDTO);
         }
 
-        function findAdvertisements(id, params) {
-            var advertisementsPath = pathWithId(id) + '/advertisements'
-            return $http.get(advertisementsPath, {params: params});
+        function findAdvertisements(userId) {
+            return userDataService.findAdvertisements(userId);
         }
 
-        function findRealEstates(id) {
-            var realEstatesPath = pathWithId(id) + '/realEstates';
-            return $http.get(realEstatesPath);
+        function findRealEstates(userId) {
+            return userDataService.findRealEstates(userId)
+                .then(findRealEstatesSuccess)
         }
 
-        function findMemberships(id) {
-            var membershipsPath = pathWithId(id) + '/memberships';
-            return $http.get(membershipsPath);
+        function findRealEstatesSuccess(response) {
+            return response.data;
         }
 
-        function createReview(id, reviewDTO) {
-            var reviewsPath = pathWithId(id) + '/reviews';
-            return $http.post(reviewsPath, reviewDTO);
+        function findReviews(userId) {
+            return userDataService.findReviews(userId)
+                .then(findReviewsSuccess);
         }
 
-        function findReviews(id) {
-            var reviewsPath = pathWithId(id) + '/reviews';
-            return $http.get(reviewsPath);
+        function findReviewsSuccess(response) {
+            var reviews = orderReviewsByDate(response.data);
+            return reviews;
+        }
+
+        function orderReviewsByDate(data) {
+            return _.orderBy(data, ['editedOn'], ['desc']);
+        }
+
+        function reviewCanBeErased(reviews, loggedUser) {
+            return  _.forEach(reviews, function (review) {
+                review.canBeErased = review.author.id === loggedUser.id;
+            });
+        }
+
+        function edit(userId, editedUser) {
+            return userDataService.edit(userId, editedUser)
+                .then(editSuccess);
+        }
+
+        function editSuccess(response) {
+            return response.data;
+        }
+
+        function createReview(userId) {
+            return userService.createReview(userId)
+                .then(createReviewSuccess);
+        }
+
+        function createReviewSuccess(response) {
+            return response.data;
+        }
+
+        function findMemberships(userId) {
+            return userDataService.findMemberships(userId)
+                .then(findMembershipsSuccess);
+        }
+
+        function findMembershipsSuccess(response) {
+            return response.data;
+        }
+
+        function handleError(error) {
+            //TODO handle error
         }
     }
-}(angular));
-
-
+})(angular);

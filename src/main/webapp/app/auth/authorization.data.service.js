@@ -2,11 +2,11 @@
     'use strict';
     angular
         .module('poretti')
-        .service('authorizationService', authorizationService);
+        .service('authorizationDataService', authorizationDataService);
 
-    authorizationService.$inject = ['$http'];
+    authorizationDataService.$inject = ['$http'];
 
-    function authorizationService($http) {
+    function authorizationDataService($http) {
         var BASE_URL = "api/authentication";
 
         function pathWithId(id) {

@@ -1,50 +1,33 @@
 (function (angular) {
-    'use strict'
+    'use strict';
 
     angular
         .module('poretti')
-        .service('realEstateService', ['$http', realEstateService])
+        .service('realEstateService', realEstateService);
 
-    function realEstateService($http) {
-        var BASE_URL = "/api/realEstates";
+    realEstateService.$inject = ['realEstateDataService'];
 
-        function pathWithId(id) {
-            return BASE_URL + "/" + id;
-        }
+    function realEstateService(realEstateDataService) {
 
         return {
-            findOne: findOne,
-            create: createOne,
+            create: create,
             edit: edit,
-            delete: deleteOne,
-            findAdvertisements: findAdvertisements,
-            createAdvertisement: createAdvertisement,
+            createAdvertisementForRealEstate: createAdvertisementForRealEstate
         };
 
-        function findOne(id) {
-            return $http.get(pathWithId(id));
+        function create(realEstate) {
+            return realEstateDataService.create(realEstate);
         }
 
-        function createOne(realEstateDTO) {
-            return $http.post(BASE_URL, realEstateDTO);
+        function edit(realEstate) {
+            return realEstateDataService.edit(realEstate.id, realEstate);
         }
 
-        function edit(id, realEstateDTO) {
-            return $http.put(pathWithId(id), realEstateDTO);
-        }
-
-        function deleteOne(id) {
-            return $http.delete(pathWithId(id));
-        }
-
-        function findAdvertisements(id) {
-            var advertisementsPath = pathWithId(id) + '/advertisements';
-            return $http.get(advertisementsPath);
-        }
-
-        function createAdvertisement(id, advertisementDTO) {
-            var advertisementsPath = pathWithId(id) + '/advertisements';
-            return $http.post(advertisementsPath, advertisementDTO);
+        function createAdvertisementForRealEstate(advertisementRealEstate) {
+            var realEstateId = advertisementRealEstate.realEstateId;
+            var advertisement = advertisementRealEstate.advertisement;
+            return realEstateDataService.createAdvertisement(realEstateId, advertisement);
         }
     }
-}(angular));
+    
+})(angular);

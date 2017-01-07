@@ -12,21 +12,20 @@
         var vm = this;
 
         vm.advertisement = advertisement;
+        vm.advertisementDialog = advertisementDialog;
         vm.realEstate = realEstate;
         vm.realEstateDialog = realEstateDialog;
-        vm.advertisementDialog = advertisementDialog;
-        vm.show = show;
-        vm.hide = hide;
+        vm.realEstateIsAdded = false;
+
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
+        vm.hide = hide;
         vm.openDialogForRealEstate = openDialogForRealEstate;
-        vm.realEstateIsAdded = false;
+        vm.show = show;
 
         activate();
 
         function activate() {
-            debugger;
-            vm.advertisement;
             vm.realEstateIsAdded = !_.values(vm.realEstate).every(function(prop) {
                 return _.isUndefined(prop) || _.isEmpty(prop);
             });

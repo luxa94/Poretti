@@ -82,11 +82,11 @@
             <md-content>
                 <md-list>
                     <md-list-item class="md-3-line md-long-text" ng-repeat="report in vm.advertisement.reports">
-                        <img ng-src="{{report.author.imageUrl}}?25" class="md-avatar" alt="{{review.author.name}}" />
+                        <img ng-src="{{report.author.imageUrl}}?25" class="md-avatar" alt="{{report.author.name}}" />
                         <div class="md-list-item-text">
                             <h3>{{report.author.name}}</h3>
-                            <p>{{report.comment}}</p>
-                            <p>Rating: {{report.rating}}</p>
+                            <p>{{report.reason}}</p>
+                            <p>{{report.description}}</p>
                         </div>
                     </md-list-item>
                 </md-list>

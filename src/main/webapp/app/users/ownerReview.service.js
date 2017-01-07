@@ -3,21 +3,18 @@
 
     angular
         .module('poretti')
-        .service('ownerReviewService', ['$http', ownerReviewService])
+        .service('ownerReviewService', ownerReviewService);
 
-    function ownerReviewService($http) {
-        var BASE_URL = "/api/ownerReviews";
+    ownerReviewService.$inject = ['ownerReviewDataService'];
 
-        function pathWithId(id) {
-            return BASE_URL + "/" + id;
-        }
+    function ownerReviewService(ownerReviewDataService) {
 
         return {
-            delete: deleteOne
+            deleteOne: deleteOne
         };
 
-        function deleteOne(id) {
-            return $http.delete(pathWithId(id));
+        function deleteOne(reviewId) {
+            return ownerReviewDataService.delete(reviewId);
         }
     }
 }(angular));

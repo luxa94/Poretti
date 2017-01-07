@@ -5,20 +5,16 @@
         .module('poretti')
         .controller('ReportDialogCtrlAs', ReportDialogCtrlAs);
 
-    ReportDialogCtrlAs.$inject = ['$mdDialog', 'report'];
+    ReportDialogCtrlAs.$inject = ['$mdDialog'];
 
-    function ReportDialogCtrlAs($mdDialog, report) {
+    function ReportDialogCtrlAs($mdDialog) {
 
         var vm = this;
 
-        vm.hide = hide;
+        vm.report = {};
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
-        vm.report = report;
-
-        function hide() {
-            $mdDialog.hide();
-        }
+        vm.hide = hide;
 
         function cancel() {
             $mdDialog.cancel();
@@ -26,6 +22,10 @@
 
         function confirmResponse(){
             $mdDialog.hide(vm.report);
+        }
+
+        function hide() {
+            $mdDialog.hide();
         }
     }
 })(angular);

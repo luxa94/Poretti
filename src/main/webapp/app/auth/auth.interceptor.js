@@ -4,9 +4,9 @@
     angular.module('poretti')
         .service('authInterceptor', authInterceptor)
 
-    authInterceptor.$inject = ['$q', '$location', 'sessionService'];
+    authInterceptor.$inject = ['$q', 'sessionService'];
 
-    function authInterceptor($q, $location, sessionService) {
+    function authInterceptor($q, sessionService) {
 
         return {
             request: request,
@@ -25,6 +25,7 @@
         }
 
         function responseError(response) {
+            //TODO Handle Error?
             return $q.reject(response);
         }
     }

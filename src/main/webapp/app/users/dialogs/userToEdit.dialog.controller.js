@@ -16,6 +16,13 @@
         vm.confirmResponse = confirmResponse;
         vm.userToEdit = {};
 
+        activate();
+
+        function activate() {
+            vm.userToEdit.phoneNumbers = [];
+            vm.userToEdit.contactEmails = [];
+        }
+
         function hide() {
             $mdDialog.hide();
         }
