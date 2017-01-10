@@ -14,20 +14,16 @@
         vm.advertisements = [];
         vm.canAdd = false;
         vm.canEdit = false;
+        vm.canJoinCompany = false;
+        vm.canLeaveCompany = false;
         vm.company = {};
         vm.companyMemberships = [];
         vm.companyMembersCriteria = "";
-        vm.canJoinCompany = false;
-        vm.canLeaveCompany = false;
-        vm.newRealEstate = {
-            technicalEquipment: []
-        };
-        vm.newAdvertisement = {
-            endsOn: new Date()
-        };
-        vm.advertisementDialog = {};
+        vm.newRealEstate = {};
+        vm.newAdvertisement = {};
         vm.realEstates = [];
         vm.reviews = [];
+
         vm.approveMembership = approveMembership;
         vm.leaveCompany = leaveCompany;
         vm.filteredMemberships = filteredMemberships;

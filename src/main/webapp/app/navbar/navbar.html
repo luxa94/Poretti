@@ -5,12 +5,12 @@
                 <h3>Poretti</h3>
                 <span flex></span>
                 <div ng-if="!vm.renderUIForLoggedUser">
-                    <md-button class="md-raised md-accent md-hue-2" ng-click="vm.login()">Login</md-button>
-                    <md-button class="md-raised md-accent md-hue-2" ng-click="vm.register()">Register</md-button>
+                    <md-button id="navbar.btn.login" class="md-raised md-accent md-hue-2" ng-click="vm.login()">Login</md-button>
+                    <md-button id="navbar.btn.register" class="md-raised md-accent md-hue-2" ng-click="vm.register()">Register</md-button>
                 </div>
                 <div ng-if="vm.renderUIForLoggedUser">
-                    <md-button class="md-raised md-accent md-hue-2" ng-click="vm.goToProfile()">{{vm.loggedUser.name}}</md-button>
-                    <md-button class="md-raised md-accent md-hue-2" ng-click="vm.logout()">Logout</md-button>
+                    <md-button id="navbar.btn.profile" class="md-raised md-accent md-hue-2" ng-click="vm.goToProfile()">{{vm.loggedUser.name}}</md-button>
+                    <md-button id="navbar.btn.logout" class="md-raised md-accent md-hue-2" ng-click="vm.logout()">Logout</md-button>
                 </div>
             </div>
         </md-toolbar>
