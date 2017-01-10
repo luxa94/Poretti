@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular
-        .module('poretti', ['ngRoute', 'ui.router', 'ngMaterial', 'angularFileUpload', 'ngAlertify'])
+        .module('poretti', ['ngRoute', 'ui.router', 'ngMaterial', 'angularFileUpload', 'ngAlertify', 'ngMap'])
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
             $mdThemingProvider
                 .theme('default')
@@ -23,14 +23,14 @@
                         'navbar': {
                             templateUrl: 'app/navbar/navbar.html',
                             controller: 'NavbarCtrlAs',
-                            controllerAs: 'vm',
+                            controllerAs: 'vm'
                         }
                     }
                 });
         })
         .run(function ($rootScope, $location, sessionService, roleService) {
 
-            var publicRoutes = ["/register", "/login", "/home"];
+            var publicRoutes = ["/register", "/login", "/home", '/advertisement'];
             var adminRoutes = ["/admin"];
             var verifierRoutes = ["/verifier"];
 
@@ -42,16 +42,17 @@
 
             $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
                 var loggedUser = sessionService.getUser();
+
                 if (!routeIsIn(publicRoutes, $location.url()) && !loggedUser) {
-                    // ev.preventDefault();
+                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
                 else if (routeIsIn(adminRoutes, $location.url()) && !roleService.isAdmin(loggedUser)) {
-                    //TODO replace with 404 page
+                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
                 else if (routeIsIn(verifierRoutes, $location.url()) && !roleService.isVerifier(loggedUser)) {
-                    //TODO replace with 404 page
+                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
             });

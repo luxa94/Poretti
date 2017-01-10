@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('RealEstateDialogCtrlAs', RealEstateDialogCtrlAs);
 
-    RealEstateDialogCtrlAs.$inject = ['$mdDialog', 'realEstate'];
+    RealEstateDialogCtrlAs.$inject = ['$mdDialog', 'realEstate', 'NgMap'];
 
-    function RealEstateDialogCtrlAs($mdDialog, realEstate) {
+    function RealEstateDialogCtrlAs($mdDialog, realEstate, NgMap) {
 
         var vm = this;
 
@@ -15,6 +15,7 @@
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
         vm.realEstate = {};
+        vm.realEstate.location = {};
 
         activate();
 

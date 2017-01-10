@@ -17,7 +17,6 @@ import com.bdzjn.poretti.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -33,8 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(EmailService emailService, UserRepository userRepository,
-                           CompanyRepository companyRepository,
-                           MembershipRepository membershipRepository, PasswordEncoder passwordEncoder) {
+                           CompanyRepository companyRepository, MembershipRepository membershipRepository, PasswordEncoder passwordEncoder) {
         this.emailService = emailService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;

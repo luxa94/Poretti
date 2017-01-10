@@ -65,7 +65,7 @@
            <md-content>
                <md-list>
                    <md-list-item class="md-3-line md-long-text" ng-repeat="review in vm.advertisement.reviews">
-                       <img ng-src="{{review.author.imageUrl}}?25" class="md-avatar" alt="{{review.author.name}}" />
+                       <img ng-src="{{review.author.imageUrl}}" class="md-avatar" alt="{{review.author.name}}" />
                        <div class="md-list-item-text">
                            <h3>{{review.author.name}}</h3>
                            <p>{{review.comment}}</p>

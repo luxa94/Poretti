@@ -2,15 +2,16 @@
 
     angular
         .module('poretti')
-        .controller('AdvertisementsCtrlAs', AdvertisementsCtrlAs)
+        .controller('AdvertisementsCtrlAs', AdvertisementsCtrlAs);
 
-    AdvertisementsCtrlAs.$inject = ['$state', 'advertisementService', 'pagingFilterService']
+    AdvertisementsCtrlAs.$inject = ['$state', 'advertisementService', 'pagingFilterService', 'NgMap'];
 
-    function AdvertisementsCtrlAs($state, advertisementService, pagingFilterService) {
+    function AdvertisementsCtrlAs($state, advertisementService, pagingFilterService, NgMap) {
 
         var vm = this;
 
         vm.advertisements = [];
+        vm.markers = [];
         vm.activePageNumber = 0;
         vm.filter = {};
         vm.numberOfPages = -1;
@@ -34,6 +35,34 @@
                 .then(function (response) {
                     vm.advertisements = response.data.content;
                     vm.numberOfPages = pagingFilterService.getNumberOfPages(response.data.totalPages);
+                    updateMap();
+                });
+        }
+
+        function updateMap() {
+            NgMap.getMap()
+                .then(function (map) {
+                    vm.markers = [];
+                    vm.advertisements.forEach(function (add) {
+                        var location = add.realEstate.location;
+                        var bounds = new google.maps.LatLngBounds();
+
+                        if (location.hasLatLong) {
+                            vm.markers.push(add);
+                            var latLng = new google.maps.LatLng(location.latitude, location.longitude);
+                            bounds.extend(latLng);
+                        }
+
+                        map.setCenter(bounds.getCenter());
+                        map.fitBounds(bounds);
+                        if (map.getZoom() > 5) {
+                            map.setZoom(5);
+                        }
+                    });
+
+                })
+                .catch(function () {
+                    alertify.error('Unable to load map.');
                 });
         }
 
