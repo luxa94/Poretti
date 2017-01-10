@@ -84,7 +84,7 @@ public class AdvertisementController {
 
         final RealEstate realEstate = realEstateService.create(realEstateDTO, user);
         final Advertisement advertisement = advertisementService.create(advertisementDTO, realEstate);
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+        return new ResponseEntity<>(advertisement.getId(), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('EDIT_ADVERTISEMENT')")
@@ -154,7 +154,7 @@ public class AdvertisementController {
                                        @PathVariable long id,
                                        @AuthenticationPrincipal User user) {
         final ImproperAdvertisementReport report = improperAdvertisementReportService.create(advertisementReportDTO, id, user);
-        return new ResponseEntity<>(report, HttpStatus.CREATED);
+        return new ResponseEntity<>(report.getId(), HttpStatus.CREATED);
     }
 
     @Transactional
@@ -173,7 +173,7 @@ public class AdvertisementController {
                                        @PathVariable long id,
                                        @AuthenticationPrincipal User user) {
         final AdvertisementReview review = advertisementReviewService.create(reviewDTO, id, user);
-        return new ResponseEntity<>(review, HttpStatus.CREATED);
+        return new ResponseEntity<>(review.getId(), HttpStatus.CREATED);
     }
 
     @Transactional

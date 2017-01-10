@@ -1,0 +1,24 @@
+<md-dialog aria-label="Edit data" flex-md flex-gt-md="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Edit your data</div>
+    </md-toolbar>
+    <md-dialog-content layout-padding layout-margin>
+        <form flex ng-cloak layout="column">
+            <md-input-container>
+                <label>Name</label>
+                <input type="text" ng-model="vm.userToEdit.name"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Image</label>
+                <input type="text" ng-model="vm.userToEdit.imageUrl"/>
+            </md-input-container>
+            <md-chips ng-model="vm.userToEdit.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
+            <br/><br/>
+            <md-chips ng-model="vm.userToEdit.contactEmails" readonly="false" placeholder="Contact emails"></md-chips>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+    </md-dialog-actions>
+</md-dialog>

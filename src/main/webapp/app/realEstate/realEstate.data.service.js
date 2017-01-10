@@ -3,9 +3,9 @@
 
     angular
         .module('poretti')
-        .service('realEstateService', ['$http', realEstateService])
+        .service('realEstateDataService', ['$http', realEstateDataService])
 
-    function realEstateService($http) {
+    function realEstateDataService($http) {
         var BASE_URL = "/api/realEstates";
 
         function pathWithId(id) {

@@ -146,7 +146,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         final OwnerReview ownerReview = ownerReviewService.create(reviewDTO, target, user);
-        return new ResponseEntity<>(ownerReview, HttpStatus.CREATED);
+        return new ResponseEntity<>(ownerReview.getId(), HttpStatus.CREATED);
     }
 
     @Transactional

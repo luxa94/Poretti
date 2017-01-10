@@ -2,9 +2,9 @@
     'use strict';
     angular
         .module('poretti')
-        .service('advertisementReviewService', ['$http', advertisementReviewService]);
+        .service('advertisementReviewDataService', ['$http', advertisementReviewDataService]);
 
-    function advertisementReviewService($http) {
+    function advertisementReviewDataService($http) {
         var BASE_URL = '/api/advertisementReviews';
 
         return {

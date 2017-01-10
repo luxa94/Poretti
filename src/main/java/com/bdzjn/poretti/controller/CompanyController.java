@@ -53,6 +53,13 @@ public class CompanyController {
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
+    @Transactional
+    @GetMapping
+    public ResponseEntity findAll(){
+        final List<Company> companies = companyService.findAll();
+        return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAnyAuthority('CREATE_COMPANY')")
     @Transactional
     @PostMapping
@@ -289,7 +296,7 @@ public class CompanyController {
         });
 
         final Membership membership = membershipService.save(user, company);
-        return new ResponseEntity<>(membership, HttpStatus.CREATED);
+        return new ResponseEntity<>(membership.getId(), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyAuthority('APPROVE_COMPANY_USER')")

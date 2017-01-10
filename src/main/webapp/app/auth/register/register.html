@@ -1,0 +1,59 @@
+<section>
+    <md-content ng-if="!vm.isRegistered" layout-padding layout="row" layout-align="center center">
+        <div flex="50" md-whiteframe="3">
+            <form name="loginForm" layout="column">
+                <md-input-container>
+                    <label>Username</label>
+                    <input required ng-model="vm.user.username"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Email</label>
+                    <input required ng-model="vm.user.email"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" required ng-model="vm.user.password"/>
+                </md-input-container>
+                <md-input-container>
+                    <label>Name</label>
+                    <input required ng-model="vm.user.name"/>
+                </md-input-container>
+                <span class="md-primary md-button" ng-click="vm.isRegisteringForCompany=true">Are you a company user?</span>
+                <div layout="row" ng-show="vm.isRegisteringForCompany">
+                    <div flex-gt-md="10" layout-align="space-between stretch">
+                        <md-button ng-click="vm.getPreviousCompanies()">Back</md-button>
+                    </div>
+                    <div flex-gt-md="80" layout>
+                        <md-card flex-gt-sm="20" ng-repeat="company in vm.currentDisplayingCompanies">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">{{company.name}}</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-actions>
+                                <md-checkbox ng-click="vm.user.companyId = company.id"></md-checkbox>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                    <div flex-gt-md="10" layout-align="space-between stretch">
+                        <md-button ng-click="vm.getNextCompanies()">Next</md-button>
+                    </div>
+                </div>
+                <md-input-container>
+                    <md-button type="submit" class="md-raised md-primary" ng-click="vm.register()">Register</md-button>
+                </md-input-container>
+            </form>
+        </div>
+
+        <div flex="50" md-whiteframe="3">
+            <image-upload object="vm.user"></image-upload>
+        </div>
+
+    </md-content>
+    <md-content flex="" ng-if="vm.isRegistered">
+        <div flex>
+            <h2 class="md-display-2">Check our email</h2>
+        </div>
+    </md-content>
+
+</section>

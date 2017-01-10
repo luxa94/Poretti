@@ -1,0 +1,92 @@
+<div layout="row" layout-padding>
+    <div flex="35" flux-offset="5">
+        <mg-content class="md-padding" layout="row" layout-align="start center">
+            <div layout="column">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h3>Filter by</h3>
+                    </div>
+                </md-toolbar>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Advertisement title</label>
+                        <input ng-model="vm.filter.advertisementTitle"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Advertisement type</label>
+                        <md-select ng-model="vm.filter.advertisementType">
+                            <md-option value="SALE">SALE</md-option>
+                            <md-option value="RENT">RENT</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Price from</label>
+                        <input type="number" ng-model="vm.filter.priceFrom"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Price to</label>
+                        <input type="number" ng-model="vm.filter.priceTo"/>
+                    </md-input-container>
+                </div>
+                <div layout layout-padding>
+                    <md-input-container>
+                        <label>Real estate name</label>
+                        <input ng-model="vm.filter.realEstateName"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Real estate name</label>
+                        <md-select ng-model="vm.filter.realEstateType">
+                            <md-option value="APARTMENT">APARTMENT</md-option>
+                            <md-option value="HOUSE">HOUSE</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <md-button class="md-raised md-accent" ng-click="vm.searchByFilters()">Search</md-button>
+                <md-button class="md-raised md-accent" ng-click="vm.clearFilters()">Clear</md-button>
+            </div>
+        </mg-content>
+    </div>
+    <div flex="80">
+        <md-content class="md-padding list-card" layout="row" layout-align="center stretch">
+            <div flex-md flex-gt-md="60" layout="column">
+
+                <md-card flex map-lazy-load="https://maps.google.com/maps/api/js">
+                    <ng-map center="45, 19" zoom="3">
+                        <custom-marker ng-repeat="add in vm.markers" position="{{add.realEstate.location.latitude}}, {{add.realEstate.location.longitude}}">
+                            <div>{{add.realEstate.name}}</div>
+                        </custom-marker>
+                    </ng-map>
+                </md-card>
+
+                <md-card ng-repeat="advertisement in vm.advertisements" md-whiteframe="2">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{advertisement.title}}</span>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <div class="md-media-md card-media">
+                                <img layout-fill ng-src="{{advertisement.realEstate.imageUrl}}"/>
+                            </div>
+                        </md-card-title-media>
+                    </md-card-title>
+                    <md-card-content layout="row">
+                        <span>{{advertisement.price}}</span>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-primary" ng-click="vm.toAdvertisement(advertisement)">Details
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+                <md-content layout="row" layout-align="center center">
+                    <md-button class="md-raised" ng-click="vm.previousPage()">Previous</md-button>
+                    <md-button class="md-raised" ng-repeat="pageNumber in vm.numberOfPages"
+                               ng-click="vm.toPage(pageNumber)">{{pageNumber+1}}
+                    </md-button>
+                    <md-button class="md-raised" ng-click="vm.nextPage()">Next</md-button>
+                </md-content>
+            </div>
+        </md-content>
+    </div>
+</div>

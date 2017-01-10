@@ -1,0 +1,121 @@
+<section>
+    <md-content layout-padding layout="row">
+        <div flex-md flex-gt-md="30" layout-padding>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Create admin/verifier</h2>
+                </div>
+            </md-toolbar>
+            <div md-whiteframe="3">
+                <form name="newUserForm" layout="column">
+                    <md-input-container>
+                        <label>Username</label>
+                        <input required ng-model="vm.newUser.username"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Password</label>
+                        <input type="password" required ng-model="vm.newUser.password"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Email</label>
+                        <input required ng-model="vm.newUser.email"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Name</label>
+                        <input required ng-model="vm.newUser.name"/>
+                    </md-input-container>
+                    <md-select ng-model="vm.role" placeholder="Choose a role">
+                        <md-option value="ADMIN">ADMIN</md-option>
+                        <md-option value="VERIFIER">VERIFIER</md-option>
+                    </md-select>
+                </form>
+                <md-button class="md-raised md-primary" ng-click="vm.createAdminOfVerifier()">Create</md-button>
+            </div>
+        </div>
+        <div flex-md flex-gt-md="40" layout-padding>
+            <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Create a company</h2>
+                    </div>
+            </md-toolbar>
+            <div md-whiteframe="3">
+                <form name="companyForm" layout="row" layout-padding ng-submit="vm.createCompany()">
+                    <div flex layout="column">
+                        <md-input-container>
+                            <label>Pib</label>
+                            <input required ng-model="vm.newCompany.pib"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Name</label>
+                            <input required ng-model="vm.newCompany.name"/>
+                        </md-input-container>
+                        <md-chips ng-model="vm.newCompany.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
+                        <br/><br/><br/>
+                        <md-chips ng-model="vm.newCompany.contactEmails" placeholder="Contact emails"></md-chips>
+                        <br/>
+                        <md-button ng-if="!vm.companyUser.name" class="md-accent md-raised" ng-click="vm.creatingCompanyUser = true">Add company user</md-button>
+                        <span ng-if="vm.companyUser.name">{{vm.companyUser.name}}</span>
+                    </div>
+                    <div flex layout="column">
+                        <md-input-container>
+                            <label>State</label>
+                            <input ng-model="vm.newCompany.location.state"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>City</label>
+                            <input required ng-model="vm.newCompany.location.city"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>City area</label>
+                            <input ng-model="vm.newCompany.location.cityArea"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Zip code</label>
+                            <input ng-model="vm.newCompany.location.zipCode"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Street</label>
+                            <input ng-model="vm.newCompany.location.street"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Street number</label>
+                            <input ng-model="vm.newCompany.location.streetNumber"/>
+                        </md-input-container>
+                    </div>
+                </form>
+                <md-button class="md-raised md-primary" ng-click="vm.createCompany()">Create</md-button>
+            </div>
+        </div>
+        <div flex-md flex-gt-md="30" layout-padding ng-if="vm.creatingCompanyUser">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Create user for company</h2>
+                </div>
+            </md-toolbar>
+            <div md-whiteframe="3">
+                <form name="newUserForm" layout="column">
+                    <md-input-container>
+                        <label>Username</label>
+                        <input required ng-model="vm.companyUser.username"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Password</label>
+                        <input type="password" required ng-model="vm.companyUser.password"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Email</label>
+                        <input required ng-model="vm.companyUser.email"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Name</label>
+                        <input required ng-model="vm.companyUser.name"/>
+                    </md-input-container>
+                    <md-chips ng-model="vm.companyUser.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
+                    <br/><br/><br/>
+                    <md-chips ng-model="vm.companyUser.contactEmails" placeholder="Contact emails"></md-chips>
+                </form>
+                <md-button class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
+            </div>
+        </div>
+    </md-content>
+</section>

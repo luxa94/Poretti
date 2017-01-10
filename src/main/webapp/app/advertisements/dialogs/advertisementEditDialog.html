@@ -1,0 +1,33 @@
+<md-dialog aria-label="Edit advertisement"  flex-gt-md="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Edit advertisement</div>
+    </md-toolbar>
+    <md-dialog-content layout-padding layout-margin>
+        <form flex ng-cloak layout="column">
+            <md-input-container>
+                <label>Title</label>
+                <input type="text" ng-model="vm.advertisement.title"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Price</label>
+                <input type="text" ng-model="vm.advertisement.price"/>
+            </md-input-container>
+            <md-select ng-model = "vm.advertisement.currency" placeholder="Currency">
+                <md-option value="RSD">RSD</md-option>
+                <md-option value="EUR">EUR</md-option>
+                <md-option value="USD">USD</md-option>
+            </md-select>
+            <md-select ng-model = "vm.advertisement.type" placeholder="Type">
+                <md-option value="SALE">SALE</md-option>
+                <md-option value="RENT">RENT</md-option>
+            </md-select>
+            <div layout>
+                <md-datepicker ng-model="vm.advertisement.endsOn" placeholder="Ends on"></md-datepicker>
+            </div>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+    </md-dialog-actions>
+</md-dialog>

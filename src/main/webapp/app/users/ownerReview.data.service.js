@@ -1,11 +1,11 @@
 (function (angular) {
-    'use strict'
+    'use strict';
 
     angular
         .module('poretti')
-        .service(ownerReviewService, ['$http', ownerReviewService])
+        .service('ownerReviewDataService', ['$http', ownerReviewDataService]);
 
-    function ownerReviewService($http) {
+    function ownerReviewDataService($http) {
         var BASE_URL = "/api/ownerReviews";
 
         function pathWithId(id) {

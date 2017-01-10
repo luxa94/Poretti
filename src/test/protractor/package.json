@@ -1,0 +1,30 @@
+{
+  "name": "poretti",
+  "version": "1.0.0",
+  "description": "Tests",
+  "main": "app.js",
+  "scripts": {
+    "e2e-setup": "npm install && node node_modules/protractor/bin/webdriver-manager update",
+    "e2e-start": "node node_modules/protractor/bin/webdriver-manager start",
+    "e2e-test": "node node_modules/protractor/bin/protractor e2e/conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luxa94/Poretti.git"
+  },
+  "keywords": [
+    "protractor",
+    "testing"
+  ],
+  "author": "Nikola Lukic Jasna Stankovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luxa94/Poretti/issues"
+  },
+  "homepage": "https://github.com/luxa94/Poretti#readme",
+  "devDependencies": {
+    "jasmine-spec-reporter": "^3.1.0",
+    "protractor": "^4.0.14",
+    "protractor-jasmine2-html-reporter": "0.0.7"
+  }
+}

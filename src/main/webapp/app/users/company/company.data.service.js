@@ -2,11 +2,12 @@
     'use strict';
     angular
         .module('poretti')
-        .service('companyService', ['$http', companyService]);
+        .service('companyDataService', ['$http', companyDataService]);
 
-    function companyService($http) {
+    function companyDataService($http) {
         return {
             findOne: findOne,
+            findAll: findAll,
             create: create,
             edit: edit,
             createRealEstate: createRealEstate,
@@ -28,6 +29,10 @@
 
         function findOne(id) {
             return $http.get(pathWithId(id));
+        }
+
+        function findAll() {
+            return $http.get(BASE_URL);
         }
 
         function create(registerCompanyDTO) {
@@ -75,27 +80,27 @@
         }
 
         function createReview(id, reviewDTO) {
-            $http.post(pathWithId(id) + REVIEW_PATH, reviewDTO);
+            return $http.post(pathWithId(id) + REVIEW_PATH, reviewDTO);
         }
 
         function findReviews(id) {
-            $http.get(pathWithId(id) + REVIEW_PATH);
+            return $http.get(pathWithId(id) + REVIEW_PATH);
         }
 
         function findMemberships(id) {
-            $http.get(pathWithId(id) + MEMBERSHIP_PATH);
+            return $http.get(pathWithId(id) + MEMBERSHIP_PATH);
         }
 
         function createMembership(id) {
-            $http.post(pathWithId(id) + MEMBERSHIP_PATH);
+            return $http.post(pathWithId(id) + MEMBERSHIP_PATH);
         }
 
         function approveMembership(id, membershipId) {
-            $http.put(companyAndMembership(id, membershipId));
+            return $http.put(companyAndMembership(id, membershipId));
         }
 
         function leaveCompany(id, membershipId) {
-            $http.delete(companyAndMembership(id, membershipId));
+            return $http.delete(companyAndMembership(id, membershipId));
         }
     }
 

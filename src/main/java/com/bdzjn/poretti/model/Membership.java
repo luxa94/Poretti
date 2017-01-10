@@ -34,18 +34,13 @@ public class Membership {
 
         Membership that = (Membership) o;
 
-        if (!getCompany().equals(that.getCompany())) return false;
-        if (!getMember().equals(that.getMember())) return false;
-        return getApprovedBy() != null ? getApprovedBy().equals(that.getApprovedBy()) : that.getApprovedBy() == null;
+        return getMember().equals(that.getMember());
 
     }
 
     @Override
     public int hashCode() {
-        int result = getCompany().hashCode();
-        result = 31 * result + getMember().hashCode();
-        result = 31 * result + (getApprovedBy() != null ? getApprovedBy().hashCode() : 0);
-        return result;
+        return getMember().hashCode();
     }
 
     @Override

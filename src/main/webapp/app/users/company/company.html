@@ -1,0 +1,138 @@
+<div layout>
+    <div layout="column" flex-gt-md="40" layout-padding>
+        <div md-whiteframe="3" layout>
+            <div flex>
+                <div layout-fill class="md-media-md">
+                    <img ng-src = "{{vm.company.imageUrl}}?50"/>
+                </div>
+            </div>
+            <div flex>
+                <div layout="column">
+                    <span class="md-headline">{{vm.company.name}}</span>
+                    <span>Phone numbers: {{vm.company.phoneNumbers}}</span>
+                    <span>Contact emails: {{vm.company.contactEmails}}</span>
+                </div>
+            </div>
+        </div>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini">
+                    <md-icon aria-label="Edit company" class="md-primary md-hue-2 md-mini">edit</md-icon>
+                </md-button>
+                <md-button ng-hide="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForReview($event)">
+                    <md-icon aria-label="Insert comment" class="material-icons">insert_comment</md-icon>
+                    <md-tooltip>Create review for company</md-tooltip>
+                </md-button>
+                <md-button ng-show="vm.canAdd" aria-label="Create real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event)">
+                    <md-icon aria-label="Home" class="material-icons">home</md-icon>
+                    <md-tooltip>Create real estate</md-tooltip>
+                </md-button>
+                <md-button ng-show="vm.canAdd" aria-label="Create advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForAdvertisement($event)">
+                    <md-icon aria-label="Announcement" class="material-icons">announcement</md-icon>
+                    <md-tooltip>Create advertisement</md-tooltip>
+                </md-button>
+                <md-button ng-if="vm.canJoinCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.createMembership()">
+                    <md-icon aria-label="Person add" class="material-icons">person_add</md-icon>
+                    <md-tooltip>Join company</md-tooltip>
+                </md-button>
+                <md-button ng-if="vm.canLeaveCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.leaveCompany()">
+                    <md-icon aria-label="Person add" class="material-icons">directions_run</md-icon>
+                    <md-tooltip>Leave company (run, save yourself)</md-tooltip>
+                </md-button>
+            </div>
+        </md-toolbar>
+    </div>
+    <div layout="column" flex-gt-md="60" layout-padding>
+        <md-content>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Advertisements">
+                    <md-content class="md-padding">
+                        <h3 ng-if="!vm.advertisements.length" class="md-display-3 md-accent md-hue-3">No advertisements</h3>
+                        <div ng-show = "vm.advertisements.length" layout-padding ng-repeat="advertisement in vm.advertisements">
+                            <div layout>
+                                <div flex>
+                                    <div>
+                                        <img layout-fill style="height: 10em; width:20em" ng-src="{{advertisement.realEstate.imageUrl}}"/>
+                                    </div>
+                                </div>
+                                <div flex>
+                                    <div layout="column">
+                                        <span class="md-headline">{{advertisement.title}}</span>
+                                        <span class="md-subhead">{{advertisement.price}}</span>
+                                        <div layout>
+                                            <md-button>Edit advertisement</md-button>
+                                            <md-button>Details</md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-divider></md-divider>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Real estates">
+                    <md-content class="md-padding">
+                        <h3 ng-if="!vm.realEstates.length" class="md-display-3 md-accent md-hue-3">No real estates</h3>
+                        <div ng-show="vm.realEstates.length" layout-padding ng-repeat="realEstate in vm.realEstates">
+                            <div layout>
+                                <div flex>
+                                    <div>
+                                        <img layout-fill style="height: 10em; width:20em" ng-src="{{realEstate.imageUrl}}"/>
+                                    </div>
+                                </div>
+                                <div flex>
+                                    <div layout="column">
+                                        <span class="md-headline">{{realEstate.name}}</span>
+                                        <span class="md-subhead">{{realEstate.area}}</span>
+                                        <span class="md-subhead">{{realEstate.type}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-divider></md-divider>
+                        </div>
+                    </md-content>
+                </md-tab>
+                </md-tab>
+                <md-tab label="Company members">
+                    <md-content class="md-padding">
+                        <div layout>
+                            <md-radio-group ng-model="vm.companyMembersCriteria" layout class="md-primary">
+                                <md-radio-button value="">All members</md-radio-button>
+                                <md-radio-button value="confirmed">Confirmed</md-radio-button>
+                                <md-radio-button value="notConfirmed">Pending approval</md-radio-button>
+                            </md-radio-group>
+                        </div>
+                        <md-list>
+                            <h3 ng-if="!vm.companyMemberships.length" class="md-display-3 md-accent md-hue-3">No members</h3>
+                            <md-list-item ng-show="vm.companyMemberships.length" class="md-3-line md-long-text" ng-repeat="membership in vm.filteredMemberships()">
+                                <img ng-src="{{membership.member.imageUrl}}?25" class="md-avatar"/>
+                                <div class="md-list-item-text">
+                                    <h3>{{membership.member.name}}</h3>
+                                    <p ng-if="membership.confirmed">Approved by: {{membership.approvedBy.name}}</p>
+                                    <md-button class="md-warn md-hue-1" ng-if="!membership.confirmed" ng-click="vm.approveMembership(membership)">Approve user</md-button>
+                                </div>
+                                <md-divider></md-divider>
+                            </md-list-item>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Reviews">
+                    <md-content class="md-padding">
+                        <md-list>
+                            <h3 ng-if="!vm.reviews.length" class="md-display-3 md-accent md-hue-3">No reviews</h3>
+                            <md-list-item ng-show="vm.reviews.length" class="md-3-line md-long-text" ng-repeat="review in vm.reviews">
+                                <img ng-src="{{review.author.imageUrl}}?25" class="md-avatar" alt="{{review.author.name}}" />
+                                <div class="md-list-item-text">
+                                    <h3>{{review.author.name}}</h3>
+                                    <p>{{review.comment}}</p>
+                                    <p>Rating: {{review.rating}}</p>
+                                    <md-button ng-if="review.canBeErased" class="md-primary md-hue-2" ng-click="vm.deleteReview(review)">Delete</md-button>
+                                </div>
+                                <md-divider></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-content>
+    </div>
+</div>

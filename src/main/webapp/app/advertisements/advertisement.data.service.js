@@ -1,10 +1,10 @@
-(function (angular) {
+(function () {
     'use strict';
     angular
         .module('poretti')
-        .service('advertisementService', ['$http', advertisementService]);
+        .service('advertisementDataService', ['$http', advertisementDataService]);
 
-    function advertisementService($http) {
+    function advertisementDataService($http) {
         var BASE_URL = '/api/advertisements';
 
         function pathWithId(id) {
@@ -79,5 +79,5 @@
             return $http.get(pathWithId(id) + '/reviews');
         }
     }
-}(angular));
+}());
 

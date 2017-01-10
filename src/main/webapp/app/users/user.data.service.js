@@ -2,9 +2,11 @@
     'use strict';
     angular
         .module('poretti')
-        .service('userService', ['$http', userService]);
+        .service('userDataService', userDataService);
 
-    function userService($http) {
+    userDataService.$inject = ['$http'];
+
+    function userDataService($http) {
         var BASE_URL = '/api/users';
 
         function pathWithId(id) {

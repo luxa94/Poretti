@@ -19,7 +19,7 @@ public class RegisterDTO {
 
     private List<String> contactEmails = new ArrayList<>();
 
-    private long companyId;
+    private int companyId;
 
     @Override
     public String toString() {
@@ -91,11 +91,11 @@ public class RegisterDTO {
         this.imageUrl = imageUrl;
     }
 
-    public long getCompanyId() {
+    public int getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(long companyId) {
+    public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
 }

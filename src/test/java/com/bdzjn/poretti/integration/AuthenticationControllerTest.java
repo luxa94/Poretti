@@ -3,6 +3,7 @@ package com.bdzjn.poretti.integration;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.util.TestUtil;
+import com.bdzjn.poretti.util.data.CompanyTestData;
 import com.bdzjn.poretti.util.data.UserTestData;
 import com.bdzjn.poretti.util.snippets.AuthorizationSnippets;
 import com.bdzjn.poretti.util.snippets.UserSnippets;
@@ -71,6 +72,15 @@ public class AuthenticationControllerTest {
         mockMvc.perform(post(BASE_URL + REGISTER)
                 .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void registerForCompany() throws Exception {
+        final RegisterDTO registerDTO = getRegisterDTO();
+        registerDTO.setCompanyId(CompanyTestData.EXISTING_COMPANY_ID);
+        mockMvc.perform(post(BASE_URL + REGISTER)
+                .contentType(CONTENT_TYPE).content(TestUtil.json(registerDTO)))
+                .andExpect(status().isCreated());
     }
 
     @Test
