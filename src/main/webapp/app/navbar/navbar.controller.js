@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('NavbarCtrlAs', NavbarCtrlAs);
 
-    NavbarCtrlAs.$inject = ['$state', 'sessionService', 'authorizationDataService', 'roleService', 'userService'];
+    NavbarCtrlAs.$inject = ['$state', 'sessionService', 'authorizationDataService', 'roleService', 'userService', 'PorettiHandler'];
 
-    function NavbarCtrlAs($state, sessionService, authorizationDataService, roleService, userService) {
+    function NavbarCtrlAs($state, sessionService, authorizationDataService, roleService, userService, PorettiHandler) {
 
         var vm = this;
 
@@ -30,7 +30,7 @@
                 userService.findOne(sessionUser.id)
                     .then(function(data) {
                         vm.loggedUser = data;
-                    });
+                    }).catch(PorettiHandler.report());
                 vm.renderUIForLoggedUser = true;
             }
         }
@@ -58,7 +58,7 @@
                 .then(function(response) {
                     sessionService.removeUser();
                     $state.go('home', {}, {reload: true});
-                }).catch(handleError);
+                }).catch(PorettiHandler.report());
 
         }
 

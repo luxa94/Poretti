@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('LoginCtrlAs', LoginCtrlAs);
 
-    LoginCtrlAs.$inject = ['$state', 'authorizationDataService', 'sessionService', 'roleService'];
+    LoginCtrlAs.$inject = ['$state', 'authorizationDataService', 'sessionService', 'roleService', 'PorettiHandler'];
 
-    function LoginCtrlAs($state, authorizationDataService, sessionService, roleService) {
+    function LoginCtrlAs($state, authorizationDataService, sessionService, roleService, PorettiHandler) {
 
         var vm = this;
 
@@ -18,7 +18,7 @@
                 .then(function (response) {
                     sessionService.setUser(response.data);
                     redirectToPath();
-                }).catch(handleError);
+                }).catch(PorettiHandler.report("Bad credentials"));
         }
 
         function redirectToPath() {
@@ -32,9 +32,6 @@
             }
         }
 
-        function handleError(error) {
-            //TODO error handler
-        }
     }
 
 })(angular);

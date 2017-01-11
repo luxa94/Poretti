@@ -17,7 +17,7 @@
             login: login,
             register: register,
             logout: logout,
-            verifyAccount: verifyAccount,
+            verifyAccount: verifyAccount
         };
 
         function login(user) {

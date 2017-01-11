@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('AdminCtrlAs', AdminCtrlAs);
 
-    AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService'];
+    AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService', 'PorettiHandler'];
 
-    function AdminCtrlAs($stateParams, userService, companyService) {
+    function AdminCtrlAs($stateParams, userService, companyService, PorettiHandler) {
 
         var vm = this;
 
@@ -39,14 +39,14 @@
             userService.findOne(userId)
                 .then(function (data) {
                     vm.admin = data;
-                }).catch(handleError);
+                }).catch(PorettiHandler.report());
         }
 
         function createCompany() {
             companyService.create(vm.newCompany, vm.companyUser)
                 .then(function(response) {
                     alertify.success("Company is created");
-                }).catch(handleError);
+                }).catch(PorettiHandler.report());
         }
 
         function createAdminOrVerifier() {

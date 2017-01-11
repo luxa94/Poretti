@@ -98,9 +98,5 @@
         function findMembershipsSuccess(response) {
             return response.data;
         }
-
-        function handleError(error) {
-            //TODO handle error
-        }
     }
 })(angular);

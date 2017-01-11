@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('poretti')
-        .service('authInterceptor', authInterceptor)
+        .service('authInterceptor', authInterceptor);
 
     authInterceptor.$inject = ['$q', 'sessionService'];
 
@@ -25,7 +25,8 @@
         }
 
         function responseError(response) {
-            //TODO Handle Error?
+            if (response.data)
+                return $q.reject(response.data.message);
             return $q.reject(response);
         }
     }

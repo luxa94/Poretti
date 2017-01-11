@@ -4,13 +4,17 @@ import com.bdzjn.poretti.controller.dto.AuthorizationDTO;
 import com.bdzjn.poretti.controller.dto.LoginDTO;
 import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.controller.response.MessageResponse;
 import com.bdzjn.poretti.model.Authorization;
 import com.bdzjn.poretti.model.User;
 import com.bdzjn.poretti.security.AuthenticationFilter;
 import com.bdzjn.poretti.service.AuthorizationService;
 import com.bdzjn.poretti.service.UserService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +34,10 @@ public class AuthenticationController {
     }
 
     @Transactional
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public ResponseEntity register(@RequestBody RegisterDTO registerDTO) {
         if (userService.areUsernameOrEmailTaken(registerDTO.getUsername(), registerDTO.getEmail())) {
-            return new ResponseEntity<>("Username or email taken.", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(new MessageResponse("Username or email taken."), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final User user = userService.register(registerDTO);

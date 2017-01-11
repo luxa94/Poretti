@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('VerifyAccountCtrlAs', VerifyAccountCtrlAs);
 
-    VerifyAccountCtrlAs.$inject = ['$stateParams', 'authorizationDataService', '$state'];
+    VerifyAccountCtrlAs.$inject = ['$stateParams', 'authorizationDataService', '$state', 'PorettiHandler', 'alertify'];
 
-    function VerifyAccountCtrlAs($stateParams, authorizationDataService, $state) {
+    function VerifyAccountCtrlAs($stateParams, authorizationDataService, $state, PorettiHandler, alertify) {
 
         activate();
 
@@ -17,12 +17,10 @@
                     alertify.success('Successfully verified.');
                     alertify.success('You can log in now.');
                     $state.go('login');
-                }).catch(handleError);
-        }
-
-        function handleError() {
-            alertify.error('Error verifying.');
-            $state.go('login');
+                }).catch(function(error) {
+                    PorettiHandler.report();
+                    $state.go('login');
+                });
         }
     }
 })(angular);

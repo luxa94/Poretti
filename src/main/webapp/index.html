@@ -1,15 +1,9 @@
 <!doctype html>
-<html>
+<html ng-app="poretti">
 <head>
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="main.css">
-</head>
-
-<body ng-app="poretti">
-
-    <div ui-view="navbar"></div>
-    <div ui-view="content"></div>
 
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular/angular.js"></script>
@@ -72,7 +66,15 @@
     <script src="app/shared/dialog.service.js"></script>
     <script src="app/shared/pagingFilter.service.js"></script>
     <script src="app/shared/directive/upload.controller.js"></script>
-    <script src="app/shared/directive/upload.directive.js"></script>
+    <script src="app/shared/exceptionHandler/exceptionHandler.js"></script>
+</head>
+
+<body class="ng-cloak">
+
+    <div ui-view="navbar"></div>
+    <div ui-view="content"></div>
+
+
 
 </body>
 </html>

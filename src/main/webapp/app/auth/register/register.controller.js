@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('RegisterCtrlAs', RegisterCtrlAs);
 
-    RegisterCtrlAs.$inject = ['authorizationDataService', 'companyService', 'alertify']
+    RegisterCtrlAs.$inject = ['authorizationDataService', 'companyService', 'PorettiHandler'];
 
-    function RegisterCtrlAs(authorizationDataService, companyService, alertify) {
+    function RegisterCtrlAs(authorizationDataService, companyService, PorettiHandler) {
 
         var vm = this;
 
@@ -30,17 +30,17 @@
         function findAllCompanies() {
             companyService.findAll()
                 .then(companyService.populateForRegister)
-                .then(function(data) {
+                .then(function (data) {
                     vm.companies = data;
                     vm.currentDisplayingCompanies = vm.companies[0];
-                }).catch(handleError);
+                }).catch(PorettiHandler.report());
         }
 
         function register() {
             authorizationDataService.register(vm.user)
-                .then(function(response) {
+                .then(function (response) {
                     vm.isRegistered = true;
-                }).catch(handleError);
+                }).catch(PorettiHandler.report());
         }
 
         function getNextCompanies() {
@@ -49,10 +49,6 @@
 
         function getPreviousCompanies() {
             vm.currentDisplayingCompanies = vm.companies[--vm.currentIndex];
-        }
-
-        function handleError(error) {
-            //TODO handle error;
         }
     }
 })(angular);
