@@ -81,6 +81,8 @@
             return userService.findAdvertisements(vm.user.id)
                 .then(function (response) {
                     //TODO paging stuff?
+                    vm.newAdvertisement = {};
+                    vm.newRealEstate = {};
                     vm.advertisements = response.data.content;
                 });
         }
@@ -88,6 +90,7 @@
         function findRealEstates() {
             return userService.findRealEstates(vm.user.id)
                 .then(function (data) {
+                    vm.newRealEstate = {};
                     vm.realEstates = data;
                 });
         }
@@ -166,7 +169,10 @@
 
 
         function openDialogForEditingUser(ev) {
-            dialogService.open(ev, 'UserEditDialogCtrlAs', 'app/users/dialogs/userEditDialog.html')
+            var locals = {
+                user: angular.copy(vm.user)
+            };
+            dialogService.open(ev, 'UserEditDialogCtrlAs', 'app/users/dialogs/userEditDialog.html', locals)
                 .then(function (user) {
                     vm.userToEdit = user;
                     edit();
@@ -177,7 +183,7 @@
 
         function openDialogForEditingAdvertisement(ev, advertisement) {
             var locals = {
-                advertisement: advertisement
+                advertisement: angular.copy(advertisement)
             };
             dialogService.open(ev, 'AdvertisementEditDialogCtrlAs', 'app/advertisements/dialogs/advertisementEditDialog.html', locals)
                 .then(function (advertisement) {
@@ -190,7 +196,7 @@
         function openDialogForRealEstate(ev, realEstate) {
             var deferred = $q.defer();
             var locals = {
-                realEstate: realEstate
+                realEstate: angular.copy(realEstate)
             };
             dialogService.open(ev, 'RealEstateDialogCtrlAs', 'app/realEstate/dialogs/realEstateDialog.html', locals)
                 .then(function (realEstate) {
@@ -210,7 +216,8 @@
             };
             dialogService.open(ev, 'RealEstatesDialogCtrlAs', 'app/realEstate/dialogs/realEstatesDialog.html', locals)
                 .then(function (realEstate) {
-                    deferred.resolve(realEstate);
+                    vm.newRealEstate = realEstate;
+                    deferred.resolve(vm.newRealEstate);
                 }).catch(function (error) {
                 console.log("Canceled");
             });

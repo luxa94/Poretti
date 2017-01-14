@@ -17,11 +17,11 @@
             findReported: findReported,
             createReview: createReview,
             createReport: createReport,
-            determineIfCanBeErased: determineIfCanBeErased,
             changeStatus: changeStatus,
             actionBasedOnStatus: actionBasedOnStatus,
             edit: edit,
-            createAdvertisementAndRealEstate: createAdvertisementAndRealEstate
+            createAdvertisementAndRealEstate: createAdvertisementAndRealEstate,
+            reviewCanBeErased: reviewCanBeErased
         };
 
         function findAll(params) {
@@ -115,8 +115,13 @@
             return _.orderBy(data, ['editedOn'], ['desc']);
         }
 
-        function determineIfCanBeErased() {
-            //TODO
+        function reviewCanBeErased(reviews, loggedUser) {
+            if (loggedUser && reviews.length) {
+                return _.forEach(reviews, function (review) {
+                    review.canBeErased = review.author.id === loggedUser.id;
+                });
+            }
+            return reviews;
         }
 
 

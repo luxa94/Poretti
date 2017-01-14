@@ -1,5 +1,5 @@
 <section>
-   <div layout="row" flex-md flex-gt-md="100" layout-align="center center">
+   <div layout="row" flex-md flex-gt-md="120" layout-align="center center">
        <md-content>
            <md-card>
                <md-card-header>
@@ -22,21 +22,21 @@
                    </div>
                    <div flex layout="column" layout-align="start end">
                        <md-card-actions>
-                           <md-button class="md-primary" ng-click="vm.openDialogForReport($event)">Create report</md-button>
-                           <md-button class="md-primary" ng-click="vm.openDialogForReview($event)">Create review</md-button>
+                           <md-button ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReport($event)">Create report</md-button>
+                           <md-button ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReview($event)">Create review</md-button>
                        </md-card-actions>
                    </div>
                </div>
                <md-card-content>
                     <div layout="row" layout-margin>
-                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
                             <span class="md-title">Details</span>
                             <span>Announced on: {{vm.advertisement.announcedOn}}</span>
                             <span>Edited on: {{vm.advertisement.editedOn}}</span>
                             <span>Ends on: {{vm.advertisement.endsOn}}</span>
                             <span>Advertiser: {{vm.advertisement.advertiser.name}}</span>
                         </div>
-                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
                             <span class="md-title">About real estate</span>
                             <span>Name: {{vm.advertisement.realEstate.name}}</span>
                             <span>Type: {{vm.advertisement.realEstate.type}}</span>
@@ -45,12 +45,38 @@
                                 {{vm.advertisement.realEstate.location.street}} {{vm.advertisement.realEstate.location.streetNumber}},
                                 {{vm.advertisement.realEstate.location.city}}, {{vm.advertisement.realEstate.location.zipCode}},
                             </span>
+                            <div>Owner of this real estate:
+                                <span>
+                                     <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</>
+                                </span>
+                            </div>
                         </div>
-                        <div layout="column" flex-md flex-gt-md="30" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
                             <span class="md-title">About advertiser</span>
-                            <span>Name: {{vm.advertisement.advertiser.name}}</span>
-                            <span>Phone numbers: {{vm.advertisement.advertiser.phoneNumbers}}</span>
-                            <span>Contact emails: {{vm.advertisement.advertiser.contactEmails}}</span>
+                            <div layout>
+                                <div flex>
+                                    <span>Name:</span>
+                                </div>
+                                <div flex>
+                                    <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.advertiser)">{{vm.advertisement.advertiser.name}}</a>
+                                </div>
+                            </div>
+                            <div layout>
+                                <div flex>
+                                    <span>Phone numbers:</span>
+                                </div>
+                                <div flex>
+                                    <div ng-repeat="phoneNumber in vm.advertisement.advertiser.phoneNumbers">{{phoneNumber}}</div>
+                                </div>
+                            </div>
+                            <div layout>
+                                <div flex>
+                                    <span>Contact emails:</span>
+                                </div>
+                                <div flex>
+                                    <div ng-repeat="contactEmail in vm.advertisement.advertiser.contactEmails">{{contactEmail}}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                </md-card-content>

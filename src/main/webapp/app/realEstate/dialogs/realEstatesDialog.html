@@ -1,5 +1,8 @@
-<div>
-    <md-content class="md-padding">
+<md-dialog aria-label="Choose real estate"  flex-md flex-gt-md="60">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Add real estate</div>
+    </md-toolbar>
+    <md-dialog-content layout-padding layout-margin>
         <div layout-padding ng-repeat="realEstate in vm.realEstates">
             <div layout>
                 <div flex>
@@ -7,7 +10,7 @@
                         <img layout-fill style="height: 10em; width:20em" ng-src="{{realEstate.imageUrl}}"/>
                     </div>
                 </div>
-                <div flex>
+                <div flex-md- flex-gt-md="30">
                     <div layout="column">
                         <span class="md-headline">{{realEstate.name}}</span>
                         <span class="md-subhead">{{realEstate.area}}</span>
@@ -18,5 +21,9 @@
             </div>
             <md-divider></md-divider>
         </div>
-    </md-content>
-</div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+    </md-dialog-actions>
+</md-dialog>

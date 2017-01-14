@@ -16,7 +16,7 @@
         </div>
         <md-toolbar class="md-accent">
             <div class="md-toolbar-tools">
-                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini">
+                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingCompany($event)">
                     <md-icon aria-label="Edit company" class="md-primary md-hue-2 md-mini">edit</md-icon>
                 </md-button>
                 <md-button ng-hide="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForReview($event)">
@@ -60,8 +60,11 @@
                                         <span class="md-headline">{{advertisement.title}}</span>
                                         <span class="md-subhead">{{advertisement.price}}</span>
                                         <div layout>
-                                            <md-button>Edit advertisement</md-button>
-                                            <md-button>Details</md-button>
+                                            <md-button class="md-primary md-raised md-hue-2" ng-click="vm.goToAdvertisement(advertisement)">Details</md-button>
+                                            <md-button ng-if="vm.canEdit" aria-label="Edit advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingAdvertisement($event, advertisement)">
+                                                <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
+                                                <md-tooltip>Edit advertisement</md-tooltip>
+                                            </md-button>
                                         </div>
                                     </div>
                                 </div>
@@ -85,6 +88,10 @@
                                         <span class="md-headline">{{realEstate.name}}</span>
                                         <span class="md-subhead">{{realEstate.area}}</span>
                                         <span class="md-subhead">{{realEstate.type}}</span>
+                                        <md-button ng-if="vm.canEdit" aria-label="Edit real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event, realEstate)">
+                                            <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
+                                            <md-tooltip>Edit real estate</md-tooltip>
+                                        </md-button>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +116,7 @@
                                 <div class="md-list-item-text">
                                     <h3>{{membership.member.name}}</h3>
                                     <p ng-if="membership.confirmed">Approved by: {{membership.approvedBy.name}}</p>
-                                    <md-button class="md-warn md-hue-1" ng-if="!membership.confirmed" ng-click="vm.approveMembership(membership)">Approve user</md-button>
+                                    <md-button class="md-warn md-hue-1" ng-if="!membership.confirmed && vm.canEdit" ng-click="vm.approveMembership(membership)">Approve user</md-button>
                                 </div>
                                 <md-divider></md-divider>
                             </md-list-item>

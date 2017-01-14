@@ -3,18 +3,18 @@
 
     angular
         .module('poretti')
-        .controller('UserEditDialogCtrlAs', UserEditDialogCtrlAs);
+        .controller('CompanyEditDialogCtrlAs', CompanyEditDialogCtrlAs);
 
-    UserEditDialogCtrlAs.$inject = ['$mdDialog', 'user'];
+    CompanyEditDialogCtrlAs.$inject = ['$mdDialog', 'company'];
 
-    function UserEditDialogCtrlAs($mdDialog, user) {
+    function CompanyEditDialogCtrlAs($mdDialog, company) {
 
         var vm = this;
 
         vm.hide = hide;
         vm.cancel = cancel;
         vm.confirmResponse = confirmResponse;
-        vm.userToEdit = user;
+        vm.companyToEdit = company;
 
         function hide() {
             $mdDialog.hide();
@@ -25,7 +25,8 @@
         }
 
         function confirmResponse(){
-            $mdDialog.hide(vm.userToEdit);
+            $mdDialog.hide(vm.companyToEdit);
         }
     }
 })(angular);
+

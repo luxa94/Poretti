@@ -15,6 +15,7 @@
             findMemberships: findMemberships,
             populateForRegister: populateForRegister,
             create: create,
+            edit: edit,
             canJoinCompany: canJoinCompany,
             canLeaveCompany: canLeaveCompany,
             approveMembership: approveMembership,
@@ -24,6 +25,14 @@
             findAdvertisements: findAdvertisements,
             findRealEstates: findRealEstates,
             findReviews: findReviews,
+            createReview: createReview,
+            reviewCanBeErased: reviewCanBeErased,
+            createAdvertisementForRealEstate: createAdvertisementForRealEstate,
+            createAdvertisementAndRealEstate: createAdvertisementAndRealEstate,
+            createRealEstate: createRealEstate,
+            editRealEstate: editRealEstate,
+            editAdvertisement: editAdvertisement,
+            areAllMembershipsUnconfirmed: areAllMembershipsUnconfirmed
         };
 
         function findOne(companyId) {
@@ -114,11 +123,65 @@
             return _.chunk(data, 5);
         }
 
+        function reviewCanBeErased(reviews, loggedUser) {
+            if (loggedUser && reviews.length) {
+                return _.forEach(reviews, function (review) {
+                    review.canBeErased = review.author.id === loggedUser.id;
+                });
+            }
+            return reviews;
+        }
+
         function create(companyDTO, userDTO) {
             var registerCompanyDTO = {};
             registerCompanyDTO.company = companyDTO;
             registerCompanyDTO.user = userDTO;
             return companyDataService.create(registerCompanyDTO);
         }
+
+        function edit(companyId, companyToEdit) {
+            return companyDataService.edit(companyId, companyToEdit);
+        }
+
+        function createReview(companyId, reviewDTO) {
+            return companyDataService.createReview(companyId, reviewDTO)
+                .then(createReviewSuccess);
+        }
+
+        function createReviewSuccess(response) {
+            return response.data;
+        }
+
+        function createAdvertisementForRealEstate(companyId, advertisementRealEstate) {
+            var realEstateId = advertisementRealEstate.realEstateId;
+            var advertisement = advertisementRealEstate.advertisement;
+            return companyDataService.createAdvertisement(companyId, realEstateId, advertisement);
+        }
+
+        function createAdvertisementAndRealEstate(companyId, advertisementRealEstate) {
+            return companyDataService.createAdvertisementAndRealEstate(companyId, advertisementRealEstate);
+        }
+
+        function createRealEstate(companyId, realEstate) {
+            return companyDataService.createRealEstate(companyId, realEstate);
+        }
+
+        function editRealEstate(companyId, realEstate) {
+            return companyDataService.editRealEstate(companyId, realEstate.id, realEstate);
+        }
+
+        function editAdvertisement(companyId, advertisement) {
+            return companyDataService.editAdvertisement(companyId, advertisement.id, advertisement);
+        }
+
+        function areAllMembershipsUnconfirmed(memberships) {
+            if (memberships.length) {
+                return _.every(memberships, function(membership) {
+                    return !membership.confirmed;
+                });
+            }
+        }
+
+
     }
 })(angular);

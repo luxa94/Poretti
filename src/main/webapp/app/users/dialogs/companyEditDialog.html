@@ -1,0 +1,48 @@
+<md-dialog aria-label="Edit company data" flex-md flex-gt-md="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">Edit company data</div>
+    </md-toolbar>
+    <md-dialog-content layout-padding layout-margin>
+        <form flex ng-cloak layout="column">
+            <md-input-container>
+                <label>Name</label>
+                <input type="text" ng-model="vm.companyToEdit.name"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Image</label>
+                <input type="text" ng-model="vm.companyToEdit.imageUrl"/>
+            </md-input-container>
+            <md-chips ng-model="vm.companyToEdit.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
+            <br/><br/>
+            <md-chips ng-model="vm.companyToEdit.contactEmails" readonly="false" placeholder="Contact emails"></md-chips>
+            <md-input-container>
+                <label>State</label>
+                <input ng-model="vm.companyToEdit.location.state"/>
+            </md-input-container>
+            <md-input-container>
+                <label>City</label>
+                <input required ng-model="vm.companyToEdit.location.city"/>
+            </md-input-container>
+            <md-input-container>
+                <label>City area</label>
+                <input ng-model="vm.companyToEdit.location.cityArea"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Zip code</label>
+                <input ng-model="vm.companyToEdit.location.zipCode"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Street</label>
+                <input ng-model="vm.companyToEdit.location.street"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Street number</label>
+                <input ng-model="vm.companyToEdit.location.streetNumber"/>
+            </md-input-container>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -5,9 +5,11 @@
         .module('poretti')
         .controller('CompanyCtrlAs', CompanyCtrlAs);
 
-    CompanyCtrlAs.$inject = ['$q', '$stateParams', 'companyService', 'sessionService', 'alertify', '$mdDialog', 'PorettiHandler'];
+    CompanyCtrlAs.$inject = ['$q', '$state', '$stateParams', 'companyService',
+        'sessionService', 'alertify', 'dialogService', 'roleService', 'PorettiHandler'];
 
-    function CompanyCtrlAs($q, $stateParams, companyService, sessionService, alertify, $mdDialog, PorettiHandler) {
+    function CompanyCtrlAs($q, $state, $stateParams, companyService,
+                           sessionService, alertify, dialogService, roleService, PorettiHandler) {
 
         var vm = this;
 
@@ -25,11 +27,14 @@
         vm.reviews = [];
 
         vm.approveMembership = approveMembership;
-        vm.leaveCompany = leaveCompany;
         vm.filteredMemberships = filteredMemberships;
+        vm.goToAdvertisement = goToAdvertisement;
+        vm.leaveCompany = leaveCompany;
         vm.createMembership = createMembership;
         vm.openDialogForReview = openDialogForReview;
         vm.openDialogForAdvertisement = openDialogForAdvertisement;
+        vm.openDialogForEditingCompany = openDialogForEditingCompany;
+        vm.openDialogForEditingAdvertisement = openDialogForEditingAdvertisement;
         vm.openStandaloneDialogForRealEstate = openStandaloneDialogForRealEstate;
 
         activate();
@@ -43,6 +48,8 @@
                 .then(findReviews)
                 .then(canEditOrAdd)
                 .catch(handleError);
+
+            vm.newAdvertisement.endsOn = new Date();
         }
 
         function findCompany(companyId) {
@@ -55,6 +62,7 @@
         function findMemberships() {
             return companyService.findMemberships(vm.company.id)
                 .then(function (data) {
+                    console.log("executing find memeberships");
                     vm.companyMemberships = data;
                     vm.canJoinCompany = companyService.canJoinCompany(sessionService.getUser(), vm.companyMemberships);
                     vm.canLeaveCompany = !vm.canJoinCompany;
@@ -63,30 +71,34 @@
 
         function findAdvertisements() {
             return companyService.findAdvertisements(vm.company.id)
-                .then(function(response) {
+                .then(function (response) {
+                    vm.newAdvertisement = {};
                     vm.advertisements = response.data.content;
                 });
         }
 
         function findRealEstates() {
             return companyService.findRealEstates(vm.company.id)
-                .then(function(data) {
+                .then(function (data) {
+                    vm.newRealEstate = {};
                     vm.realEstates = data;
                 });
         }
 
         function findReviews() {
             return companyService.findReviews(vm.company.id)
-                .then(function(data) {
+                .then(function (data) {
                     vm.reviews = data;
+                    vm.reviews = companyService.reviewCanBeErased(vm.reviews, sessionService.getUser())
                 });
         }
 
         function canEditOrAdd() {
+            console.log("executing can Edit orAdd");
             vm.canAdd = false;
             vm.canEdit = false;
             var membership = companyService.findMembershipForUser(vm.companyMemberships, sessionService.getUser());
-            if (membership.confirmed) {
+            if (membership && membership.confirmed) {
                 vm.canAdd = true;
                 vm.canEdit = true;
             }
@@ -95,7 +107,7 @@
         function approveMembership(membership) {
             companyService.approveMembership(vm.company, membership)
                 .then(function (response) {
-                    findMemberships();
+                    return findMemberships();
                 }).then(canEditOrAdd)
                 .catch(handleError);
 
@@ -107,7 +119,7 @@
                 .then(function (response) {
                     vm.canLeaveCompany = false;
                     vm.canJoinCompany = !vm.canLeaveCompany;
-                    findMemberships();
+                    return findMemberships();
                 }).then(canEditOrAdd)
                 .catch(handleError);
         }
@@ -127,123 +139,171 @@
             companyService.createMembership(vm.company.id)
                 .then(function (response) {
                     vm.canJoinCompany = false;
-                    findMemberships();
+                    return findMemberships();
                 }).then(canEditOrAdd)
                 .catch(handleError);
         }
 
-        function openDialogForReview(ev) {
-            $mdDialog.show({
-                controller: 'ReviewDialogCtrlAs',
-                controllerAs: 'vm',
-                templateUrl: 'app/advertisements/dialogs/reviewDialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
-                    review: vm.newReview
-                }
-            }).then(function (review) {
-                vm.newReview = review;
-                createReview();
-            }).catch(function (error) {
-               console.log("Canceled");
-            })
+        function edit() {
+            companyService.edit(vm.company.id, vm.company)
+                .then(function (response) {
+                    findCompany(vm.company.id)
+                })
+                .catch(handleError);
         }
 
-        function createReview() {
-            companyService.createReview(vm.user.id, vm.newReview).then(function (response) {
-                alertify.delay(2000).success("You added new review");
-                return userService.findReviews(vm.user.id);
-            }).then(function (response) {
-                vm.reviews = response.data;
-                _.forEach(vm.reviews, function (value) {
-                    value.canBeErased = value.author.id === vm.user.id;
-                });
-                _.orderBy(vm.reviews, ['editedOn'], ['desc']);
-            }).catch(function (error) {
+        function openDialogForEditingCompany(ev) {
+            var locals = {
+                company: angular.copy(vm.company)
+            };
+            dialogService.open(ev, 'CompanyEditDialogCtrlAs', 'app/users/dialogs/companyEditDialog.html', locals)
+                .then(function (editedCompany) {
+                    vm.company = editedCompany;
+                    edit();
+                }).catch(function (error) {
                 console.log("Canceled");
             });
         }
 
-
-        function openDialogForAdvertisement(ev) {
-            vm.advertisementDialog = $mdDialog;
-            vm.advertisementDialog.show({
-                controller: 'AdvertisementDialogCtrlAs',
-                controllerAs: 'vm',
-                templateUrl: 'app/advertisements/dialogs/advertisementDialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
-                    advertisement: vm.newAdvertisement,
-                    realEstate: vm.newRealEstate,
-                    realEstateDialog: openDialogForRealEstate,
-                    advertisementDialog: vm.openDialogForAdvertisement
-                }
-            }).then(function (response) {
-                if (response.realEstateIsChosen) {
-                    createAdvertisementForRealEstate(_.omit(response, ['realEstateIsChosen']));
-                } else {
-                    createAdvertisementAndRealEstate(_.omit(response, ['realEstateIsChosen']));
-                }
-            }).catch(function (error) {
+        function openDialogForReview(ev) {
+            dialogService.open(ev, 'ReviewDialogCtrlAs', 'app/advertisements/dialogs/reviewDialog.html')
+                .then(function (review) {
+                    debugger;
+                    vm.newReview = review;
+                    createReview();
+                }).catch(function (error) {
                 console.log("Canceled");
             })
         }
 
-        function openDialogForRealEstate(ev) {
+        function createReview() {
+            companyService.createReview(vm.company.id, vm.newReview)
+                .then(findReviews)
+                .catch(handleError)
+        }
+
+
+        function openDialogForAdvertisement(ev) {
+            var locals = {
+                advertisement: vm.newAdvertisement,
+                realEstate: vm.newRealEstate,
+                realEstateDialog: openDialogForRealEstate,
+                realEstatesDialog: openDialogForChoosingRealEstate,
+                advertisementDialog: openDialogForAdvertisement
+            };
+            dialogService.open(ev, 'AdvertisementDialogCtrlAs', 'app/advertisements/dialogs/advertisementDialog.html', locals)
+                .then(function (response) {
+                    if (response.realEstateIsChosen) {
+                        createAdvertisementForRealEstate(_.omit(response, ['realEstateIsChosen']));
+                    } else {
+                        createAdvertisementAndRealEstate(_.omit(response, ['realEstateIsChosen']));
+                    }
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
+        }
+
+        function openDialogForEditingAdvertisement(ev, advertisement) {
+            var locals = {
+                advertisement: angular.copy(advertisement)
+            };
+            dialogService.open(ev, 'AdvertisementEditDialogCtrlAs', 'app/advertisements/dialogs/advertisementEditDialog.html', locals)
+                .then(function (advertisement) {
+                    editAdvertisement(advertisement);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
+        }
+
+        function openDialogForRealEstate(ev, realEstate) {
             var deferred = $q.defer();
-            $mdDialog.show({
-                controller: 'RealEstateDialogCtrlAs',
-                controllerAs: 'vm',
-                templateUrl: 'app/realEstate/dialogs/realEstateDialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
-                    realEstate: vm.newRealEstate
-                }
-            }).then(function (realEstate) {
-                vm.newRealEstate = realEstate;
-                deferred.resolve(vm.newRealEstate);
-            }).catch(function (error) {
+            var locals = {
+                realEstate: angular.copy(realEstate)
+            };
+            dialogService.open(ev, 'RealEstateDialogCtrlAs', 'app/realEstate/dialogs/realEstateDialog.html', locals)
+                .then(function (realEstate) {
+                    vm.newRealEstate = realEstate;
+                    deferred.resolve(vm.newRealEstate);
+                }).catch(function (error) {
                 console.log("Canceled");
             });
 
             return deferred.promise;
         }
 
-        function openStandaloneDialogForRealEstate(ev) {
-            openDialogForRealEstate(ev).then(function (realEstate) {
-                createRealEstate();
-            }).catch(function (error) {
+        function openDialogForChoosingRealEstate(ev) {
+            var deferred = $q.defer();
+            var locals = {
+                realEstates: vm.realEstates
+            };
+            dialogService.open(ev, 'RealEstatesDialogCtrlAs', 'app/realEstate/dialogs/realEstatesDialog.html', locals)
+                .then(function (realEstate) {
+                    vm.newRealEstate = realEstate;
+                    deferred.resolve(vm.newRealEstate);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
+
+            return deferred.promise;
+        }
+
+        function openStandaloneDialogForRealEstate(ev, realEstate) {
+            openDialogForRealEstate(ev, realEstate)
+                .then(function (realEstate) {
+                    if (realEstate.id) {
+                        editRealEstate(realEstate);
+                    } else {
+                        createRealEstate(realEstate);
+                    }
+                }).catch(function (error) {
+                vm.newRealEstate = {};
                 console.log("Canceled");
             });
         }
 
+
         function createAdvertisementAndRealEstate(advertisementRealEstate) {
-            companyService.createAdvertisementAndRealEstate(advertisementRealEstate).then(function (response) {
-                alertify.success('You successfully added new advertisement!');
-            }).catch(handleError);
+            companyService.createAdvertisementAndRealEstate(vm.company.id, advertisementRealEstate)
+                .then(function (response) {
+                    alertify.success('You successfully added new advertisement!');
+                    findAdvertisements();
+                }).catch(handleError);
         }
 
         function createAdvertisementForRealEstate(advertisementRealEstate) {
-            companyService.createAdvertisement(advertisementRealEstate.realEstateId, advertisementRealEstate.advertisement)
+            companyService.createAdvertisementForRealEstate(vm.company.id, advertisementRealEstate)
                 .then(function (response) {
-                    alertify.delay(3000).success('You successfully added new advertisement!');
+                    alertify.success('You successfully added new advertisement!');
                     findAdvertisements();
                 }).catch(handleError);
         }
 
         function createRealEstate() {
-            companyService.createRealEstate(vm.company.id, vm.newRealEstate).then(function (response) {
-                alertify.delay(3000).success('You successfully added new real estate!');
-                return companyService.findRealEstates(vm.company.id);
-            }).then(function (response) {
-                vm.realEstates = response.data;
-            }).catch(handleError);
+            companyService.createRealEstate(vm.company.id, vm.newRealEstate)
+                .then(function (response) {
+                    alertify.delay(3000).success('You successfully added new real estate!');
+                    findRealEstates();
+                }).catch(handleError);
+        }
+
+        function editRealEstate(realEstate) {
+            companyService.editRealEstate(vm.company.id, realEstate)
+                .then(function (response) {
+                    alertify.success('You successfully edited real estate!');
+                    findRealEstates();
+                }).catch(handleError);
+        }
+
+        function editAdvertisement(advertisement) {
+            companyService.editAdvertisement(vm.company.id, advertisement)
+                .then(function (response) {
+                    alertify.success("Advertisement is edited");
+                    findAdvertisements();
+                }).catch(handleError);
+        }
+
+        function goToAdvertisement(advertisement) {
+            $state.go('advertisement', {id: advertisement.id});
         }
 
         function handleError(error) {

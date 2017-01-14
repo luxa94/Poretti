@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('AdvertisementDialogCtrlAs', AdvertisementDialogCtrlAs);
 
-    AdvertisementDialogCtrlAs.$inject = ['$mdDialog', 'advertisement', 'realEstate', 'realEstateDialog', 'realEstatesDialog', 'advertisementDialog'];
+    AdvertisementDialogCtrlAs.$inject = ['$mdDialog', 'advertisement', 'realEstate', 'realEstateDialog', 'realEstatesDialog', 'advertisementDialog', 'alertify'];
 
-    function AdvertisementDialogCtrlAs($mdDialog, advertisement, realEstate, realEstateDialog, realEstatesDialog, advertisementDialog) {
+    function AdvertisementDialogCtrlAs($mdDialog, advertisement, realEstate, realEstateDialog, realEstatesDialog, advertisementDialog, alertify) {
 
         var vm = this;
 
@@ -45,18 +45,22 @@
         }
 
         function confirmResponse() {
-            if (vm.realEstate.id) {
-                $mdDialog.hide({
-                    realEstateIsChosen: true,
-                    realEstateId: vm.realEstate.id,
-                    advertisement: vm.advertisement
-                });
+            if (vm.realEstateIsAdded) {
+                if (vm.realEstate.id) {
+                    $mdDialog.hide({
+                        realEstateIsChosen: true,
+                        realEstateId: vm.realEstate.id,
+                        advertisement: vm.advertisement
+                    });
+                } else {
+                    $mdDialog.hide({
+                        realEstateIsChosen: false,
+                        advertisementDTO: vm.advertisement,
+                        realEstateDTO: vm.realEstate
+                    });
+                }
             } else {
-                $mdDialog.hide({
-                    realEstateIsChosen: false,
-                    advertisementDTO: vm.advertisement,
-                    realEstateDTO: vm.realEstate
-                });
+                alertify.error("You must specify real estate for this advertisement");
             }
 
         }

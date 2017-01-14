@@ -266,7 +266,7 @@ public class CompanyController {
                                        @AuthenticationPrincipal User user) {
         final Company company = companyService.findById(id).orElseThrow(NotFoundException::new);
         final OwnerReview ownerReview = ownerReviewService.create(reviewDTO, company, user);
-        return new ResponseEntity<>(ownerReview, HttpStatus.CREATED);
+        return new ResponseEntity<>(ownerReview.getId(), HttpStatus.CREATED);
     }
 
     @Transactional

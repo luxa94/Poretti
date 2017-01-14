@@ -2,7 +2,7 @@
     <md-toolbar>
         <div class="md-toolbar-tools">Add real estate</div>
     </md-toolbar>
-    <md-dialog-content layout-padding layout-maring>
+    <md-dialog-content layout-padding layout-margin>
         <form flex ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
@@ -16,7 +16,7 @@
                 <label>Description</label>
                 <textarea ng-model="vm.realEstate.description" rows="5"></textarea>
             </md-input-container>
-            <md-select ng-model="vm.realEstate.realEstateType">
+            <md-select ng-model="vm.realEstate.realEstateType" placeholder="Type">
                 <md-option value="APARTMENT">APARTMENT</md-option>
                 <md-option value="HOUSE">HOUSE</md-option>
             </md-select>

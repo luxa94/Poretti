@@ -4,9 +4,9 @@
     angular.module('poretti')
         .controller('AdminCtrlAs', AdminCtrlAs);
 
-    AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService', 'PorettiHandler'];
+    AdminCtrlAs.$inject = ['$stateParams', 'userService', 'companyService', 'PorettiHandler', 'alertify'];
 
-    function AdminCtrlAs($stateParams, userService, companyService, PorettiHandler) {
+    function AdminCtrlAs($stateParams, userService, companyService, PorettiHandler, alertify) {
 
         var vm = this;
 

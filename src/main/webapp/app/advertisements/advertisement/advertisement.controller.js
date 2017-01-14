@@ -5,17 +5,24 @@
         .module('poretti')
         .controller('AdvertisementCtrlAs', AdvertisementCtrlAs);
 
-    AdvertisementCtrlAs.$inject = ['$stateParams', 'dialogService', 'advertisementService', 'PorettiHandler'];
+    AdvertisementCtrlAs.$inject = ['$stateParams', '$state', 'dialogService',
+        'advertisementService', 'sessionService', 'userService', 'companyService',
+        'PorettiHandler', 'dateHelper'];
 
-    function AdvertisementCtrlAs($stateParams, dialogService, advertisementService, PorettiHandler) {
+    function AdvertisementCtrlAs($stateParams, $state, dialogService,
+                                 advertisementService, sessionService, userService, companyService,
+                                 PorettiHandler, dateHelper) {
 
         var vm = this;
 
         vm.advertisement = {};
+        vm.canAdd = false;
         vm.newReview = {};
         vm.newReport = {};
+
         vm.createReview = createReview;
         vm.createReport = createReport;
+        vm.goToProfileOf = goToProfileOf;
         vm.openDialogForReview = openDialogForReview;
         vm.openDialogForReport = openDialogForReport;
 
@@ -26,6 +33,7 @@
             findAdvertisement(advertisementId)
                 .then(findReviews)
                 .then(findReports)
+                .then(determineIfCanAdd)
                 .catch(handleError)
         }
 
@@ -33,6 +41,9 @@
             return advertisementService.findOne(advertisementId)
                 .then(function (data) {
                     vm.advertisement = data;
+                    vm.advertisement.announcedOn = dateHelper.format(vm.advertisement.announcedOn);
+                    vm.advertisement.editedOn = dateHelper.format(vm.advertisement.editedOn);
+                    vm.advertisement.endsOn = dateHelper.format(vm.advertisement.endsOn);
                 });
         }
 
@@ -40,6 +51,7 @@
             return advertisementService.findReviews(vm.advertisement.id)
                 .then(function (data) {
                     vm.advertisement.reviews = data;
+                    vm.advertisement.reviews = advertisementService.reviewCanBeErased(vm.reviews, sessionService.getUser())
                 });
         }
 
@@ -48,6 +60,18 @@
                 .then(function (data) {
                     vm.advertisement.reports = data;
                 });
+        }
+
+        function determineIfCanAdd() {
+            var loggedUser = sessionService.getUser();
+            if (loggedUser) {
+                var isAdvertiserOrOwner = loggedUser.id === vm.advertisement.advertiser.id || loggedUser.id === vm.advertisement.owner.id;
+                if (!isAdvertiserOrOwner) {
+                    vm.canAdd = true;
+                }
+            } else {
+                vm.canAdd = false;
+            }
         }
 
         function createReview() {
@@ -78,8 +102,24 @@
                 }).catch(handleError);
         }
 
-        function handleError(error) {
-            PorettiHandler.report(error.data.message);
+        function goToProfileOf(user) {
+            userService.findOne(user.id)
+                .then(function (data) {
+                    $state.go('user', {id: data.id});
+                }).catch(function(error) {
+                    return companyService.find(user.id);
+                }).then(function(data) {
+                $state.go('company', {id: data.id});
+            }).catch(handleError);
         }
+
+        function handleError(error) {
+            if (angular.isString(error)) {
+                PorettiHandler.report(error);
+            } else {
+                PorettiHandler.report(error.data.message);
+            }
+        }
+
     }
 })(angular);

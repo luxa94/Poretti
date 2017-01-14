@@ -67,9 +67,12 @@
         }
 
         function reviewCanBeErased(reviews, loggedUser) {
-            return  _.forEach(reviews, function (review) {
-                review.canBeErased = review.author.id === loggedUser.id;
-            });
+            if (loggedUser && reviews.length) {
+                return _.forEach(reviews, function (review) {
+                    review.canBeErased = review.author.id === loggedUser.id;
+                });
+            }
+            return reviews;
         }
 
         function edit(userId, editedUser) {

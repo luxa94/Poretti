@@ -109,14 +109,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(LoginDTO loginDTO) {
-        final User user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow(AuthenticationException::new);
+        final User user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow(() ->
+                new AuthenticationException("Invalid username"));
 
         if (!user.isRegistrationConfirmed()) {
             throw new AuthenticationException("Please verify your account with the link in the email.");
         }
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new AuthenticationException("Invalid username or password");
+            throw new AuthenticationException("Invalid password");
         }
 
         return user;
