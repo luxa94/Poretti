@@ -64,4 +64,44 @@
             });
         });
 
+    angular
+        .module('poretti')
+        .service('sharerrorService', function ($http) {
+            return {
+                send: function (exception) {
+                    var e = {};
+                    e.fragment = 'cela aplikacija';
+                    e.appVersion = '1.0.0';
+                    e.stackTrace = exception.stack || exception;
+
+                    $http.post('http://localhost:9000/api/applications/poretti/events', e)
+                        .then(function () {
+
+                        })
+                        .catch(function () {
+
+                        });
+                }
+            }
+        })
+        .config(exceptionConfig);
+
+    exceptionConfig.$inject = ['$provide'];
+
+    function exceptionConfig($provide) {
+        $provide.decorator('$exceptionHandler', extendExceptionHandler);
+    }
+
+    extendExceptionHandler.$inject = ['$delegate', '$injector'];
+
+    function extendExceptionHandler($delegate, $injector) {
+        return function(exception, cause) {
+            $delegate(exception, cause);
+            var asd = $injector.get('sharerrorService');
+            // alertify.error('an error has occurred, chap');
+
+            asd.send(exception);
+        };
+    }
+
 }(angular));
