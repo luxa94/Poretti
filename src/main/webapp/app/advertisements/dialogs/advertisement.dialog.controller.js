@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('AdvertisementDialogCtrlAs', AdvertisementDialogCtrlAs);
 
-    AdvertisementDialogCtrlAs.$inject = ['$mdDialog', 'advertisement', 'realEstate', 'realEstateDialog', 'advertisementDialog'];
+    AdvertisementDialogCtrlAs.$inject = ['$mdDialog', 'advertisement', 'realEstate', 'realEstateDialog', 'realEstatesDialog', 'advertisementDialog'];
 
-    function AdvertisementDialogCtrlAs($mdDialog, advertisement, realEstate, realEstateDialog, advertisementDialog) {
+    function AdvertisementDialogCtrlAs($mdDialog, advertisement, realEstate, realEstateDialog, realEstatesDialog, advertisementDialog) {
 
         var vm = this;
 
@@ -21,12 +21,13 @@
         vm.confirmResponse = confirmResponse;
         vm.hide = hide;
         vm.openDialogForRealEstate = openDialogForRealEstate;
+        vm.openDialogForChoosingRealEstate = openDialogForChoosingRealEstate;
         vm.show = show;
 
         activate();
 
         function activate() {
-            vm.realEstateIsAdded = !_.values(vm.realEstate).every(function(prop) {
+            vm.realEstateIsAdded = !_.values(vm.realEstate).every(function (prop) {
                 return _.isUndefined(prop) || _.isEmpty(prop);
             });
         }
@@ -44,11 +45,12 @@
         }
 
         function confirmResponse() {
-            if (vm.realEstate.id){
+            if (vm.realEstate.id) {
                 $mdDialog.hide({
                     realEstateIsChosen: true,
                     realEstateId: vm.realEstate.id,
-                    advertisement: vm.advertisement});
+                    advertisement: vm.advertisement
+                });
             } else {
                 $mdDialog.hide({
                     realEstateIsChosen: false,
@@ -61,6 +63,13 @@
 
         function openDialogForRealEstate(ev) {
             realEstateDialog(ev).then(function (data) {
+                vm.realEstate = data;
+                vm.advertisementDialog(null);
+            });
+        }
+
+        function openDialogForChoosingRealEstate(ev) {
+            realEstatesDialog(ev).then(function (data) {
                 vm.realEstate = data;
                 vm.advertisementDialog(null);
             });

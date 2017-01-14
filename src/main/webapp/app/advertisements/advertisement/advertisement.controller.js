@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('AdvertisementCtrlAs', AdvertisementCtrlAs);
 
-    AdvertisementCtrlAs.$inject = ['$stateParams', 'dialogService', 'advertisementService'];
+    AdvertisementCtrlAs.$inject = ['$stateParams', 'dialogService', 'advertisementService', 'PorettiHandler'];
 
-    function AdvertisementCtrlAs($stateParams, dialogService, advertisementService) {
+    function AdvertisementCtrlAs($stateParams, dialogService, advertisementService, PorettiHandler) {
 
         var vm = this;
 
@@ -79,7 +79,7 @@
         }
 
         function handleError(error) {
-            //TODO error handler
+            PorettiHandler.report(error.data.message);
         }
     }
 })(angular);

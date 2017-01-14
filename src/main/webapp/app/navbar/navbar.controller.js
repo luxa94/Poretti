@@ -30,12 +30,11 @@
                 userService.findOne(sessionUser.id)
                     .then(function(data) {
                         vm.loggedUser = data;
-                    }).catch(PorettiHandler.report());
+                    }).catch(handleError)
                 vm.renderUIForLoggedUser = true;
             }
         }
 
-        //routing logic-needs to be in controller?
         function goToProfile() {
             if (vm.loggedUser) {
                 if (roleService.isAdmin(vm.loggedUser)) {
@@ -58,7 +57,7 @@
                 .then(function(response) {
                     sessionService.removeUser();
                     $state.go('home', {}, {reload: true});
-                }).catch(PorettiHandler.report());
+                }).catch(handleError);
 
         }
 
@@ -67,7 +66,7 @@
         }
 
         function handleError(error) {
-            //TODO error
+            PorettiHandler.report(error.data.message);
         }
 
     }

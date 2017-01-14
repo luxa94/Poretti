@@ -40,7 +40,9 @@
             authorizationDataService.register(vm.user)
                 .then(function (response) {
                     vm.isRegistered = true;
-                }).catch(PorettiHandler.report());
+                }).catch(function (error) {
+                PorettiHandler.report(error.data.message);
+            });
         }
 
         function getNextCompanies() {

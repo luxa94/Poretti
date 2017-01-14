@@ -39,14 +39,14 @@
             userService.findOne(userId)
                 .then(function (data) {
                     vm.admin = data;
-                }).catch(PorettiHandler.report());
+                }).catch(handleError);
         }
 
         function createCompany() {
             companyService.create(vm.newCompany, vm.companyUser)
                 .then(function(response) {
                     alertify.success("Company is created");
-                }).catch(PorettiHandler.report());
+                }).catch(handleError);
         }
 
         function createAdminOrVerifier() {
@@ -73,7 +73,7 @@
         }
 
         function handleError(error) {
-            //TODO error handler
+            PorettiHandler.report(error.data.message);
         }
 
     }

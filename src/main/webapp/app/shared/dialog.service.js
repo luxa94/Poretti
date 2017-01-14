@@ -10,9 +10,7 @@
     function dialogService($mdDialog) {
 
         return {
-            open: open,
-            cancel: cancel,
-            confirmResponse: confirmResponse
+            open: open
         };
 
         function open(ev, ctrl, tUrl, locals) {
@@ -25,14 +23,6 @@
                 clickOutsideToClose: true,
                 locals : locals
             });
-        }
-
-        function cancel() {
-
-        }
-
-        function confirmResponse() {
-
         }
     }
 })(angular);

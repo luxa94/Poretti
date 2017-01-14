@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('CompanyCtrlAs', CompanyCtrlAs);
 
-    CompanyCtrlAs.$inject = ['$q', '$stateParams', 'companyService', 'sessionService', 'alertify', '$mdDialog'];
+    CompanyCtrlAs.$inject = ['$q', '$stateParams', 'companyService', 'sessionService', 'alertify', '$mdDialog', 'PorettiHandler'];
 
-    function CompanyCtrlAs($q, $stateParams, companyService, sessionService, alertify, $mdDialog) {
+    function CompanyCtrlAs($q, $stateParams, companyService, sessionService, alertify, $mdDialog, PorettiHandler) {
 
         var vm = this;
 
@@ -147,7 +147,7 @@
                 vm.newReview = review;
                 createReview();
             }).catch(function (error) {
-                alertify.delay(2000).error("Server error.")
+               console.log("Canceled");
             })
         }
 
@@ -162,7 +162,7 @@
                 });
                 _.orderBy(vm.reviews, ['editedOn'], ['desc']);
             }).catch(function (error) {
-                alertify.delay(1000).error("Server error.")
+                console.log("Canceled");
             });
         }
 
@@ -188,8 +188,8 @@
                 } else {
                     createAdvertisementAndRealEstate(_.omit(response, ['realEstateIsChosen']));
                 }
-            }).catch(function (data) {
-                console.log("Error in dialog");
+            }).catch(function (error) {
+                console.log("Canceled");
             })
         }
 
@@ -208,8 +208,8 @@
             }).then(function (realEstate) {
                 vm.newRealEstate = realEstate;
                 deferred.resolve(vm.newRealEstate);
-            }).catch(function (data) {
-                console.log("catch");
+            }).catch(function (error) {
+                console.log("Canceled");
             });
 
             return deferred.promise;
@@ -219,16 +219,14 @@
             openDialogForRealEstate(ev).then(function (realEstate) {
                 createRealEstate();
             }).catch(function (error) {
-                console.log("console log");
+                console.log("Canceled");
             });
         }
 
         function createAdvertisementAndRealEstate(advertisementRealEstate) {
             companyService.createAdvertisementAndRealEstate(advertisementRealEstate).then(function (response) {
-                alertify.delay(3000).success('You successfully added new advertisement!');
-            }).catch(function (error) {
-                alertify.delay(2000).error('Server error.');
-            })
+                alertify.success('You successfully added new advertisement!');
+            }).catch(handleError);
         }
 
         function createAdvertisementForRealEstate(advertisementRealEstate) {
@@ -236,9 +234,7 @@
                 .then(function (response) {
                     alertify.delay(3000).success('You successfully added new advertisement!');
                     findAdvertisements();
-                }).catch(function (error) {
-                alertify.delay(2000).error('Server error.');
-            });
+                }).catch(handleError);
         }
 
         function createRealEstate() {
@@ -247,13 +243,11 @@
                 return companyService.findRealEstates(vm.company.id);
             }).then(function (response) {
                 vm.realEstates = response.data;
-            }).catch(function (error) {
-                alertify.delay(2000).error('Server error.');
-            });
+            }).catch(handleError);
         }
 
         function handleError(error) {
-            //TODO handle error
+            PorettiHandler.report(error.data.message);
         }
 
     }

@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('VerifierCtrlAs', VerifierCtrlAs);
 
-    VerifierCtrlAs.$inject = ['$stateParams', 'userService', 'advertisementService', 'sessionService'];
+    VerifierCtrlAs.$inject = ['$stateParams', 'userService', 'advertisementService', 'sessionService', 'PorettiHandler'];
 
-    function VerifierCtrlAs($stateParams, userService, advertisementService, sessionService) {
+    function VerifierCtrlAs($stateParams, userService, advertisementService, sessionService, PorettiHandler) {
 
         var vm = this;
 
@@ -30,7 +30,6 @@
         }
 
         function findUser(userId) {
-            console.log(userId);
             return userService.findOne(userId)
                 .then(function(data) {
                     vm.verifier = data;
@@ -67,7 +66,7 @@
         }
 
         function handleError(error) {
-
+            PorettiHandler.report(error.data.message);
         }
 
 

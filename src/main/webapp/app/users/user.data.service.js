@@ -22,7 +22,7 @@
             findRealEstates: findRealEstates,
             findMemberships: findMemberships,
             createReview: createReview,
-            findReviews: findReviews,
+            findReviews: findReviews
         };
 
         function createAdmin(registerDTO) {

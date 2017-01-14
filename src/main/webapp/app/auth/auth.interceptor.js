@@ -25,8 +25,6 @@
         }
 
         function responseError(response) {
-            if (response.data)
-                return $q.reject(response.data.message);
             return $q.reject(response);
         }
     }

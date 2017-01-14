@@ -1,0 +1,22 @@
+<div>
+    <md-content class="md-padding">
+        <div layout-padding ng-repeat="realEstate in vm.realEstates">
+            <div layout>
+                <div flex>
+                    <div>
+                        <img layout-fill style="height: 10em; width:20em" ng-src="{{realEstate.imageUrl}}"/>
+                    </div>
+                </div>
+                <div flex>
+                    <div layout="column">
+                        <span class="md-headline">{{realEstate.name}}</span>
+                        <span class="md-subhead">{{realEstate.area}}</span>
+                        <span class="md-subhead">{{realEstate.type}}</span>
+                        <md-checkbox ng-click="vm.chosenRealEstate = realEstate"></md-checkbox>
+                    </div>
+                </div>
+            </div>
+            <md-divider></md-divider>
+        </div>
+    </md-content>
+</div>

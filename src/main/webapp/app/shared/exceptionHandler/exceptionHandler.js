@@ -13,11 +13,11 @@
             report: report
         };
 
-        function report(message) {
-            return function (reason) {
-                console.log(reason);
-                message ? alertify.error(message) : alertify.error(reason);
-            };
+        function report(reason) {
+            if (!reason) {
+                reason = "Error occurred.";
+            }
+            alertify.error(reason);
         }
     }
 })(angular);

@@ -30,7 +30,8 @@
         })
         .run(function ($rootScope, $location, sessionService, roleService) {
 
-            var publicRoutes = ["/register", "/login", "/home", '/advertisement'];
+            var publicRoutes = ["/register", "/login", "/home", "/advertisement", "/user", "/company"];
+            var restrictedRoutesForLoggedUser = ["/register", "/login"];
             var adminRoutes = ["/admin"];
             var verifierRoutes = ["/verifier"];
 
@@ -43,16 +44,21 @@
             $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
                 var loggedUser = sessionService.getUser();
 
+                if (routeIsIn(restrictedRoutesForLoggedUser, $location.url()) && loggedUser) {
+                    debugger;
+                    if (fromParams){
+                        from.url = from.url.replace(/:id/gm,fromParams.id);
+                    }
+                    $location.path(from.url);
+                }
+
                 if (!routeIsIn(publicRoutes, $location.url()) && !loggedUser) {
-                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
                 else if (routeIsIn(adminRoutes, $location.url()) && !roleService.isAdmin(loggedUser)) {
-                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
                 else if (routeIsIn(verifierRoutes, $location.url()) && !roleService.isVerifier(loggedUser)) {
-                    alertify.alert('Access denied.');
                     $location.path('/home');
                 }
             });

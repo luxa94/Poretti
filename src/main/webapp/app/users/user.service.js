@@ -19,7 +19,7 @@
             reviewCanBeErased: reviewCanBeErased,
             edit: edit,
             createReview: createReview,
-            findMemberships: findMemberships
+            findMemberships: findMemberships,
         };
 
         function findOne(userId) {
@@ -81,8 +81,8 @@
             return response.data;
         }
 
-        function createReview(userId) {
-            return userService.createReview(userId)
+        function createReview(userId, reviewDTO) {
+            return userDataService.createReview(userId, reviewDTO)
                 .then(createReviewSuccess);
         }
 

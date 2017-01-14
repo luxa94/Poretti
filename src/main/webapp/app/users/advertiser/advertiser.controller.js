@@ -7,20 +7,22 @@
 
     AdvertiserCtrlAs.$inject = ['$q', '$stateParams', '$state',
         'userService', 'sessionService', 'ownerReviewService',
-        'advertisementService', 'realEstateService', 'roleService', 'dialogService', 'alertify'];
+        'advertisementService', 'realEstateService', 'roleService', 'dialogService', 'alertify', 'PorettiHandler'];
 
     function AdvertiserCtrlAs($q, $stateParams, $state,
                               userService, sessionService, ownerReviewService,
                               advertisementService, realEstateService, roleService,
-                              dialogService, alertify) {
+                              dialogService, alertify, PorettiHandler) {
 
         var vm = this;
 
         vm.advertisements = [];
         vm.canAdd = false;
         vm.canEdit = false;
+        vm.isAdvertiser = true;
         vm.newAdvertisement = {};
         vm.newRealEstate = {};
+        vm.newReview = {};
         vm.memberships = [];
         vm.realEstates = [];
         vm.reviews = [];
@@ -57,11 +59,22 @@
             return userService.findOne(userId)
                 .then(function (data) {
                     vm.user = data;
-                    if (vm.user.id === sessionService.getUser().id && roleService.isUser(vm.user)) {
-                        vm.canEdit = true;
-                        vm.canAdd = true;
+                    if (!roleService.isUser(data)) {
+                        vm.isAdvertiser = false;
+                        return $q.reject("It seems like there is nothing for you on this page");
                     }
+                    setupAllowedActionsForLoggedUser();
                 });
+        }
+
+        function setupAllowedActionsForLoggedUser() {
+            var loggedUser = sessionService.getUser();
+            if (loggedUser) {
+                if (vm.user.id === loggedUser.id && roleService.isUser(vm.user)) {
+                    vm.canEdit = true;
+                    vm.canAdd = true;
+                }
+            }
         }
 
         function findAdvertisements() {
@@ -69,7 +82,7 @@
                 .then(function (response) {
                     //TODO paging stuff?
                     vm.advertisements = response.data.content;
-                })
+                });
         }
 
         function findRealEstates() {
@@ -90,7 +103,7 @@
         function findMemberships() {
             return userService.findMemberships(vm.user.id)
                 .then(function (data) {
-                   vm.memberships = data;
+                    vm.memberships = data;
                 });
         }
 
@@ -102,7 +115,7 @@
         }
 
         function createReview() {
-            userService.createReview(vm.user.id)
+            userService.createReview(vm.user.id, vm.newReview)
                 .then(findReviews)
                 .catch(handleError)
         }
@@ -127,7 +140,7 @@
                     vm.newReview = review;
                     createReview();
                 }).catch(function (error) {
-                alertify.error("Server error.");
+                console.log("Canceled");
             });
         }
 
@@ -136,17 +149,19 @@
                 advertisement: vm.newAdvertisement,
                 realEstate: vm.newRealEstate,
                 realEstateDialog: openDialogForRealEstate,
-                advertisementDialog: vm.openDialogForAdvertisement
+                realEstatesDialog: openDialogForChoosingRealEstate,
+                advertisementDialog: openDialogForAdvertisement
             };
             dialogService.open(ev, 'AdvertisementDialogCtrlAs', 'app/advertisements/dialogs/advertisementDialog.html', locals)
                 .then(function (response) {
-                    debugger;
                     if (response.realEstateIsChosen) {
                         createAdvertisementForRealEstate(_.omit(response, ['realEstateIsChosen']));
                     } else {
                         createAdvertisementAndRealEstate(_.omit(response, ['realEstateIsChosen']));
                     }
-                }).catch(handleError);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
         }
 
 
@@ -155,7 +170,9 @@
                 .then(function (user) {
                     vm.userToEdit = user;
                     edit();
-                }).catch(handleError);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
         }
 
         function openDialogForEditingAdvertisement(ev, advertisement) {
@@ -165,7 +182,9 @@
             dialogService.open(ev, 'AdvertisementEditDialogCtrlAs', 'app/advertisements/dialogs/advertisementEditDialog.html', locals)
                 .then(function (advertisement) {
                     editAdvertisement(advertisement);
-                }).catch(handleError);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
         }
 
         function openDialogForRealEstate(ev, realEstate) {
@@ -177,7 +196,24 @@
                 .then(function (realEstate) {
                     vm.newRealEstate = realEstate;
                     deferred.resolve(vm.newRealEstate);
-                }).catch(handleError);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
+
+            return deferred.promise;
+        }
+
+        function openDialogForChoosingRealEstate(ev) {
+            var deferred = $q.defer();
+            var locals = {
+                realEstates: vm.realEstates
+            };
+            dialogService.open(ev, 'RealEstatesDialogCtrlAs', 'app/realEstate/dialogs/realEstatesDialog.html', locals)
+                .then(function (realEstate) {
+                    deferred.resolve(realEstate);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
 
             return deferred.promise;
         }
@@ -190,7 +226,9 @@
                     } else {
                         createRealEstate(realEstate);
                     }
-            }).catch(handleError);
+                }).catch(function (error) {
+                console.log("Canceled");
+            });
         }
 
         function createAdvertisementAndRealEstate(advertisementRealEstate) {
@@ -229,14 +267,18 @@
 
         function editAdvertisement(advertisement) {
             advertisementService.edit(advertisement)
-                .then(function(response) {
+                .then(function (response) {
                     alertify.success("Advertisement is edited");
                     findAdvertisements();
                 }).catch(handleError);
         }
 
-        function handleError() {
-            //TODO handle error
+        function handleError(error) {
+            if (angular.isString(error)) {
+                PorettiHandler.report(error);
+            }else {
+                PorettiHandler.report(error.data.message);
+            }
         }
 
     }

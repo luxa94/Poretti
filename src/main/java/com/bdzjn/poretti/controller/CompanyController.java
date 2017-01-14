@@ -4,6 +4,7 @@ import com.bdzjn.poretti.controller.criteria.AdvertisementSearchCriteria;
 import com.bdzjn.poretti.controller.dto.*;
 import com.bdzjn.poretti.controller.exception.ForbiddenException;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.controller.response.MessageResponse;
 import com.bdzjn.poretti.model.*;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
@@ -69,15 +70,15 @@ public class CompanyController {
         final RegisterDTO registerDTO = registerCompanyDTO.getRegisterDTO();
 
         if (companyDTO == null || registerDTO == null) {
-            return new ResponseEntity<>("Must specify user and company.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("Must specify user and company."), HttpStatus.BAD_REQUEST);
         }
 
         if (companyService.findByPib(companyDTO.getPib()).isPresent()) {
-            return new ResponseEntity<>("Company with given pib already exists.", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(new MessageResponse("Company with given pib already exists."), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if (userService.areUsernameOrEmailTaken(registerDTO.getUsername(), registerDTO.getEmail())) {
-            return new ResponseEntity<>("Username or email taken.", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(new MessageResponse("Username or email taken."), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final Company company = companyService.create(companyDTO);
@@ -308,7 +309,7 @@ public class CompanyController {
         membershipService.findActiveMembership(user.getId(), id);
         final Membership membership = membershipService.findById(membershipId).orElseThrow(NotFoundException::new);
         if (membership.isConfirmed()) {
-            return new ResponseEntity<>("Already accepted.", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new MessageResponse("Already accepted."), HttpStatus.CONFLICT);
         }
 
         membership.setConfirmed(true);

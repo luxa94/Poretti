@@ -111,11 +111,6 @@
             return advertisementDataService.create(advertisementRealEstate);
         }
 
-        function handleError(error) {
-            //TODO PorettiError
-            console.log(error);
-        }
-
         function orderReviewsByDate(data) {
             return _.orderBy(data, ['editedOn'], ['desc']);
         }

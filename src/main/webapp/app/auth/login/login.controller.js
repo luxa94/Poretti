@@ -18,7 +18,9 @@
                 .then(function (response) {
                     sessionService.setUser(response.data);
                     redirectToPath();
-                }).catch(PorettiHandler.report("Bad credentials"));
+                }).catch(function(error) {
+                PorettiHandler.report(error.data.message);
+            });
         }
 
         function redirectToPath() {

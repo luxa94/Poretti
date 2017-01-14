@@ -26,7 +26,7 @@
             </div>
             <div layout="column" flex-md flex-gt-md="20" ng-if="!vm.realEstateIsAdded">
                 <md-button class="md-primary md-raised" ng-click="vm.openDialogForRealEstate($event)">Add real estate</md-button>
-                <md-button class="md-primary">Chose existing real estate</md-button>
+                <md-button class="md-primary" ng-click="vm.openDialogForChoosingRealEstate($event)" >Choose existing real estate</md-button>
             </div>
             <div ng-if="vm.realEstateIsAdded"  flex-md flex-gt-md="20">
                 <span class="md-primary md-raised"> You added this real estate: {{vm.realEstate.name}}</span>

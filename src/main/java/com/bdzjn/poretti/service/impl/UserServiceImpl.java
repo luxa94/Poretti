@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new AuthenticationException();
+            throw new AuthenticationException("Invalid username or password");
         }
 
         return user;

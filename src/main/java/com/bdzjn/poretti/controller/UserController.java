@@ -5,6 +5,7 @@ import com.bdzjn.poretti.controller.dto.RegisterDTO;
 import com.bdzjn.poretti.controller.dto.ReviewDTO;
 import com.bdzjn.poretti.controller.dto.UserDTO;
 import com.bdzjn.poretti.controller.exception.NotFoundException;
+import com.bdzjn.poretti.controller.response.MessageResponse;
 import com.bdzjn.poretti.model.*;
 import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.model.enumeration.AdvertisementType;
@@ -44,7 +45,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('CREATE_SYSTEM_ADMIN')")
     public ResponseEntity crateAdmin(@RequestBody RegisterDTO registerDTO) {
         if (userService.areUsernameOrEmailTaken(registerDTO.getUsername(), registerDTO.getEmail())) {
-            return new ResponseEntity<>("Username or email taken.", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(new MessageResponse("Username or email taken."), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final User user = userService.createAdmin(registerDTO);
@@ -55,7 +56,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('CREATE_VERIFIER')")
     public ResponseEntity crateVerifier(@RequestBody RegisterDTO registerDTO) {
         if (userService.areUsernameOrEmailTaken(registerDTO.getUsername(), registerDTO.getEmail())) {
-            return new ResponseEntity<>("Username or email taken.", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(new MessageResponse("Username or email taken."), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final User user = userService.createVerifier(registerDTO);

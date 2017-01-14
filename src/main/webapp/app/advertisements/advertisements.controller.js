@@ -4,9 +4,9 @@
         .module('poretti')
         .controller('AdvertisementsCtrlAs', AdvertisementsCtrlAs);
 
-    AdvertisementsCtrlAs.$inject = ['$state', 'advertisementService', 'pagingFilterService', 'NgMap'];
+    AdvertisementsCtrlAs.$inject = ['$state', 'advertisementService', 'pagingFilterService', 'NgMap', 'PorettiHandler'];
 
-    function AdvertisementsCtrlAs($state, advertisementService, pagingFilterService, NgMap) {
+    function AdvertisementsCtrlAs($state, advertisementService, pagingFilterService, NgMap, PorettiHandler) {
 
         var vm = this;
 
@@ -15,6 +15,7 @@
         vm.activePageNumber = 0;
         vm.filter = {};
         vm.numberOfPages = -1;
+
         vm.clearFilters = clearFilters;
         vm.nextPage = nextPage;
         vm.previousPage = previousPage;
@@ -36,7 +37,7 @@
                     vm.advertisements = response.data.content;
                     vm.numberOfPages = pagingFilterService.getNumberOfPages(response.data.totalPages);
                     updateMap();
-                });
+                }).catch(handleError);
         }
 
         function updateMap() {
@@ -99,8 +100,8 @@
             findAdvertisements(params);
         }
 
-        function handleError() {
-            //TODO
+        function handleError(error) {
+            PorettiHandler(error.data.message);
         }
     }
 
