@@ -1,0 +1,13 @@
+<div flex map-lazy-load="https://maps.google.com/maps/api/js" layout="column" layout-align="center stretch">
+    <ng-map flex center="45, 19" zoom="3" on-click="vm.placeMarker()">
+        <marker ng-if="vm.location.hasLatLong" position="{{vm.location.latitude}}, {{vm.location.longitude}}"></marker>
+    </ng-map>
+
+    <div flex layout="row" layout-align="end center" class="md-padding">
+        <md-button class="md-primary md-raised" ng-click="vm.clearLocation()" ng-disabled="!vm.location.hasLatLong">Clear
+            <md-tooltip>
+                Disable location for this real estate
+            </md-tooltip>
+        </md-button>
+    </div>
+</div>

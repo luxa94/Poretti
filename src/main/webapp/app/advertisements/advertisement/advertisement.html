@@ -29,14 +29,15 @@
                </div>
                <md-card-content>
                     <div layout="row" layout-margin>
-                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">Details</span>
                             <span>Announced on: {{vm.advertisement.announcedOn}}</span>
                             <span>Edited on: {{vm.advertisement.editedOn}}</span>
                             <span>Ends on: {{vm.advertisement.endsOn}}</span>
                             <span>Advertiser: {{vm.advertisement.advertiser.name}}</span>
+                            <span>Status: {{vm.advertisement.status}}</span>
                         </div>
-                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">About real estate</span>
                             <span>Name: {{vm.advertisement.realEstate.name}}</span>
                             <span>Type: {{vm.advertisement.realEstate.type}}</span>
@@ -47,11 +48,11 @@
                             </span>
                             <div>Owner of this real estate:
                                 <span>
-                                     <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</>
+                                     <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</a>
                                 </span>
                             </div>
                         </div>
-                        <div layout="column" flex-md flex-gt-md="40" layout-padding>
+                        <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">About advertiser</span>
                             <div layout>
                                 <div flex>
@@ -78,8 +79,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div flex-md flex-gt-md="25" map-lazy-load="https://maps.google.com/maps/api/js">
+                            <ng-map flex center="{{vm.advertisement.realEstate.location.latitude}}, {{vm.advertisement.realEstate.location.longitude}}" zoom="5">
+                                <custom-marker position="{{vm.advertisement.realEstate.location.latitude}}, {{vm.advertisement.realEstate.location.longitude}}">
+                                    <div>{{vm.advertisement.realEstate.name}}</div>
+                                </custom-marker>
+                            </ng-map>
+                        </div>
                     </div>
                </md-card-content>
+               <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId">
+                   <md-button class="md-raised md-primary" ng-click="vm.markAsDone()">Finish
+                        <md-tooltip>Mark as done</md-tooltip>
+                   </md-button>
+               </md-card-actions>
            </md-card>
        </md-content>
    </div>
@@ -96,6 +109,7 @@
                            <h3>{{review.author.name}}</h3>
                            <p>{{review.comment}}</p>
                            <p>Rating: {{review.rating}}</p>
+                           <md-button ng-if="review.canBeErased" class="md-primary md-hue-2" ng-click="vm.deleteReview(review)">Delete</md-button>
                        </div>
                    </md-list-item>
                </md-list>

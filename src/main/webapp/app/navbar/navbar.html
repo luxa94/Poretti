@@ -2,7 +2,7 @@
     <md-content>
         <md-toolbar md-scroll-shrink ng-if="true">
             <div class="md-toolbar-tools">
-                <h3>Poretti</h3>
+                <h3 ng-click="vm.toHome()" style="cursor: pointer;">Poretti</h3>
                 <span flex></span>
                 <div ng-if="!vm.renderUIForLoggedUser">
                     <md-button id="navbar-btn-login" class="md-raised md-accent md-hue-2" ng-click="vm.login()">Login</md-button>

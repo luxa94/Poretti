@@ -17,6 +17,7 @@
         vm.login = login;
         vm.logout = logout;
         vm.register = register;
+        vm.toHome = toHome;
 
         activate();
 
@@ -63,6 +64,10 @@
 
         function register() {
             $state.go('register');
+        }
+
+        function toHome() {
+            $state.go('home');
         }
 
         function handleError(error) {

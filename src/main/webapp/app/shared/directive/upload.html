@@ -1,10 +1,4 @@
 <md-content felx layout-padding class="register-column">
-    <img ng-src="{{vm.object.imageUrl}}" ng-if="vm.object.imageUrl">
-    <div ng-repeat="item in images" class="md-block">
-        <div ng-thumb="{ file: item._file, width: 350 }" uploader="uploader"></div>
-        <span ng-bind="item.file.name"></span>
-    </div>
-
+    <img ng-src="{{vm.object.imageUrl}}" ng-if="vm.object.imageUrl" width="95%">
     <input type="file" nv-file-select uploader="vm.uploader">
-
 </md-content>

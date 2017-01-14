@@ -31,7 +31,6 @@
             companyService.findAll()
                 .then(companyService.populateForRegister)
                 .then(function (data) {
-                    debugger;
                     vm.companies = data;
                     vm.currentDisplayingCompanies = vm.companies.length ? vm.companies[0] : [];
                 }).catch(function(error) {

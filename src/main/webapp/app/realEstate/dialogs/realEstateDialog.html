@@ -1,9 +1,9 @@
-<md-dialog aria-label="Create realEstate" flex-md flex-gt-md="40">
+<md-dialog aria-label="Create realEstate" flex-md flex-gt-md="80">
     <md-toolbar>
         <div class="md-toolbar-tools">Add real estate</div>
     </md-toolbar>
-    <md-dialog-content layout-padding layout-margin>
-        <form flex ng-cloak layout="column">
+    <md-dialog-content layout-padding layout="row">
+        <form flex="60" ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
                 <input type="text" ng-model="vm.realEstate.name"/>
@@ -16,10 +16,12 @@
                 <label>Description</label>
                 <textarea ng-model="vm.realEstate.description" rows="5"></textarea>
             </md-input-container>
-            <md-select ng-model="vm.realEstate.realEstateType" placeholder="Type">
+            <md-input-container>
+            <md-select ng-model="vm.realEstate.type" placeholder="Type">
                 <md-option value="APARTMENT">APARTMENT</md-option>
                 <md-option value="HOUSE">HOUSE</md-option>
             </md-select>
+            </md-input-container>
             <md-chips ng-model="vm.realEstate.technicalEquipment" readonly="false" placeholder="Technical equipment"></md-chips>
             <br/><br/>
             <md-input-container>
@@ -47,6 +49,11 @@
                 <input ng-model="vm.realEstate.location.streetNumber"/>
             </md-input-container>
         </form>
+
+        <div flex="40">
+            <pin-map location="vm.realEstate.location"></pin-map>
+            <image-upload object="vm.realEstate"></image-upload>
+        </div>
     </md-dialog-content>
     <md-dialog-actions>
         <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>

@@ -29,6 +29,7 @@
                         <md-option value="VERIFIER">VERIFIER</md-option>
                     </md-select>
                 </form>
+                <image-upload object="vm.newUser"></image-upload>
                 <md-button class="md-raised md-primary" ng-click="vm.createAdminOfVerifier()">Create</md-button>
             </div>
         </div>
@@ -83,6 +84,8 @@
                         </md-input-container>
                     </div>
                 </form>
+                <pin-map location="vm.newCompany.location"></pin-map>
+                <image-upload object="vm.newCompany"></image-upload>
                 <md-button class="md-raised md-primary" ng-click="vm.createCompany()">Create</md-button>
             </div>
         </div>
@@ -114,6 +117,7 @@
                     <br/><br/><br/>
                     <md-chips ng-model="vm.companyUser.contactEmails" placeholder="Contact emails"></md-chips>
                 </form>
+                <image-upload object="vm.companyUser"></image-upload>
                 <md-button class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
             </div>
         </div>

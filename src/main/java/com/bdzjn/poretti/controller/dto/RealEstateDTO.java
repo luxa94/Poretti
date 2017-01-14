@@ -21,7 +21,7 @@ public class RealEstateDTO {
 
     private String imageUrl;
 
-    private RealEstateType realEstateType;
+    private RealEstateType type;
 
     public long getId() {
         return id;
@@ -80,10 +80,10 @@ public class RealEstateDTO {
     }
 
     public RealEstateType getRealEstateType() {
-        return realEstateType;
+        return type;
     }
 
     public void setRealEstateType(RealEstateType realEstateType) {
-        this.realEstateType = realEstateType;
+        this.type = realEstateType;
     }
 }

@@ -39,6 +39,7 @@
         vm.openStandaloneDialogForRealEstate = openStandaloneDialogForRealEstate;
         vm.openDialogForEditingUser = openDialogForEditingUser;
         vm.openDialogForEditingAdvertisement = openDialogForEditingAdvertisement;
+        vm.deleteAdvertisement = deleteAdvertisement;
 
 
         activate();
@@ -131,6 +132,16 @@
 
         function goToAdvertisement(advertisement) {
             $state.go('advertisement', {id: advertisement.id});
+        }
+
+        function deleteAdvertisement(advertisement) {
+            advertisementService.deleteOne(advertisement)
+                .then(function() {
+                    findAdvertisements();
+                })
+                .catch(function () {
+                    alertify.error("Could not delete advertisement.");
+                });
         }
 
         function goToCompany(company) {

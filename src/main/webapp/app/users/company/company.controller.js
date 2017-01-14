@@ -6,10 +6,10 @@
         .controller('CompanyCtrlAs', CompanyCtrlAs);
 
     CompanyCtrlAs.$inject = ['$q', '$state', '$stateParams', 'companyService',
-        'sessionService', 'alertify', 'dialogService', 'roleService', 'PorettiHandler'];
+        'sessionService', 'alertify', 'dialogService', 'roleService', 'PorettiHandler', 'ownerReviewService'];
 
     function CompanyCtrlAs($q, $state, $stateParams, companyService,
-                           sessionService, alertify, dialogService, roleService, PorettiHandler) {
+                           sessionService, alertify, dialogService, roleService, PorettiHandler, ownerReviewService) {
 
         var vm = this;
 
@@ -27,6 +27,7 @@
         vm.reviews = [];
 
         vm.approveMembership = approveMembership;
+        vm.deleteReview = deleteReview;
         vm.filteredMemberships = filteredMemberships;
         vm.goToAdvertisement = goToAdvertisement;
         vm.leaveCompany = leaveCompany;
@@ -102,6 +103,12 @@
                 vm.canAdd = true;
                 vm.canEdit = true;
             }
+        }
+
+        function deleteReview(review) {
+            ownerReviewService.deleteOne(review.id)
+                .then(findReviews)
+                .catch(handleError);
         }
 
         function approveMembership(membership) {
@@ -300,6 +307,12 @@
                     alertify.success("Advertisement is edited");
                     findAdvertisements();
                 }).catch(handleError);
+        }
+
+        function deleteReview(review) {
+            ownerReviewService.deleteOne(review.id)
+                .then(findReviews)
+                .catch(handleError);
         }
 
         function goToAdvertisement(advertisement) {

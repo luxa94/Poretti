@@ -19,7 +19,7 @@ public class RealEstateSnippets {
             fieldWithPath("imageUrl").description("Image of real estate"),
             fieldWithPath("description").description("Description of real estate"),
             fieldWithPath("technicalEquipment").description("Technical equipment in real estate"),
-            fieldWithPath("realEstateType").description("Type of real estate"),
+            fieldWithPath("type").description("Type of real estate"),
             fieldWithPath("location").description("Location of real estate")
     };
 }

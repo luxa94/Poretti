@@ -12,6 +12,8 @@
         return {
             findAll: findAll,
             findOne: findOne,
+            markAsDone: markAsDone,
+            deleteOne: deleteOne,
             findReviews: findReviews,
             findReports: findReports,
             findReported: findReported,
@@ -124,6 +126,13 @@
             return reviews;
         }
 
+        function deleteOne(advertisement) {
+            return advertisementDataService.delete(advertisement.id);
+        }
+
+        function markAsDone(advertisement) {
+            return advertisementDataService.done(advertisement.id);
+        }
 
     }
 

@@ -48,7 +48,7 @@ public class AdvertisementSnippets {
             fieldWithPath("realEstateDTO.imageUrl").description("Image of real estate"),
             fieldWithPath("realEstateDTO.description").description("Description of real estate"),
             fieldWithPath("realEstateDTO.technicalEquipment").description("Technical equipment in real estate"),
-            fieldWithPath("realEstateDTO.realEstateType").description("Type of real estate"),
+            fieldWithPath("realEstateDTO.type").description("Type of real estate"),
             fieldWithPath("realEstateDTO.location").description("Location of real estate"),
     };
 

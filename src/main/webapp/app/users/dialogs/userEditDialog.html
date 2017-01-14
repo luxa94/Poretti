@@ -1,9 +1,9 @@
-<md-dialog aria-label="Edit data" flex-md flex-gt-md="40">
+<md-dialog aria-label="Edit data" flex-md flex-gt-md="80">
     <md-toolbar>
         <div class="md-toolbar-tools">Edit your data</div>
     </md-toolbar>
-    <md-dialog-content layout-padding layout-margin>
-        <form flex ng-cloak layout="column">
+    <md-dialog-content layout-padding layout-margin layout="row" layout-align="center center">
+        <form flex="40" ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
                 <input type="text" ng-model="vm.userToEdit.name"/>
@@ -16,6 +16,10 @@
             <br/><br/>
             <md-chips ng-model="vm.userToEdit.contactEmails" readonly="false" placeholder="Contact emails"></md-chips>
         </form>
+
+        <div flex="40">
+            <image-upload object="vm.userToEdit"></image-upload>
+        </div>
     </md-dialog-content>
     <md-dialog-actions>
         <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>

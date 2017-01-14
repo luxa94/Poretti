@@ -7,14 +7,15 @@
 
     AdvertisementCtrlAs.$inject = ['$stateParams', '$state', 'dialogService',
         'advertisementService', 'sessionService', 'userService', 'companyService',
-        'PorettiHandler', 'dateHelper'];
+        'advertisementReviewDataService', 'PorettiHandler', 'dateHelper'];
 
     function AdvertisementCtrlAs($stateParams, $state, dialogService,
                                  advertisementService, sessionService, userService, companyService,
-                                 PorettiHandler, dateHelper) {
+                                 advertisementReviewDataService, PorettiHandler, dateHelper) {
 
         var vm = this;
 
+        vm.userId = sessionService.getUser() ? sessionService.getUser().id : -1;
         vm.advertisement = {};
         vm.canAdd = false;
         vm.newReview = {};
@@ -22,9 +23,11 @@
 
         vm.createReview = createReview;
         vm.createReport = createReport;
+        vm.deleteReview = deleteReview;
         vm.goToProfileOf = goToProfileOf;
         vm.openDialogForReview = openDialogForReview;
         vm.openDialogForReport = openDialogForReport;
+        vm.markAsDone = markAsDone;
 
         activate();
 
@@ -51,7 +54,7 @@
             return advertisementService.findReviews(vm.advertisement.id)
                 .then(function (data) {
                     vm.advertisement.reviews = data;
-                    vm.advertisement.reviews = advertisementService.reviewCanBeErased(vm.reviews, sessionService.getUser())
+                    vm.advertisement.reviews = advertisementService.reviewCanBeErased(vm.advertisement.reviews, sessionService.getUser())
                 });
         }
 
@@ -65,13 +68,24 @@
         function determineIfCanAdd() {
             var loggedUser = sessionService.getUser();
             if (loggedUser) {
-                var isAdvertiserOrOwner = loggedUser.id === vm.advertisement.advertiser.id || loggedUser.id === vm.advertisement.owner.id;
+                var isAdvertiserOrOwner = loggedUser.id === vm.advertisement.advertiser.id;
                 if (!isAdvertiserOrOwner) {
                     vm.canAdd = true;
                 }
             } else {
                 vm.canAdd = false;
             }
+        }
+
+        function markAsDone() {
+            advertisementService.markAsDone(vm.advertisement)
+                .then(function () {
+                    activate();
+                    alertify.success('Marked as done.');
+                })
+                .catch(function () {
+                    alertify.error('Unable to process request.');
+                });
         }
 
         function createReview() {
@@ -84,6 +98,12 @@
             advertisementService.createReport(vm.advertisement.id, vm.newReport)
                 .then(findReports)
                 .catch(handleError)
+        }
+
+        function deleteReview(review) {
+            advertisementReviewDataService.delete(review.id)
+                .then(findReviews)
+                .catch(handleError);
         }
 
         function openDialogForReview(ev) {
@@ -106,11 +126,14 @@
             userService.findOne(user.id)
                 .then(function (data) {
                     $state.go('user', {id: data.id});
-                }).catch(function(error) {
-                    return companyService.find(user.id);
-                }).then(function(data) {
-                $state.go('company', {id: data.id});
-            }).catch(handleError);
+                })
+                .catch(function (error) {
+                    companyService.find(user.id)
+                        .then(function (data) {
+                            $state.go('company', {id: data.id});
+                        })
+                        .catch(handleError);
+                });
         }
 
         function handleError(error) {

@@ -29,6 +29,7 @@
         }
 
         function initializeFields() {
+            vm.newCompany.location = {};
             vm.newCompany.phoneNumbers = [];
             vm.newCompany.contactEmails = [];
             vm.companyUser.phoneNumbers = [];
