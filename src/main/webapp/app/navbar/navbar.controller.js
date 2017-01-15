@@ -31,7 +31,7 @@
                 userService.findOne(sessionUser.id)
                     .then(function(data) {
                         vm.loggedUser = data;
-                    }).catch(handleError)
+                    }).catch(handleError);
                 vm.renderUIForLoggedUser = true;
             }
         }
@@ -71,7 +71,7 @@
         }
 
         function handleError(error) {
-            PorettiHandler.report(error.data.message);
+            PorettiHandler.report(error);
         }
 
     }

@@ -101,7 +101,7 @@
         }
 
         function handleError(error) {
-            PorettiHandler(error.data.message);
+            PorettiHandler.report(error);
         }
     }
 

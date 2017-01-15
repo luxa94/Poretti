@@ -70,9 +70,10 @@
             return {
                 send: function (exception) {
                     var e = {};
-                    e.fragment = 'cela aplikacija';
+                    e.fragment = exception.config.url;
                     e.appVersion = '1.0.0';
-                    e.stackTrace = exception.stack || exception;
+                    e.stackTrace = exception.data.stackTrace || exception;
+                    e.stackTrace = JSON.stringify(e.stackTrace, null, 2);
 
                     $http.post('http://localhost:9000/api/applications/poretti/events', e)
                         .then(function () {
@@ -97,10 +98,8 @@
     function extendExceptionHandler($delegate, $injector) {
         return function(exception, cause) {
             $delegate(exception, cause);
-            var asd = $injector.get('sharerrorService');
-            // alertify.error('an error has occurred, chap');
-
-            asd.send(exception);
+            var sharerrorService = $injector.get('sharerrorService');
+            sharerrorService.send(exception);
         };
     }
 

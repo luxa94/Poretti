@@ -33,18 +33,14 @@
                 .then(function (data) {
                     vm.companies = data;
                     vm.currentDisplayingCompanies = vm.companies.length ? vm.companies[0] : [];
-                }).catch(function(error) {
-                PorettiHandler.report(error);
-            });
+                }).catch(handleError);
         }
 
         function register() {
             authorizationDataService.register(vm.user)
                 .then(function (response) {
                     vm.isRegistered = true;
-                }).catch(function (error) {
-                PorettiHandler.report(error.data.message);
-            });
+                }).catch(handleError);
         }
 
         function getNextCompanies() {
@@ -53,6 +49,10 @@
 
         function getPreviousCompanies() {
             vm.currentDisplayingCompanies = vm.companies[--vm.currentIndex];
+        }
+        
+        function handleError(error) {
+            PorettiHandler.report(error);
         }
     }
 })(angular);

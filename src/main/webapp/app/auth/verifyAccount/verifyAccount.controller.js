@@ -18,7 +18,7 @@
                     alertify.success('You can log in now.');
                     $state.go('login');
                 }).catch(function(error) {
-                    PorettiHandler.report(error.data.message);
+                    PorettiHandler.report(error);
                     $state.go('login');
                 });
         }

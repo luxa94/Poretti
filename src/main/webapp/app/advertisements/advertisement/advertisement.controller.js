@@ -137,11 +137,7 @@
         }
 
         function handleError(error) {
-            if (angular.isString(error)) {
-                PorettiHandler.report(error);
-            } else {
-                PorettiHandler.report(error.data.message);
-            }
+            PorettiHandler.report(error);
         }
 
     }

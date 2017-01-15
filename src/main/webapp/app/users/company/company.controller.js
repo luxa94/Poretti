@@ -320,7 +320,7 @@
         }
 
         function handleError(error) {
-            PorettiHandler.report(error.data.message);
+            PorettiHandler.report(error);
         }
 
     }

@@ -18,9 +18,7 @@
                 .then(function (response) {
                     sessionService.setUser(response.data);
                     redirectToPath();
-                }).catch(function(error) {
-                PorettiHandler.report(error.data.message);
-            });
+                }).catch(handleError);
         }
 
         function redirectToPath() {
@@ -32,6 +30,10 @@
             } else if (roleService.isUser(loggedUser)) {
                 $state.go('home');
             }
+        }
+
+        function handleError(error) {
+            PorettiHandler.report(error);
         }
 
     }
