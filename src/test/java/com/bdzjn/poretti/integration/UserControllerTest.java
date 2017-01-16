@@ -22,22 +22,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -96,7 +89,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."));
+                .andExpect(jsonPath("$.message", is("Username or email taken.")));
 
         final int numberOfElementsAfter = userRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
@@ -115,7 +108,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."));
+                .andExpect(jsonPath("$.message", is("Username or email taken.")));
     }
 
     @Test
@@ -151,7 +144,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingUsername)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."));
+                .andExpect(jsonPath("$.message", is("Username or email taken.")));
 
         final int numberOfElementsAfter = userRepository.findAll().size();
         Assert.assertThat(numberOfElementsAfter, is(numberOfElementsBefore));
@@ -169,7 +162,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.json(testEntityWithExistingEmail)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Username or email taken."));
+                .andExpect(jsonPath("$.message", is("Username or email taken.")));
     }
 
     @Test
@@ -297,9 +290,6 @@ public class UserControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.comment", is(testEntity.getComment())))
-                .andExpect(jsonPath("$.rating", is(testEntity.getRating())))
-                .andExpect(jsonPath("$.target.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("create-review-for-user",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(UserSnippets.USER_ID),

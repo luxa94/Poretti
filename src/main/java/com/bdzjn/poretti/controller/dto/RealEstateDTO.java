@@ -79,11 +79,11 @@ public class RealEstateDTO {
         this.imageUrl = imageUrl;
     }
 
-    public RealEstateType getRealEstateType() {
+    public RealEstateType getType() {
         return type;
     }
 
-    public void setRealEstateType(RealEstateType realEstateType) {
-        this.type = realEstateType;
+    public void setType(RealEstateType type) {
+        this.type = type;
     }
 }

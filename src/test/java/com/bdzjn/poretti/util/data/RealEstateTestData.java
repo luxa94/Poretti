@@ -46,7 +46,7 @@ public class RealEstateTestData {
         realEstateDTO.setImageUrl("/testImage.jpg");
         realEstateDTO.setDescription("Test description");
         realEstateDTO.setTechnicalEquipment(technicalEquipment);
-        realEstateDTO.setRealEstateType(RealEstateType.APARTMENT);
+        realEstateDTO.setType(RealEstateType.APARTMENT);
         return realEstateDTO;
     }
 

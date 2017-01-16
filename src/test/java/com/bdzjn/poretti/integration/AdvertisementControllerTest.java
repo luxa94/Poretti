@@ -537,12 +537,6 @@ public class AdvertisementControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.title", is(testEntity.getAdvertisementDTO().getTitle())))
-                .andExpect(jsonPath("$.advertiser.id", is(UserTestData.CURRENT_USER_ID)))
-                .andExpect(jsonPath("$.status", is(AdvertisementStatus.ACTIVE.toString())))
-                .andExpect(jsonPath("$.type", is(testEntity.getAdvertisementDTO().getType().toString())))
-                .andExpect(jsonPath("$.price", is(testEntity.getAdvertisementDTO().getPrice())))
-                .andExpect(jsonPath("$.currency", is(testEntity.getAdvertisementDTO().getCurrency().toString())))
                 .andDo(document("create-advertisement",
                         preprocessRequest(prettyPrint(), modifyParameters().remove("advertisementDTO.id"), modifyParameters().remove("realEstateDTO.id")),
                         preprocessResponse(prettyPrint()),
@@ -756,10 +750,6 @@ public class AdvertisementControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.reason", is(testEntity.getReason().toString())))
-                .andExpect(jsonPath("$.description", is(testEntity.getDescription())))
-                .andExpect(jsonPath("$.author.id", is(AdvertisementReportTestData.REPORT_AUTHOR_ID)))
-                .andExpect(jsonPath("$.advertisement.id", is(AdvertisementReportTestData.FROM_ADVERTISEMENT_ID)))
                 .andDo(document("create-advertisement-report",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
@@ -863,9 +853,6 @@ public class AdvertisementControllerTest {
                 .content(TestUtil.json(testEntity)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.comment", is(testEntity.getComment())))
-                .andExpect(jsonPath("$.rating", is(testEntity.getRating())))
-                .andExpect(jsonPath("$.target.id", is(AdvertisementTestData.EXISTING_ID)))
                 .andDo(document("create-advertisement-review",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(AdvertisementSnippets.ADVERTISEMENT_ID),
