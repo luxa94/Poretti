@@ -4,14 +4,14 @@
             <form name="loginForm" layout="column" ng-submit="vm.login()">
                 <md-input-container>
                     <label>Username</label>
-                    <input id="login.input.username" required ng-model="vm.user.username"/>
+                    <input id="login-input-username" required ng-model="vm.user.username"/>
                 </md-input-container>
                 <md-input-container>
                     <label>Password</label>
-                    <input id="login.input.password" type="password" required ng-model="vm.user.password"/>
+                    <input id="login-input-password" type="password" required ng-model="vm.user.password"/>
                 </md-input-container>
             </form>
-            <md-button id="login.btn.login" class="md-raised md-primary" ng-click="vm.login()">Log in</md-button>
+            <md-button id="login-btn-login" class="md-raised md-primary" ng-click="vm.login()">Log in</md-button>
         </div>
     </md-content>
 </section>

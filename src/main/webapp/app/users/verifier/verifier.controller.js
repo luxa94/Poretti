@@ -5,9 +5,9 @@
         .module('poretti')
         .controller('VerifierCtrlAs', VerifierCtrlAs);
 
-    VerifierCtrlAs.$inject = ['$stateParams', 'userService', 'advertisementService', 'sessionService', 'PorettiHandler'];
+    VerifierCtrlAs.$inject = ['$stateParams', '$state', 'userService', 'advertisementService', 'sessionService', 'PorettiHandler'];
 
-    function VerifierCtrlAs($stateParams, userService, advertisementService, sessionService, PorettiHandler) {
+    function VerifierCtrlAs($stateParams, $state, userService, advertisementService, sessionService, PorettiHandler) {
 
         var vm = this;
 
@@ -19,6 +19,7 @@
         vm.actionBasedOnStatus = actionBasedOnStatus;
         vm.changeStatus = changeStatus;
         vm.getReports = getReports;
+        vm.goToAdvertisement = goToAdvertisement;
 
         activate();
 
@@ -50,6 +51,10 @@
                 .then(function(data) {
                     vm.chosenAdvertisement.reports = data;
                 }).catch(handleError);
+        }
+
+        function goToAdvertisement(advertisement) {
+            $state.go('advertisement', {id: advertisement.id});
         }
 
         function changeStatus() {

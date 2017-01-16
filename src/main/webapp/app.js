@@ -70,9 +70,9 @@
             return {
                 send: function (exception) {
                     var e = {};
-                    e.fragment = exception.config.url;
+                    e.fragment = exception.config ? exception.config.url : 'cela aplikacija';
                     e.appVersion = '1.0.0';
-                    e.stackTrace = exception.data.stackTrace || exception;
+                    e.stackTrace = exception.data? exception.data.stackTrace : exception;
                     e.stackTrace = JSON.stringify(e.stackTrace, null, 2);
 
                     $http.post('http://localhost:9000/api/applications/poretti/events', e)

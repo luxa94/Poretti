@@ -1,5 +1,5 @@
-<div layout>
-    <div layout="column" flex-gt-md="40" layout-padding>
+<div layout flex-md flex-gt-md="120">
+    <div layout="column" flex  flex-gt-md="40" layout-padding>
         <div md-whiteframe="3" layout>
             <div flex>
                 <div layout-fill class="md-media-md">
@@ -16,7 +16,7 @@
         </div>
 
     </div>
-    <div layout="column" flext-gt-md="80" layout-padding>
+    <div layout="column" flex flex-gt-md="80" layout-padding>
             <div layout-padding ng-repeat="reportedAdv in vm.reported">
                 <div layout>
                     <div flex>
@@ -30,10 +30,8 @@
                             <span class="md-subhead">{{reportedAdv.price}}</span>
                             <span class="md-subhead">{{reportedAdv.advertiser.name}}</span>
                             <div layout>
-                                <md-button class="md-icon-button md-corner md-primary md-hue-2">
-                                    <md-icon aria-label="Details" class="material-icons">more_horiz</md-icon>
-                                </md-button>
-                                <md-button class="md-primary md-hue-2" ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
+                                <md-button class="md-primary md-hue-2" ng-click="vm.goToAdvertisement(reportedAdv)">Details</md-button>
+                                <md-button class="md-hue-2 md-warn" ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
                             </div>
                         </div>
                     </div>

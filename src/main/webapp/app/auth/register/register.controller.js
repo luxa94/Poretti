@@ -24,6 +24,8 @@
         activate();
 
         function activate() {
+            vm.user.phoneNumbers = [];
+            vm.user.contactEmails = [];
             findAllCompanies();
         }
 

@@ -4,21 +4,25 @@
             <form name="loginForm" layout="column">
                 <md-input-container>
                     <label>Username</label>
-                    <input required ng-model="vm.user.username"/>
+                    <input id="register-input-username" required ng-model="vm.user.username"/>
                 </md-input-container>
                 <md-input-container>
                     <label>Email</label>
-                    <input required ng-model="vm.user.email"/>
+                    <input id="register-input-email" required ng-model="vm.user.email"/>
                 </md-input-container>
                 <md-input-container>
                     <label>Password</label>
-                    <input type="password" required ng-model="vm.user.password"/>
+                    <input id="register-input-password" type="password" required ng-model="vm.user.password"/>
                 </md-input-container>
                 <md-input-container>
                     <label>Name</label>
-                    <input required ng-model="vm.user.name"/>
+                    <input id="register-input-name" required ng-model="vm.user.name"/>
                 </md-input-container>
-                <span class="md-primary md-button" ng-click="vm.isRegisteringForCompany=true">Are you a company user?</span>
+                <md-chips id="register-chips-phoneNumbers" ng-model="vm.user.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
+                <br/><br/><br/>
+                <md-chips id="register-chips-contactEmails" ng-model="vm.user.contactEmails" placeholder="Contact emails"></md-chips>
+                <br/><br/><br/>
+                <span id="register-span-forCompany" class="md-primary md-button" ng-click="vm.isRegisteringForCompany=true">Are you a company user?</span>
                 <div layout="row" ng-show="vm.isRegisteringForCompany">
                     <div flex-gt-md="10" layout-align="space-between stretch">
                         <md-button ng-click="vm.getPreviousCompanies()">Back</md-button>
@@ -31,7 +35,9 @@
                                 </md-card-title-text>
                             </md-card-title>
                             <md-card-actions>
-                                <md-checkbox ng-click="vm.user.companyId = company.id"></md-checkbox>
+                                <div class="material-checkbox">
+                                    <md-checkbox aria-label="Select company" ng-click="vm.user.companyId = company.id"></md-checkbox>
+                                </div>
                             </md-card-actions>
                         </md-card>
                     </div>
@@ -40,7 +46,7 @@
                     </div>
                 </div>
                 <md-input-container>
-                    <md-button type="submit" class="md-raised md-primary" ng-click="vm.register()">Register</md-button>
+                    <md-button id="register-btn-register" type="submit" class="md-raised md-primary" ng-click="vm.register()">Register</md-button>
                 </md-input-container>
             </form>
         </div>
@@ -52,7 +58,7 @@
     </md-content>
     <md-content flex="" ng-if="vm.isRegistered">
         <div flex>
-            <h2 class="md-display-2">Check your email</h2>
+            <h2 id="register-h2-checkEmail" class="md-display-2">Check your email</h2>
         </div>
     </md-content>
 

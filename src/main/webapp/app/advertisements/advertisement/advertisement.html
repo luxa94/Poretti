@@ -5,20 +5,20 @@
                <md-card-header>
                    <md-card-header-text layout>
                        <div layout="column" flex>
-                           <span class="md-title">{{vm.advertisement.title}}</span>
-                           <span class="md-subhead">FOR {{vm.advertisement.type}}</span>
+                           <span id="advertisement-span-title" class="md-title">{{vm.advertisement.title}}</span>
+                           <span id="advertisement-span-type" class="md-subhead">FOR {{vm.advertisement.type}}</span>
                        </div>
                        <div layout="column" flex layout-align="start end">
-                           <span class="md-title">{{vm.advertisement.price}} {{vm.advertisement.currency}}</span>
-                           <span class="md-subhead">Average rating {{vm.advertisement.averageRating}}</span>
+                           <span id="advertisement-span-price-currency" class="md-title">{{vm.advertisement.price}} {{vm.advertisement.currency}}</span>
+                           <span id="advertisement-span-averageRating" class="md-subhead">Average rating {{vm.advertisement.averageRating}}</span>
                        </div>
                    </md-card-header-text>
                </md-card-header>
-               <img ng-src="{{vm.advertisement.realEstate.imageUrl}}"/>
+               <img id="advertisement-img-realEstate" ng-src="{{vm.advertisement.realEstate.imageUrl}}"/>
                <div layout="row">
                    <div flex layout="column" layout-padding="start start">
                        <span class="md-headline">Description</span>
-                       <p>{{vm.advertisement.realEstate.description}}</p>
+                       <p id="advertisement-p-description">{{vm.advertisement.realEstate.description}}</p>
                    </div>
                    <div flex layout="column" layout-align="start end">
                        <md-card-actions>
