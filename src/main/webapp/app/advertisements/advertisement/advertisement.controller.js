@@ -7,19 +7,20 @@
 
     AdvertisementCtrlAs.$inject = ['$q', '$stateParams', '$state', 'dialogService',
         'advertisementService', 'sessionService', 'userService', 'companyService',
-        'advertisementReviewDataService', 'PorettiHandler', 'dateHelper'];
+        'advertisementReviewDataService', 'PorettiHandler'];
 
     function AdvertisementCtrlAs($q, $stateParams, $state, dialogService,
                                  advertisementService, sessionService, userService, companyService,
-                                 advertisementReviewDataService, PorettiHandler, dateHelper) {
+                                 advertisementReviewDataService, PorettiHandler) {
 
         var vm = this;
 
-        vm.userId = sessionService.getUser() ? sessionService.getUser().id : -1;
         vm.advertisement = {};
         vm.canAdd = false;
+        vm.location;
         vm.newReview = {};
         vm.newReport = {};
+        vm.userId = sessionService.getUser() ? sessionService.getUser().id : -1;
 
         vm.createReview = createReview;
         vm.createReport = createReport;
@@ -37,6 +38,7 @@
                 .then(findReviews)
                 .then(findReports)
                 .then(determineIfCanAdd)
+                // .then();
                 .catch(handleError)
         }
 
@@ -44,9 +46,8 @@
             return advertisementService.findOne(advertisementId)
                 .then(function (data) {
                     vm.advertisement = data;
-                    vm.advertisement.announcedOn = dateHelper.format(vm.advertisement.announcedOn);
-                    vm.advertisement.editedOn = dateHelper.format(vm.advertisement.editedOn);
-                    vm.advertisement.endsOn = dateHelper.format(vm.advertisement.endsOn);
+                    var l = vm.advertisement.realEstate.location;
+                    vm.location = l.hasLatLong ? (l.latitude + ', ' + l.longitude) : (l.street + ' '+ l.streetNumber + ' '+ l.city + ' '+ l.state);
                 }).catch(function(error) {
                     vm.advertisement = undefined;
                     return $q.reject("It seems like this advertisement has left the building");
