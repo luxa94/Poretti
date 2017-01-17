@@ -31,9 +31,9 @@
                     <div layout="row" layout-margin>
                         <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">Details</span>
-                            <span id="advertisement-span-announcedOn">Announced on: {{vm.advertisement.announcedOn}}</span>
-                            <span id="advertisement-span-editedOn">Edited on: {{vm.advertisement.editedOn}}</span>
-                            <span id="advertisement-span-endsOn">Ends on: {{vm.advertisement.endsOn}}</span>
+                            <span id="advertisement-span-announcedOn">Announced on: {{vm.advertisement.announcedOn | date:'medium'}}</span>
+                            <span id="advertisement-span-editedOn">Edited on: {{vm.advertisement.editedOn | date:'medium'}}</span>
+                            <span id="advertisement-span-endsOn">Ends on: {{vm.advertisement.endsOn | date:'medium'}}</span>
                             <span id="advertisement-span-advertiser-name">Advertiser: {{vm.advertisement.advertiser.name}}</span>
                             <span id="advertisement-span-status">Status: {{vm.advertisement.status}}</span>
                         </div>
@@ -82,15 +82,16 @@
                             </div>
                         </div>
                         <div flex-md flex-gt-md="25" map-lazy-load="https://maps.google.com/maps/api/js">
-                            <ng-map flex center="{{vm.advertisement.realEstate.location.latitude}}, {{vm.advertisement.realEstate.location.longitude}}" zoom="5">
-                                <custom-marker position="{{vm.advertisement.realEstate.location.latitude}}, {{vm.advertisement.realEstate.location.longitude}}">
+                            <ng-map flex center="{{vm.location}}" zoom="5">
+                                <custom-marker position="{{vm.location}}">
                                     <div>{{vm.advertisement.realEstate.name}}</div>
                                 </custom-marker>
+
                             </ng-map>
                         </div>
                     </div>
                </md-card-content>
-               <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId">
+               <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId && vm.advertisement.status != 'ACTIVE'">
                    <md-button id="advertisement-btn-done" class="md-raised md-primary" ng-click="vm.markAsDone()">Finish
                         <md-tooltip>Mark as done</md-tooltip>
                    </md-button>

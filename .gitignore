@@ -31,3 +31,4 @@ src/main/webapp/images/
 !src/main/webapp/images/defaultUser.jpg
 !src/main/webapp/images/defaultCompany.jpg
 !src/main/webapp/images/defaultRealEstate.jpg
+/src/test/protractor/npm-debug.log
