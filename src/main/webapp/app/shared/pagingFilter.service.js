@@ -9,8 +9,7 @@
 
 
         return {
-            pageNext: pageNext,
-            pageBack: pageBack,
+            goByStep: goByStep,
             toExactPage: toExactPage,
             getNumberOfPages: getNumberOfPages,
             clearFilter: clearFilter,
@@ -18,12 +17,8 @@
             size: 5
         };
 
-        function pageNext(currentPage, filter) {
-            return this.setUpPagingFilterParams(++currentPage, filter);
-        }
-
-        function pageBack(currentPage, filter) {
-            return this.setUpPagingFilterParams(--currentPage, filter);
+        function goByStep(currentPage, filter) {
+            return this.setUpPagingFilterParams(currentPage, filter);
         }
 
         function toExactPage(pageNumber) {

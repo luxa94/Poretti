@@ -10,27 +10,27 @@
                 <form name="newUserForm" layout="column">
                     <md-input-container>
                         <label>Username</label>
-                        <input required ng-model="vm.newUser.username"/>
+                        <input id="admin-input-newUser-username" required ng-model="vm.newUser.username"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Password</label>
-                        <input type="password" required ng-model="vm.newUser.password"/>
+                        <input id="admin-input-newUser-password" type="password" required ng-model="vm.newUser.password"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Email</label>
-                        <input required ng-model="vm.newUser.email"/>
+                        <input id="admin-input-newUser-email" required ng-model="vm.newUser.email"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Name</label>
-                        <input required ng-model="vm.newUser.name"/>
+                        <input id="admin-input-newUser-name" required ng-model="vm.newUser.name"/>
                     </md-input-container>
-                    <md-select ng-model="vm.role" placeholder="Choose a role">
+                    <md-select id="admin-select-newUser-role" ng-model="vm.role" placeholder="Choose a role">
                         <md-option value="ADMIN">ADMIN</md-option>
                         <md-option value="VERIFIER">VERIFIER</md-option>
                     </md-select>
                 </form>
                 <image-upload object="vm.newUser"></image-upload>
-                <md-button class="md-raised md-primary" ng-click="vm.createAdminOfVerifier()">Create</md-button>
+                <md-button id="admin-btn-createAdminVerifier" class="md-raised md-primary" ng-click="vm.createAdminOfVerifier()">Create</md-button>
             </div>
         </div>
         <div flex-md flex-gt-md="40" layout-padding>
@@ -44,49 +44,49 @@
                     <div flex layout="column">
                         <md-input-container>
                             <label>Pib</label>
-                            <input required ng-model="vm.newCompany.pib"/>
+                            <input id="admin-input-company-pib" required ng-model="vm.newCompany.pib"/>
                         </md-input-container>
                         <md-input-container>
                             <label>Name</label>
-                            <input required ng-model="vm.newCompany.name"/>
+                            <input id="admin-input-company-name" required ng-model="vm.newCompany.name"/>
                         </md-input-container>
                         <md-chips ng-model="vm.newCompany.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
                         <br/><br/><br/>
                         <md-chips ng-model="vm.newCompany.contactEmails" placeholder="Contact emails"></md-chips>
                         <br/>
-                        <md-button ng-if="!vm.companyUser.name" class="md-accent md-raised" ng-click="vm.creatingCompanyUser = true">Add company user</md-button>
+                        <md-button  id="admin-btn-company-addUser" ng-if="!vm.companyUser.name" class="md-accent md-raised" ng-click="vm.creatingCompanyUser = true">Add company user</md-button>
                         <span ng-if="vm.companyUser.name">{{vm.companyUser.name}}</span>
                     </div>
                     <div flex layout="column">
                         <md-input-container>
                             <label>State</label>
-                            <input ng-model="vm.newCompany.location.state"/>
+                            <input  id="admin-input-location-state" ng-model="vm.newCompany.location.state"/>
                         </md-input-container>
                         <md-input-container>
                             <label>City</label>
-                            <input required ng-model="vm.newCompany.location.city"/>
+                            <input id="admin-input-location-city" required ng-model="vm.newCompany.location.city"/>
                         </md-input-container>
                         <md-input-container>
                             <label>City area</label>
-                            <input ng-model="vm.newCompany.location.cityArea"/>
+                            <input id="admin-input-location-cityArea" ng-model="vm.newCompany.location.cityArea"/>
                         </md-input-container>
                         <md-input-container>
                             <label>Zip code</label>
-                            <input ng-model="vm.newCompany.location.zipCode"/>
+                            <input id="admin-input-location-zipCode" ng-model="vm.newCompany.location.zipCode"/>
                         </md-input-container>
                         <md-input-container>
                             <label>Street</label>
-                            <input ng-model="vm.newCompany.location.street"/>
+                            <input id="admin-input-location-street" ng-model="vm.newCompany.location.street"/>
                         </md-input-container>
                         <md-input-container>
                             <label>Street number</label>
-                            <input ng-model="vm.newCompany.location.streetNumber"/>
+                            <input id="admin-input-location-streetNumber" ng-model="vm.newCompany.location.streetNumber"/>
                         </md-input-container>
                     </div>
                 </form>
                 <pin-map location="vm.newCompany.location"></pin-map>
                 <image-upload object="vm.newCompany"></image-upload>
-                <md-button class="md-raised md-primary" ng-click="vm.createCompany()">Create</md-button>
+                <md-button id="admin-btn-createCompany" class="md-raised md-primary" ng-click="vm.createCompany()">Create</md-button>
             </div>
         </div>
         <div flex-md flex-gt-md="30" layout-padding ng-if="vm.creatingCompanyUser">
@@ -99,26 +99,26 @@
                 <form name="newUserForm" layout="column">
                     <md-input-container>
                         <label>Username</label>
-                        <input required ng-model="vm.companyUser.username"/>
+                        <input id="admin-input-companyUser-username" required ng-model="vm.companyUser.username"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Password</label>
-                        <input type="password" required ng-model="vm.companyUser.password"/>
+                        <input id="admin-input-companyUser-password" type="password" required ng-model="vm.companyUser.password"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Email</label>
-                        <input required ng-model="vm.companyUser.email"/>
+                        <input id="admin-input-companyUser-email" required ng-model="vm.companyUser.email"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Name</label>
-                        <input required ng-model="vm.companyUser.name"/>
+                        <input id="admin-input-companyUser-name" required ng-model="vm.companyUser.name"/>
                     </md-input-container>
                     <md-chips ng-model="vm.companyUser.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
                     <br/><br/><br/>
                     <md-chips ng-model="vm.companyUser.contactEmails" placeholder="Contact emails"></md-chips>
                 </form>
                 <image-upload object="vm.companyUser"></image-upload>
-                <md-button class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
+                <md-button id="admin-input-addCompanyUser" class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
             </div>
         </div>
     </md-content>

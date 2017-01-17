@@ -1,4 +1,4 @@
-<section>
+<section ng-if="vm.advertisement">
    <div layout="row" flex-md flex-gt-md="120" layout-align="center center">
        <md-content>
            <md-card>
@@ -22,8 +22,8 @@
                    </div>
                    <div flex layout="column" layout-align="start end">
                        <md-card-actions>
-                           <md-button ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReport($event)">Create report</md-button>
-                           <md-button ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReview($event)">Create review</md-button>
+                           <md-button id="advertisement-btn-report" ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReport($event)">Create report</md-button>
+                           <md-button id="advertisement-btn-review" ng-if="vm.canAdd" class="md-primary" ng-click="vm.openDialogForReview($event)">Create review</md-button>
                        </md-card-actions>
                    </div>
                </div>
@@ -31,24 +31,26 @@
                     <div layout="row" layout-margin>
                         <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">Details</span>
-                            <span>Announced on: {{vm.advertisement.announcedOn}}</span>
-                            <span>Edited on: {{vm.advertisement.editedOn}}</span>
-                            <span>Ends on: {{vm.advertisement.endsOn}}</span>
-                            <span>Advertiser: {{vm.advertisement.advertiser.name}}</span>
-                            <span>Status: {{vm.advertisement.status}}</span>
+                            <span id="advertisement-span-announcedOn">Announced on: {{vm.advertisement.announcedOn}}</span>
+                            <span id="advertisement-span-editedOn">Edited on: {{vm.advertisement.editedOn}}</span>
+                            <span id="advertisement-span-endsOn">Ends on: {{vm.advertisement.endsOn}}</span>
+                            <span id="advertisement-span-advertiser-name">Advertiser: {{vm.advertisement.advertiser.name}}</span>
+                            <span id="advertisement-span-status">Status: {{vm.advertisement.status}}</span>
                         </div>
                         <div layout="column" flex-md flex-gt-md="25" layout-padding>
                             <span class="md-title">About real estate</span>
-                            <span>Name: {{vm.advertisement.realEstate.name}}</span>
-                            <span>Type: {{vm.advertisement.realEstate.type}}</span>
-                            <span>Technical equipment: {{vm.advertisement.realEstate.tehnicalEquipment}}</span>
-                            <span>Address:
-                                {{vm.advertisement.realEstate.location.street}} {{vm.advertisement.realEstate.location.streetNumber}},
-                                {{vm.advertisement.realEstate.location.city}}, {{vm.advertisement.realEstate.location.zipCode}},
+                            <span id="advertisement-span-realEstate-name">Name: {{vm.advertisement.realEstate.name}}</span>
+                            <span id="advertisement-span-reaEstate-type">Type: {{vm.advertisement.realEstate.type}}</span>
+                            <span id="advertisement-span-reaEstate-technicalEquipment">Technical equipment: {{vm.advertisement.realEstate.tehnicalEquipment}}</span>
+                            <span id="advertisement-span-realEstate-address">Address: {{vm.advertisement.realEstate.location.city}}
+                                <br/>
+                                {{vm.advertisement.realEstate.location.street}} {{vm.advertisement.realEstate.location.streetNumber}}
+                                <br/>
+                                {{vm.advertisement.realEstate.location.state}} {{vm.advertisement.realEstate.location.zipCode}}
                             </span>
                             <div>Owner of this real estate:
                                 <span>
-                                     <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</a>
+                                     <a id="advertisement-a-realEstate-owner-name" class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</a>
                                 </span>
                             </div>
                         </div>
@@ -59,7 +61,7 @@
                                     <span>Name:</span>
                                 </div>
                                 <div flex>
-                                    <a class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.advertiser)">{{vm.advertisement.advertiser.name}}</a>
+                                    <a id="advertisement-a-realEstate-advertiser-name" class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.advertiser)">{{vm.advertisement.advertiser.name}}</a>
                                 </div>
                             </div>
                             <div layout>
@@ -89,7 +91,7 @@
                     </div>
                </md-card-content>
                <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId">
-                   <md-button class="md-raised md-primary" ng-click="vm.markAsDone()">Finish
+                   <md-button id="advertisement-btn-done" class="md-raised md-primary" ng-click="vm.markAsDone()">Finish
                         <md-tooltip>Mark as done</md-tooltip>
                    </md-button>
                </md-card-actions>

@@ -2,13 +2,13 @@
     <form ng-cloak>
         <md-input-container class="md-block">
             <label>Comment</label>
-            <textarea placeholder="Write something..." ng-model="vm.review.comment" rows="5"></textarea>
+            <textarea id="review-textarea-comment" placeholder="Write something..." ng-model="vm.review.comment" rows="5"></textarea>
         </md-input-container>
         <md-input-container>
             <label>Rating</label>
-            <input type="number" placeholder="Rating" ng-model="vm.review.rating" min="1" max="10"/>
+            <input id="review-input-rating" type="number" placeholder="Rating" ng-model="vm.review.rating" min="1" max="10"/>
         </md-input-container>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="review-btn-ok" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="review-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </form>
 </md-dialog>

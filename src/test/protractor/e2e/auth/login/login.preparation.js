@@ -1,12 +1,14 @@
 var Login = require("./login.pageObject.js");
 
-exports.execLogin = function() {
+exports.execLogin = function(username, password) {
     var login = new Login();
-
+    var testUsername = username ? username : 'test_user';
+    var testPassword = password ? password : 'admin';
+    
     browser.driver.get("http://localhost:8080/#!/login");
 
-    login.inputUsername = "test_user";
-    login.inputPassword = "admin";
+    login.inputUsername = testUsername;
+    login.inputPassword = testPassword;
     login.loginButton.click();
 
     login.ensureIsSuccessfullyRedirected();

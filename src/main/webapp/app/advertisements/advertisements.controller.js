@@ -68,21 +68,23 @@
         }
 
         function clearFilters() {
+            vm.filter = {};
             var params = pagingFilterService.setUpPagingFilterParams(vm.activePageNumber);
             findAdvertisements(params);
         }
 
         function nextPage() {
-            var params = pagingFilterService.pageNext(vm.activePageNumber, vm.filter);
+            var params = pagingFilterService.goByStep(++vm.activePageNumber, vm.filter);
             findAdvertisements(params);
         }
 
         function previousPage() {
-            var params = pagingFilterService.pageBack(vm.activePageNumber, vm.filter);
+            var params = pagingFilterService.goByStep(--vm.activePageNumber, vm.filter);
             findAdvertisements(params);
         }
 
         function searchByFilters() {
+            vm.activePageNumber = 0;
             var params = pagingFilterService.setUpPagingFilterParams(vm.activePageNumber, vm.filter);
             findAdvertisements(params);
         }
@@ -96,6 +98,7 @@
         }
 
         function toPage(number) {
+            vm.activePageNumber = number;
             var params = pagingFilterService.toExactPage(number, vm.filter);
             findAdvertisements(params);
         }

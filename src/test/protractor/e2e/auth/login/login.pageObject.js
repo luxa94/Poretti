@@ -30,7 +30,10 @@ LoginPage.prototype = Object.create({}, {
         value: function() {
             browser.wait(function() {
                 return browser.getCurrentUrl().then(function(url) {
-                    return url === 'http://localhost:8080/#!/home';
+                    var home = url === 'http://localhost:8080/#!/home';
+                    var admin = url.indexOf('http://localhost:8080/#!/admin') !== -1;
+                    var verifier = url.indexOf('http://localhost:8080/#!/verifier') !== -1;
+                    return home || admin || verifier;
                 })
             }, 10000);
         }

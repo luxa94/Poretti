@@ -1,13 +1,15 @@
 <md-dialog aria-label="Create report">
     <form ng-cloak>
-        <md-select ng-model="vm.report.reason">
+        <md-select id="report-select-reason" ng-model="vm.report.reason">
+            <md-option value="INVALID_IMAGE">INVALID IMAGE</md-option>
+            <md-option value="REAL_ESTATE_SOLD">REAL ESTATE SOLD</md-option>
             <md-option value="OTHER">OTHER</md-option>
         </md-select>
         <md-input-container>
             <label>Description</label>
-            <textarea placeholder="Write something..." ng-model="vm.report.description" rows="5"></textarea>
+            <textarea id="report-textarea-description" placeholder="Write something..." ng-model="vm.report.description" rows="5"></textarea>
         </md-input-container>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="report-btn-ok" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="report-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </form>
 </md-dialog>

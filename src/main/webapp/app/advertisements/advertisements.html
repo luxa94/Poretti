@@ -10,11 +10,11 @@
                 <div layout layout-padding>
                     <md-input-container>
                         <label>Advertisement title</label>
-                        <input ng-model="vm.filter.advertisementTitle"/>
+                        <input id="advertisements-input-filter-title" ng-model="vm.filter.advertisementTitle"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Advertisement type</label>
-                        <md-select ng-model="vm.filter.advertisementType">
+                        <md-select id="advertisements-select-filter-ad-type" ng-model="vm.filter.advertisementType" placeholder="Advertisement type">
                             <md-option value="SALE">SALE</md-option>
                             <md-option value="RENT">RENT</md-option>
                         </md-select>
@@ -23,28 +23,28 @@
                 <div layout layout-padding>
                     <md-input-container>
                         <label>Price from</label>
-                        <input type="number" ng-model="vm.filter.priceFrom"/>
+                        <input id="advertisements-input-filter-priceFrom" type="number" ng-model="vm.filter.priceFrom"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Price to</label>
-                        <input type="number" ng-model="vm.filter.priceTo"/>
+                        <input id="advertisements-input-filter-priceTo" type="number" ng-model="vm.filter.priceTo"/>
                     </md-input-container>
                 </div>
                 <div layout layout-padding>
                     <md-input-container>
                         <label>Real estate name</label>
-                        <input ng-model="vm.filter.realEstateName"/>
+                        <input id="advertisements-input-filter-re-name" ng-model="vm.filter.realEstateName"/>
                     </md-input-container>
                     <md-input-container>
                         <label>Real estate name</label>
-                        <md-select ng-model="vm.filter.realEstateType">
+                        <md-select id="advertisements-select-filter-re-type" ng-model="vm.filter.realEstateType">
                             <md-option value="APARTMENT">APARTMENT</md-option>
                             <md-option value="HOUSE">HOUSE</md-option>
                         </md-select>
                     </md-input-container>
                 </div>
-                <md-button class="md-raised md-accent" ng-click="vm.searchByFilters()">Search</md-button>
-                <md-button class="md-raised md-accent" ng-click="vm.clearFilters()">Clear</md-button>
+                <md-button id="advertisements-btn-search" class="md-raised md-accent" ng-click="vm.searchByFilters()">Search</md-button>
+                <md-button id="advertisements-btn-clear" class="md-raised md-accent" ng-click="vm.clearFilters()">Clear</md-button>
             </div>
         </mg-content>
     </div>
@@ -64,6 +64,7 @@
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{advertisement.title}}</span>
+                            <span class="md-subhead">Updated at: {{advertisement.editedOn | date: 'medium'}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
                             <div class="md-media-md card-media">
@@ -71,20 +72,21 @@
                             </div>
                         </md-card-title-media>
                     </md-card-title>
-                    <md-card-content layout="row">
-                        <span>{{advertisement.price}}</span>
+                    <md-card-content layout="column">
+                        <span class="md-subhead">Price: {{advertisement.price}} {{advertisement.currency}} </span>
+                        <span class="md-subhead">Location: {{advertisement.realEstate.location.city}} {{advertisement.realEstate.location.street}} {{advertisement.realEstate.location.streetNumber}}</span>
+                        <span class="md-subhead">Advertiser: {{advertisement.advertiser.name}}</span>
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-raised md-primary" ng-click="vm.toAdvertisement(advertisement)">Details
-                        </md-button>
+                        <button aria-label="Details" class="md-button md-raised md-primary" ng-click="vm.toAdvertisement(advertisement)">Details</button>
                     </md-card-actions>
                 </md-card>
-                <md-content layout="row" layout-align="center center">
-                    <md-button class="md-raised" ng-click="vm.previousPage()">Previous</md-button>
+                <md-content ng-if="vm.advertisements.length" layout="row" layout-align="center center">
+                    <md-button id="advertisements-btn-previousPage" class="md-raised" ng-click="vm.previousPage()">Previous</md-button>
                     <md-button class="md-raised" ng-repeat="pageNumber in vm.numberOfPages"
                                ng-click="vm.toPage(pageNumber)">{{pageNumber+1}}
                     </md-button>
-                    <md-button class="md-raised" ng-click="vm.nextPage()">Next</md-button>
+                    <md-button id="advertisements-btn-nextPage" class="md-raised" ng-click="vm.nextPage()">Next</md-button>
                 </md-content>
             </div>
         </md-content>

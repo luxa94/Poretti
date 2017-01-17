@@ -5,11 +5,11 @@
         .module('poretti')
         .controller('AdvertisementCtrlAs', AdvertisementCtrlAs);
 
-    AdvertisementCtrlAs.$inject = ['$stateParams', '$state', 'dialogService',
+    AdvertisementCtrlAs.$inject = ['$q', '$stateParams', '$state', 'dialogService',
         'advertisementService', 'sessionService', 'userService', 'companyService',
         'advertisementReviewDataService', 'PorettiHandler', 'dateHelper'];
 
-    function AdvertisementCtrlAs($stateParams, $state, dialogService,
+    function AdvertisementCtrlAs($q, $stateParams, $state, dialogService,
                                  advertisementService, sessionService, userService, companyService,
                                  advertisementReviewDataService, PorettiHandler, dateHelper) {
 
@@ -47,6 +47,9 @@
                     vm.advertisement.announcedOn = dateHelper.format(vm.advertisement.announcedOn);
                     vm.advertisement.editedOn = dateHelper.format(vm.advertisement.editedOn);
                     vm.advertisement.endsOn = dateHelper.format(vm.advertisement.endsOn);
+                }).catch(function(error) {
+                    vm.advertisement = undefined;
+                    return $q.reject("It seems like this advertisement has left the building");
                 });
         }
 
