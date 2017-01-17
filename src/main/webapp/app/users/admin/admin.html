@@ -54,8 +54,8 @@
                         <br/><br/><br/>
                         <md-chips ng-model="vm.newCompany.contactEmails" placeholder="Contact emails"></md-chips>
                         <br/>
-                        <md-button  id="admin-btn-company-addUser" ng-if="!vm.companyUser.name" class="md-accent md-raised" ng-click="vm.creatingCompanyUser = true">Add company user</md-button>
-                        <span ng-if="vm.companyUser.name">{{vm.companyUser.name}}</span>
+                        <md-button id="admin-btn-company-addUser" ng-if="!vm.companyUser.name" class="md-accent md-raised" ng-click="vm.creatingCompanyUser = true">Add company user</md-button>
+                        <span id="admin-span-addedUser" ng-if="vm.companyUser.name">{{vm.companyUser.name}}</span>
                     </div>
                     <div flex layout="column">
                         <md-input-container>
@@ -118,7 +118,7 @@
                     <md-chips ng-model="vm.companyUser.contactEmails" placeholder="Contact emails"></md-chips>
                 </form>
                 <image-upload object="vm.companyUser"></image-upload>
-                <md-button id="admin-input-addCompanyUser" class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
+                <md-button id="admin-input-createCompanyUser" class="md-raised md-primary" ng-click="vm.creatingCompanyUser = false">Add</md-button>
             </div>
         </div>
     </md-content>
