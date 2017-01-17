@@ -17,7 +17,7 @@
 
         vm.advertisement = {};
         vm.canAdd = false;
-        vm.location;
+        vm.location = '0, 0';
         vm.newReview = {};
         vm.newReport = {};
         vm.userId = sessionService.getUser() ? sessionService.getUser().id : -1;
@@ -46,9 +46,8 @@
             return advertisementService.findOne(advertisementId)
                 .then(function (data) {
                     vm.advertisement = data;
-                    var l = vm.advertisement.realEstate.location;
-                    vm.location = l.hasLatLong ? (l.latitude + ', ' + l.longitude) : (l.street + ' '+ l.streetNumber + ' '+ l.city + ' '+ l.state);
-                }).catch(function(error) {
+                    vm.location = advertisementService.getLocation(vm.advertisement);
+                }).catch(function (error) {
                     vm.advertisement = undefined;
                     return $q.reject("It seems like this advertisement has left the building");
                 });

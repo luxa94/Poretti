@@ -27,8 +27,16 @@ nbdist/
 src/main/webapp/bower_components
 src/test/protractor/node_modules
 
+!/src/main/webapp/images/defaultUser.jpg
+!/src/main/webapp/images/defaultCompany.jpg
+!/src/main/webapp/images/defaultRealEstate.jpg
+!/src/main/webapp/images/fluffy1.png
+!/src/main/webapp/images/joey.png
+!/src/main/webapp/images/google.png
+!/src/main/webapp/images/chandler.png
+!/src/main/webapp/images/palm.jpg
+!/src/main/webapp/images/bk.jpeg
 src/main/webapp/images/
-!src/main/webapp/images/defaultUser.jpg
-!src/main/webapp/images/defaultCompany.jpg
-!src/main/webapp/images/defaultRealEstate.jpg
+
+### Protractor files
 /src/test/protractor/npm-debug.log
