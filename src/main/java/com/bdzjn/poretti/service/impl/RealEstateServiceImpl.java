@@ -36,7 +36,7 @@ public class RealEstateServiceImpl implements RealEstateService {
         realEstate.setTechnicalEquipment(realEstateDTO.getTechnicalEquipment());
         realEstate.setDescription(realEstateDTO.getDescription());
         realEstate.setImageUrl(realEstateDTO.getImageUrl());
-        realEstate.setType(realEstateDTO.getRealEstateType());
+        realEstate.setType(realEstateDTO.getType());
         realEstate.setOwner(owner);
 
         return realEstateRepository.save(realEstate);

@@ -39,7 +39,7 @@ public class RealEstateServiceTest {
         final RealEstate createdTestEntity = realEstateService.create(testEntity, ownerTestEntity);
         assertThat(createdTestEntity).isNotNull();
 
-        assertThat(createdTestEntity.getType()).isEqualTo(testEntity.getRealEstateType());
+        assertThat(createdTestEntity.getType()).isEqualTo(testEntity.getType());
         assertThat(createdTestEntity.getAdvertisements()).hasSize(0);
         assertThat(createdTestEntity.getArea()).isEqualTo(testEntity.getArea());
         assertThat(createdTestEntity.getDescription()).isEqualTo(testEntity.getDescription());
@@ -105,7 +105,7 @@ public class RealEstateServiceTest {
         final RealEstate editedTestEntity = realEstateService.edit(testEntity, ownerId);
         assertThat(editedTestEntity).isNotNull();
 
-        assertThat(editedTestEntity.getType()).isEqualTo(testEntity.getRealEstateType());
+        assertThat(editedTestEntity.getType()).isEqualTo(testEntity.getType());
         assertThat(editedTestEntity.getAdvertisements()).hasSize(1);
         assertThat(editedTestEntity.getArea()).isEqualTo(testEntity.getArea());
         assertThat(editedTestEntity.getDescription()).isEqualTo(testEntity.getDescription());

@@ -2,7 +2,6 @@ package com.bdzjn.poretti.integration;
 
 import com.bdzjn.poretti.controller.dto.AdvertisementDTO;
 import com.bdzjn.poretti.controller.dto.RealEstateDTO;
-import com.bdzjn.poretti.model.enumeration.AdvertisementStatus;
 import com.bdzjn.poretti.repository.AdvertisementRepository;
 import com.bdzjn.poretti.repository.RealEstateRepository;
 import com.bdzjn.poretti.util.TestUtil;
@@ -31,7 +30,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -110,13 +108,6 @@ public class RealEstateControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.name", is(testEntity.getName())))
-                .andExpect(jsonPath("$.description", is(testEntity.getDescription())))
-                .andExpect(jsonPath("$.area", is(testEntity.getArea())))
-                .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
-                .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
-                .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
-                .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("create-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         requestFields(RealEstateSnippets.REAL_ESTATE_DTO)));
 
@@ -142,7 +133,7 @@ public class RealEstateControllerTest {
                 .andExpect(jsonPath("$.description", is(testEntity.getDescription())))
                 .andExpect(jsonPath("$.area", is(testEntity.getArea())))
                 .andExpect(jsonPath("$.imageUrl", is(testEntity.getImageUrl())))
-                .andExpect(jsonPath("$.type", is(testEntity.getRealEstateType().toString())))
+                .andExpect(jsonPath("$.type", is(testEntity.getType().toString())))
                 .andExpect(jsonPath("$.technicalEquipment", hasSize(testEntity.getTechnicalEquipment().size())))
                 .andExpect(jsonPath("$.owner.id", is(UserTestData.CURRENT_USER_ID)))
                 .andDo(document("edit-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
@@ -273,13 +264,6 @@ public class RealEstateControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.title", is(testEntity.getTitle())))
-                .andExpect(jsonPath("$.advertiser.id", is(UserTestData.CURRENT_USER_ID)))
-                .andExpect(jsonPath("$.status", is(AdvertisementStatus.ACTIVE.toString())))
-                .andExpect(jsonPath("$.type", is(testEntity.getType().toString())))
-                .andExpect(jsonPath("$.price", is(testEntity.getPrice())))
-                .andExpect(jsonPath("$.currency", is(testEntity.getCurrency().toString())))
-                .andExpect(jsonPath("$.realEstate.id", is(RealEstateTestData.EXISTING_ID)))
                 .andDo(document("create-advertisement-for-real-estate", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
                         pathParameters(RealEstateSnippets.REAL_ESTATE_ID),
                         AuthorizationSnippets.AUTH_HEADER,
