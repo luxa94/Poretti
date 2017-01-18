@@ -6,20 +6,20 @@
         <form flex ng-cloak layout="column">
             <md-input-container>
                 <label>Title</label>
-                <input required type="text" ng-model="vm.advertisement.title"/>
+                <input id="advertisement-input-title" required type="text" ng-model="vm.advertisement.title"/>
                 <div ng-messages="vm.advertisement.title.$error">
                     <div ng-message="required">This is required.</div>
                 </div>
             </md-input-container>
             <md-input-container>
                 <label>Price</label>
-                <input required type="text" ng-model="vm.advertisement.price"/>
+                <input id="advertisement-input-price" required type="text" ng-model="vm.advertisement.price"/>
                 <div ng-messages="vm.advertisement.price.$error">
                     <div ng-message="required">This is required.</div>
                 </div>
             </md-input-container>
             <md-input-container>
-            <md-select required ng-model = "vm.advertisement.currency" placeholder="Currency">
+            <md-select id="advertisement-select-currency" required ng-model = "vm.advertisement.currency" placeholder="Currency">
                 <md-option value="RSD">RSD</md-option>
                 <md-option value="EUR">EUR</md-option>
                 <md-option value="USD">USD</md-option>
@@ -29,7 +29,7 @@
             </div>
             </md-input-container>
             <md-input-container>
-            <md-select required ng-model = "vm.advertisement.type" placeholder="Type">
+            <md-select id="advertisement-select-type" required ng-model = "vm.advertisement.type" placeholder="Type">
                 <md-option value="SALE">SALE</md-option>
                 <md-option value="RENT">RENT</md-option>
             </md-select>
@@ -39,23 +39,23 @@
             </md-input-container>
             <div layout>
                 <md-input-container>
-                <md-datepicker required ng-model="vm.advertisement.endsOn" placeholder="Ends on"></md-datepicker>
+                <md-datepicker id="advertisement-datepicker-endsOn" required ng-model="vm.advertisement.endsOn" placeholder="Ends on"></md-datepicker>
                 <div ng-messages="vm.advertisement.endsOn.$error">
                     <div ng-message="required">This is required.</div>
                 </div>
 
             </div>
             <div layout="column" flex-md flex-gt-md="20" ng-if="!vm.realEstateIsAdded">
-                <md-button class="md-primary md-raised" ng-click="vm.openDialogForRealEstate($event)">Add real estate</md-button>
-                <md-button class="md-primary" ng-click="vm.openDialogForChoosingRealEstate($event)" >Choose existing real estate</md-button>
+                <md-button id="advertisement-btn-addRE" class="md-primary md-raised" ng-click="vm.openDialogForRealEstate($event)">Add real estate</md-button>
+                <md-button id="advertisement-btn-chooseRE" class="md-primary" ng-click="vm.openDialogForChoosingRealEstate($event)" >Choose existing real estate</md-button>
             </div>
             <div ng-if="vm.realEstateIsAdded"  flex-md flex-gt-md="20">
-                <span class="md-primary md-raised"> You added this real estate: {{vm.realEstate.name}}</span>
+                <span id="advertisement-span-addedRE" class="md-primary md-raised"> You added this real estate: {{vm.realEstate.name}}</span>
             </div>
         </form>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="advertisement-btn-confirm" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="advertisement-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </md-dialog-actions>
 </md-dialog>

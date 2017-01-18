@@ -20,7 +20,7 @@
                 if (error.data && error.status){
                     sharerrorService.send(error);
                     message = error.data.message ? error.data.message : "Error occurred";
-                    if (error.status === 500) {
+                    if (error.status === 500 || error.status === 400) {
                         message = "Error occurred.";
                     }
                 } else if (angular.isString(error)){

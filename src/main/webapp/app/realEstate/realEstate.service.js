@@ -12,7 +12,8 @@
         return {
             create: create,
             edit: edit,
-            createAdvertisementForRealEstate: createAdvertisementForRealEstate
+            createAdvertisementForRealEstate: createAdvertisementForRealEstate,
+            delete: deleteOne
         };
 
         function create(realEstate) {
@@ -27,6 +28,10 @@
             var realEstateId = advertisementRealEstate.realEstateId;
             var advertisement = advertisementRealEstate.advertisement;
             return realEstateDataService.createAdvertisement(realEstateId, advertisement);
+        }
+
+        function deleteOne(realEstate){
+            return realEstateDataService.delete(realEstate.id);
         }
     }
     

@@ -6,18 +6,18 @@
         <form flex="60" ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
-                <input type="text" ng-model="vm.realEstate.name"/>
+                <input id="realEstate-input-name" type="text" ng-model="vm.realEstate.name"/>
             </md-input-container>
             <md-input-container>
                 <label>Area</label>
-                <input type="text" ng-model="vm.realEstate.area"/>
+                <input id="realEstate-input-area" type="text" ng-model="vm.realEstate.area"/>
             </md-input-container>
             <md-input-container>
                 <label>Description</label>
-                <textarea ng-model="vm.realEstate.description" rows="5"></textarea>
+                <textarea id="realEstate-textarea-desc" ng-model="vm.realEstate.description" rows="5"></textarea>
             </md-input-container>
             <md-input-container>
-            <md-select ng-model="vm.realEstate.type" placeholder="Type">
+            <md-select id="realEstate-select-type" ng-model="vm.realEstate.type" placeholder="Type">
                 <md-option value="APARTMENT">APARTMENT</md-option>
                 <md-option value="HOUSE">HOUSE</md-option>
             </md-select>
@@ -26,37 +26,37 @@
             <br/><br/>
             <md-input-container>
                 <label>State</label>
-                <input ng-model="vm.realEstate.location.state"/>
+                <input id="realEstate-input-location-state" ng-model="vm.realEstate.location.state"/>
             </md-input-container>
             <md-input-container>
                 <label>City</label>
-                <input required ng-model="vm.realEstate.location.city"/>
+                <input id="realEstate-input-location-city" required ng-model="vm.realEstate.location.city"/>
             </md-input-container>
             <md-input-container>
                 <label>City area</label>
-                <input ng-model="vm.realEstate.location.cityArea"/>
+                <input id="realEstate-input-location-cityArea" ng-model="vm.realEstate.location.cityArea"/>
             </md-input-container>
             <md-input-container>
                 <label>Zip code</label>
-                <input ng-model="vm.realEstate.location.zipCode"/>
+                <input id="realEstate-input-location-zipCode" ng-model="vm.realEstate.location.zipCode"/>
             </md-input-container>
             <md-input-container>
                 <label>Street</label>
-                <input ng-model="vm.realEstate.location.street"/>
+                <input id="realEstate-input-location-street" ng-model="vm.realEstate.location.street"/>
             </md-input-container>
             <md-input-container>
                 <label>Street number</label>
-                <input ng-model="vm.realEstate.location.streetNumber"/>
+                <input id="realEstate-input-location-streetNumber" ng-model="vm.realEstate.location.streetNumber"/>
             </md-input-container>
         </form>
 
         <div flex="40">
-            <pin-map location="vm.realEstate.location"></pin-map>
+            <pin-map id="realEstate-pinMap" location="vm.realEstate.location"></pin-map>
             <image-upload object="vm.realEstate"></image-upload>
         </div>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="realEstate-btn-ok" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="realEstate-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -3,6 +3,7 @@
         <div class="md-toolbar-tools">Add real estate</div>
     </md-toolbar>
     <md-dialog-content layout-padding layout-margin>
+        <h4 class="md-display-2 md-subhead" ng-show="!vm.realEstates.length">You have no real estates. You can add new if you wish.</h4>
         <div layout-padding ng-repeat="realEstate in vm.realEstates">
             <div layout>
                 <div flex>
@@ -23,7 +24,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button ng-show="vm.realEstates.length" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
         <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </md-dialog-actions>
 </md-dialog>

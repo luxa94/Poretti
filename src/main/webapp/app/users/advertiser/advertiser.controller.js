@@ -7,12 +7,12 @@
 
     AdvertiserCtrlAs.$inject = ['$q', '$stateParams', '$state',
         'userService', 'sessionService', 'ownerReviewService',
-        'advertisementService', 'realEstateService', 'roleService', 'dialogService', 'alertify', 'PorettiHandler'];
+        'advertisementService', 'realEstateService', 'roleService', 'dialogService', 'alertify', 'PorettiHandler', '$mdDialog'];
 
     function AdvertiserCtrlAs($q, $stateParams, $state,
                               userService, sessionService, ownerReviewService,
                               advertisementService, realEstateService, roleService,
-                              dialogService, alertify, PorettiHandler) {
+                              dialogService, alertify, PorettiHandler, $mdDialog) {
 
         var vm = this;
 
@@ -40,20 +40,19 @@
         vm.openDialogForEditingUser = openDialogForEditingUser;
         vm.openDialogForEditingAdvertisement = openDialogForEditingAdvertisement;
         vm.deleteAdvertisement = deleteAdvertisement;
-
+        vm.openDialogDeleteRealEstate = openDialogDeleteRealEstate;
 
         activate();
 
         function activate() {
             var userId = $stateParams.id;
+            vm.newAdvertisement.endsOn = new Date();
             findUser(userId)
                 .then(findAdvertisements)
                 .then(findRealEstates)
                 .then(findReviews)
                 .then(findMemberships)
                 .catch(handleError);
-
-            vm.newAdvertisement.endsOn = new Date();
         }
 
         function findUser(userId) {
@@ -81,8 +80,8 @@
         function findAdvertisements() {
             return userService.findAdvertisements(vm.user.id)
                 .then(function (response) {
-                    //TODO paging stuff?
                     vm.newAdvertisement = {};
+                    vm.newAdvertisement.endsOn = new Date();
                     vm.newRealEstate = {};
                     vm.advertisements = response.data.content;
                 });
@@ -121,7 +120,7 @@
         function createReview() {
             userService.createReview(vm.user.id, vm.newReview)
                 .then(findReviews)
-                .catch(handleError)
+                .catch(handleError);
         }
 
         function deleteReview(review) {
@@ -254,7 +253,8 @@
                 .then(function (response) {
                     alertify.success('You successfully added new advertisement!');
                     findAdvertisements();
-                }).catch(handleError);
+                }).then(findRealEstates)
+                .catch(handleError);
         }
 
         function createAdvertisementForRealEstate(advertisementRealEstate) {
@@ -289,6 +289,27 @@
                     alertify.success("Advertisement is edited");
                     findAdvertisements();
                 }).catch(handleError);
+        }
+
+        function openDialogDeleteRealEstate(ev, realEstate) {
+            var confirm = $mdDialog.confirm()
+                .title('Would you like to delete this real estate?')
+                .textContent('Every advertisement which contains this real estate will be deleted also')
+                .ariaLabel('Real estate deleting')
+                .targetEvent(ev)
+                .ok('Yes')
+                .cancel('No');
+
+            $mdDialog.show(confirm).then(function() {
+                deleteRealEstate(realEstate);
+            }).catch(function(error) {});
+        }
+
+        function deleteRealEstate(realEstate) {
+            realEstateService.delete(realEstate)
+                .then(findAdvertisements)
+                .then(findRealEstates)
+                .catch(handleError);
         }
 
         function handleError(error) {

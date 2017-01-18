@@ -39,7 +39,7 @@ describe("One advertisement", function() {
     //
     // });
     //
-    // it('should not show info page when advertisement  does not exists', function() {
+    // it('should not show info page when advertisement does not exists', function() {
     //     browser.get('http://localhost:8080/#!/advertisement/' + nonExistingId);
     //
     //     expect(advertisementPage.advertisementTitleSpan.isPresent()).toBe(false);
@@ -107,7 +107,7 @@ describe("One advertisement", function() {
         expect(reviewDialog.okButton.isDisplayed()).toBe(true);
         expect(reviewDialog.cancelButton.isDisplayed()).toBe(true);
 
-        reviewDialog.commentTextarea = "Just to check if this work";
+        reviewDialog.commentTextarea = "Just to check if this thing works";
         reviewDialog.ratingInput = 5;
         reviewDialog.okButton.click();
 
