@@ -23,7 +23,8 @@
             actionBasedOnStatus: actionBasedOnStatus,
             edit: edit,
             createAdvertisementAndRealEstate: createAdvertisementAndRealEstate,
-            reviewCanBeErased: reviewCanBeErased
+            reviewCanBeErased: reviewCanBeErased,
+            getLocation: getLocation
         };
 
         function findAll(params) {
@@ -132,6 +133,11 @@
 
         function markAsDone(advertisement) {
             return advertisementDataService.done(advertisement.id);
+        }
+
+        function getLocation(advertisement) {
+            var l = advertisement.realEstate.location;
+            return l.hasLatLong ? (l.latitude + ', ' + l.longitude) : ((l.street || '') + ' ' + (l.streetNumber || '') + ' ' + l.city + ' ' + (l.state || ''));
         }
 
     }

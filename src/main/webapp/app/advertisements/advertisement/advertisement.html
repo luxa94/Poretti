@@ -49,7 +49,7 @@
                                 {{vm.advertisement.realEstate.location.state}} {{vm.advertisement.realEstate.location.zipCode}}
                             </span>
                             <div>Owner of this real estate:
-                                <span>
+                                <span style="cursor: pointer;">
                                      <a id="advertisement-a-realEstate-owner-name" class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.realEstate.owner)">{{vm.advertisement.realEstate.owner.name}}</a>
                                 </span>
                             </div>
@@ -60,7 +60,7 @@
                                 <div flex>
                                     <span>Name:</span>
                                 </div>
-                                <div flex>
+                                <div flex style="cursor: pointer;">
                                     <a id="advertisement-a-realEstate-advertiser-name" class="md-primary" ng-click="vm.goToProfileOf(vm.advertisement.advertiser)">{{vm.advertisement.advertiser.name}}</a>
                                 </div>
                             </div>
@@ -83,15 +83,14 @@
                         </div>
                         <div flex-md flex-gt-md="25" map-lazy-load="https://maps.google.com/maps/api/js">
                             <ng-map flex center="{{vm.location}}" zoom="5">
-                                <custom-marker position="{{vm.location}}">
+                                <custom-marker position="{{vm.location}}" centered="true">
                                     <div>{{vm.advertisement.realEstate.name}}</div>
                                 </custom-marker>
-
                             </ng-map>
                         </div>
                     </div>
                </md-card-content>
-               <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId && vm.advertisement.status != 'ACTIVE'">
+               <md-card-actions layout="row" layout-align="end" ng-if="vm.advertisement.advertiser.id === vm.userId">
                    <md-button id="advertisement-btn-done" class="md-raised md-primary" ng-click="vm.markAsDone()">Finish
                         <md-tooltip>Mark as done</md-tooltip>
                    </md-button>
