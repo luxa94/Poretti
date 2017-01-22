@@ -6,12 +6,9 @@
         <form flex="40" ng-cloak layout="column">
             <md-input-container>
                 <label>Name</label>
-                <input type="text" ng-model="vm.userToEdit.name"/>
+                <input id="userToEdit-input-name" type="text" ng-model="vm.userToEdit.name"/>
             </md-input-container>
-            <md-input-container>
-                <label>Image</label>
-                <input type="text" ng-model="vm.userToEdit.imageUrl"/>
-            </md-input-container>
+            <input type="hidden" ng-model="vm.userToEdit.imageUrl"/>
             <md-chips ng-model="vm.userToEdit.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
             <br/><br/>
             <md-chips ng-model="vm.userToEdit.contactEmails" readonly="false" placeholder="Contact emails"></md-chips>
@@ -22,7 +19,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="userToEdit-btn-ok" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="userToEdit-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </md-dialog-actions>
 </md-dialog>

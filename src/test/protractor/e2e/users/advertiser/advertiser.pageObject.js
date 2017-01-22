@@ -91,6 +91,30 @@ AdvertiserPage.prototype = Object.create({}, {
             return element.all(by.repeater("membership in vm.memberships"));
         }
     },
+
+    realEstatesTab: {
+        get: function() {
+            return element.all(by.tagName('md-tab-item')).get(1);
+        }
+    },
+
+    advertisementsTab: {
+        get: function() {
+            return element.all(by.tagName('md-tab-item')).get(0);
+        }
+    },
+
+    reviewsTab: {
+        get: function() {
+            return element.all(by.tagName('md-tab-item')).get(2);
+        }
+    },
+
+    membershipsTab: {
+        get: function() {
+            return element.all(by.tagName('md-tab-item')).get(3);
+        }
+    },
     
     ensureIsRedirectedToAdvertisement: {
         value: function() {
@@ -119,6 +143,17 @@ AdvertiserPage.prototype = Object.create({}, {
                 return thatReviewList.count().then(function(newNumberOfReviews){
                     return newNumberOfReviews === (numberOfReviews + 1);
                 });
+            }, 10000);
+        }
+    },
+
+    ensureAdvertisementIsDeleted: {
+        value: function(currentNumberOfItems) {
+            var thatAdvertisementList = this.advertisementList;
+            browser.wait(function() {
+                return thatAdvertisementList.count().then(function(numberOfItems) {
+                    return numberOfItems === currentNumberOfItems - 1;
+                })
             }, 10000);
         }
     }

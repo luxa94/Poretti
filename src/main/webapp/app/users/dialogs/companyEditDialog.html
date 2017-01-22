@@ -8,10 +8,7 @@
                 <label>Name</label>
                 <input type="text" ng-model="vm.companyToEdit.name"/>
             </md-input-container>
-            <md-input-container>
-                <label>Image</label>
-                <input type="text" ng-model="vm.companyToEdit.imageUrl"/>
-            </md-input-container>
+            <input type="hidden" ng-model="vm.companyToEdit.imageUrl"/>
             <md-chips ng-model="vm.companyToEdit.phoneNumbers" readonly="false" placeholder="Phone numbers"></md-chips>
             <br/><br/>
             <md-chips ng-model="vm.companyToEdit.contactEmails" readonly="false" placeholder="Contact emails"></md-chips>

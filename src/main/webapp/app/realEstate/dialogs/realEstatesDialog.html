@@ -16,7 +16,7 @@
                         <span class="md-headline">{{realEstate.name}}</span>
                         <span class="md-subhead">{{realEstate.area}}</span>
                         <span class="md-subhead">{{realEstate.type}}</span>
-                        <md-checkbox ng-click="vm.chosenRealEstate = realEstate"></md-checkbox>
+                        <md-checkbox aria-label="Choose this real estate" ng-click="vm.chosenRealEstate = realEstate"></md-checkbox>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button ng-show="vm.realEstates.length" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
-        <md-button class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
+        <md-button id="realEstates-btn-ok" ng-show="vm.realEstates.length" class="md-raised md-primary" ng-click="vm.confirmResponse()">Ok</md-button>
+        <md-button id="realEstates-btn-cancel" class="md-raised md-accent" ng-click="vm.cancel()">Cancel</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -74,7 +74,6 @@ RealEstateDialog.prototype = Object.create({}, {
             }, 10000);
         }
     }
-
 });
 
 module.exports = RealEstateDialog;

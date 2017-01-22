@@ -37,3 +37,16 @@
     bottom: -7px;
     left: 50%;
 }
+
+.image-wrapper {
+    width: 100%;
+}
+.image-wrapper img {
+    max-width: 13em;
+    height: auto;
+    width: auto;
+}
+
+img {
+    max-width: 13em;
+}
