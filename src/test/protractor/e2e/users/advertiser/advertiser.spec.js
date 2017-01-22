@@ -1,3 +1,5 @@
+'use strict';
+
 var login = require('../../auth/login/login.preparation');
 var Navbar = require('../../navbar/navbar.pageObject');
 var AdvertiserPage = require('./advertiser.pageObject');
@@ -8,7 +10,7 @@ var AdvertisementDialog = require('../../advertisements/dialogs/advertisement.di
 var AdvertisementEditDialog = require('../../advertisements/dialogs/advertisementEdit.dialog.pageObject');
 var ReviewDialog = require('../../advertisements/dialogs/review.dialog.pageObject');
 
-//TODO Fix size of advertisements and real estates
+
 
 describe('Advertiser profile page', function () {
     var navbar;
@@ -19,6 +21,14 @@ describe('Advertiser profile page', function () {
     var advertisementDialog;
     var advertisementEditDialog;
     var reviewDialog;
+    var numberOfAdvertisements = {
+        'jsIsABitch' : 0
+    };
+
+    var numberOfRealEstates = {
+        'jsIsABitch' : 0
+    };
+
 
     beforeAll(function () {
         browser.get('http://localhost:8080');
@@ -30,6 +40,12 @@ describe('Advertiser profile page', function () {
         advertisementDialog = new AdvertisementDialog();
         advertisementEditDialog = new AdvertisementEditDialog();
         reviewDialog = new ReviewDialog();
+
+    });
+
+    beforeEach(function(){
+        advertiserPage.getNumberOfAdvertisements(numberOfAdvertisements);
+        advertiserPage.getNumberOfRealEstates(numberOfRealEstates);
     });
 
     afterEach(function () {
@@ -256,16 +272,32 @@ describe('Advertiser profile page', function () {
     //       expect(advertiserPage.realEstateList.get(0).getText()).toContain("Just to check if this thing still works");
     //  });
 
-    it('should successfully delete advertisement', function() {
+    // it('should successfully delete advertisement', function() {
+    //     login.execLogin();
+    //
+    //     browser.get('http://localhost:8080/#!/user/2');
+    //
+    //     advertiserPage.advertisementsTab.click();
+    //
+    //     advertiserPage.advertisementDeleteButton.click();
+    //
+    //     advertiserPage.ensureAdvertisementIsDeleted(numberOfAdvertisements);
+    // });
+
+    it('should successfully delete real estate', function() {
         login.execLogin();
 
         browser.get('http://localhost:8080/#!/user/2');
 
-        advertiserPage.advertisementsTab.click();
+        advertiserPage.realEstatesTab.click();
 
-        advertiserPage.advertisementDeleteButton.click();
+        advertiserPage.realEstateDeleteButton.click();
 
-        advertiserPage.ensureAdvertisementIsDeleted(9);
+        advertiserPage.ensureConfirmDeleteIsOpened();
+
+        browser.switchTo().alert().accept();
+
+        advertiserPage.ensureRealEstateIsDeleted(numberOfRealEstates);
     });
 
     // it('should successfully edit user data', function() {
