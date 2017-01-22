@@ -163,7 +163,7 @@ AdvertiserPage.prototype = Object.create({}, {
             var thatRealEstateList = this.realEstateList;
             browser.wait(function() {
                 return thatRealEstateList.count().then(function(numberOfItems) {
-                    return numberOfItems === (numberOfRealEstates.jsIsABitch - 1);
+                    return numberOfItems === (numberOfRealEstates.jsIsNotABitch -1);
                 });
             }, 10000);
         }
@@ -184,19 +184,23 @@ AdvertiserPage.prototype = Object.create({}, {
     getNumberOfRealEstates: {
         value: function(numberOfRealEstates) {
             var thatRealEstateList = this.realEstateList;
-            return browser.wait(function() {
+            browser.wait(function() {
                 return thatRealEstateList.count().then(function(numberOfItems) {
-                    numberOfRealEstates.jsIsABitch = numberOfItems;
-                    return thatRealEstateList;
+                    numberOfRealEstates.jsIsNotABitch = numberOfItems;
+                    return numberOfRealEstates;
                 });
             }, 10000);
         }
     },
 
-    ensureConfirmDeleteIsOpened: {
-        value: function() {
-            browser.wait(function() {
-
+    getNumberOfReviews: {
+        value: function(numberOfReviews) {
+            var thatReviewList= this.reviewList;
+            return browser.wait(function() {
+                return thatReviewList.count().then(function(numberOfItems) {
+                    numberOfReviews.value = numberOfItems;
+                    return numberOfReviews;
+                });
             }, 10000);
         }
     }

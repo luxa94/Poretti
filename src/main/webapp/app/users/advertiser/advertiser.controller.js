@@ -40,7 +40,7 @@
         vm.openDialogForEditingUser = openDialogForEditingUser;
         vm.openDialogForEditingAdvertisement = openDialogForEditingAdvertisement;
         vm.deleteAdvertisement = deleteAdvertisement;
-        vm.openDialogDeleteRealEstate = openDialogDeleteRealEstate;
+        vm.deleteRealEstate = deleteRealEstate;
 
         activate();
 
@@ -291,19 +291,19 @@
                 }).catch(handleError);
         }
 
-        function openDialogDeleteRealEstate(ev, realEstate) {
-            var confirm = $mdDialog.confirm()
-                .title('Would you like to delete this real estate?')
-                .textContent('Every advertisement which contains this real estate will be deleted also')
-                .ariaLabel('Real estate deleting')
-                .targetEvent(ev)
-                .ok('Yes')
-                .cancel('No');
-
-            $mdDialog.show(confirm).then(function() {
-                deleteRealEstate(realEstate);
-            }).catch(function(error) {});
-        }
+        // function openDialogDeleteRealEstate(ev, realEstate) {
+        //     var confirm = $mdDialog.confirm()
+        //         .title('Would you like to delete this real estate?')
+        //         .textContent('Every advertisement which contains this real estate will be deleted also')
+        //         .ariaLabel('Real estate deleting')
+        //         .targetEvent(ev)
+        //         .ok('Yes')
+        //         .cancel('No');
+        //
+        //     $mdDialog.show(confirm).then(function() {
+        //         deleteRealEstate(realEstate);
+        //     }).catch(function(error) {});
+        // }
 
         function deleteRealEstate(realEstate) {
             realEstateService.delete(realEstate)

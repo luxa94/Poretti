@@ -26,7 +26,11 @@ describe('Advertiser profile page', function () {
     };
 
     var numberOfRealEstates = {
-        'jsIsABitch' : 0
+        'jsIsNotABitch' : 0
+    };
+
+    var numberOfReviews = {
+        value : 0
     };
 
 
@@ -44,8 +48,7 @@ describe('Advertiser profile page', function () {
     });
 
     beforeEach(function(){
-        advertiserPage.getNumberOfAdvertisements(numberOfAdvertisements);
-        advertiserPage.getNumberOfRealEstates(numberOfRealEstates);
+       advertiserPage.getNumberOfAdvertisements(numberOfAdvertisements);
     });
 
     afterEach(function () {
@@ -91,48 +94,56 @@ describe('Advertiser profile page', function () {
     //     expect(advertiserPage.realEstateDeleteButton.isDisplayed()).toBe(true);
     // });
 
-    // it('should successfully add new review', function() {
-    //     login.execLogin("monica", "monica");
-    //
-    //     browser.get('http://localhost:8080/#!/user/2');
-    //
-    //     advertiserPage.reviewButton.click();
-    //
-    //     expect(reviewDialog.commentTextarea.isDisplayed()).toBe(true);
-    //     expect(reviewDialog.ratingInput.isDisplayed()).toBe(true);
-    //     expect(reviewDialog.okButton.isDisplayed()).toBe(true);
-    //     expect(reviewDialog.cancelButton.isDisplayed()).toBe(true);
-    //
-    //     reviewDialog.commentTextarea = "Just to check if this this works";
-    //     reviewDialog.ratingInput = 5;
-    //     reviewDialog.okButton.click();
-    //
-    //     advertiserPage.ensureReviewIsAdded(currentNumOfReviews);
-    // });
+    it('should successfully add new review', function() {
+        login.execLogin("chandler", "asd");
 
-    // it('should successfully add new real estate', function () {
-    //     login.execLogin();
-    //
-    //     browser.get('http://localhost:8080/#!/user/2');
-    //
-    //     advertiserPage.realEstateButton.click();
-    //
-    //     expect(realEstateDialog.nameInput.isDisplayed()).toBe(true);
-    //     expect(realEstateDialog.areaInput.isDisplayed()).toBe(true);
-    //     expect(realEstateDialog.descriptionTextArea.isDisplayed()).toBe(true);
-    //     expect(realEstateDialog.locationCity.isDisplayed()).toBe(true);
-    //     expect(realEstateDialog.pinMap.isDisplayed()).toBe(true);
-    //
-    //     realEstateDialog.nameInput = "Dom Zivojin Culum";
-    //     realEstateDialog.areaInput = 1000;
-    //     realEstateDialog.descriptionTextArea = "Just to check if this thing works";
-    //     realEstateDialog.typeSelect = "HOUSE";
-    //     realEstateDialog.locationCity = "Novi Sad";
-    //     realEstateDialog.okButton.click();
-    //
-    //     //TODO figure out how to test maps
-    //     realEstateDialog.ensureRealEstateIsAdded(advertiserPage.realEstateList, 3);
-    // });
+        browser.get('http://localhost:8080/#!/user/2');
+
+        advertiserPage.reviewsTab.click();
+
+        advertiserPage.getNumberOfReviews(numberOfReviews);
+
+        advertiserPage.reviewButton.click();
+
+        expect(reviewDialog.commentTextarea.isDisplayed()).toBe(true);
+        expect(reviewDialog.ratingInput.isDisplayed()).toBe(true);
+        expect(reviewDialog.okButton.isDisplayed()).toBe(true);
+        expect(reviewDialog.cancelButton.isDisplayed()).toBe(true);
+
+        reviewDialog.commentTextarea = "Just to check if this this works";
+        reviewDialog.ratingInput = 5;
+        reviewDialog.okButton.click();
+
+        reviewDialog.ensureReviewIsAdded(advertiserPage.reviewList, numberOfReviews.value);
+    });
+
+    it('should successfully add new real estate', function () {
+        login.execLogin();
+
+        browser.get('http://localhost:8080/#!/user/2');
+
+        advertiserPage.realEstatesTab.click();
+
+        advertiserPage.getNumberOfRealEstates(numberOfRealEstates);
+
+        advertiserPage.realEstateButton.click();
+
+        expect(realEstateDialog.nameInput.isDisplayed()).toBe(true);
+        expect(realEstateDialog.areaInput.isDisplayed()).toBe(true);
+        expect(realEstateDialog.descriptionTextArea.isDisplayed()).toBe(true);
+        expect(realEstateDialog.locationCity.isDisplayed()).toBe(true);
+        expect(realEstateDialog.pinMap.isDisplayed()).toBe(true);
+
+        realEstateDialog.nameInput = "Dom Zivojin Culum";
+        realEstateDialog.areaInput = 1000;
+        realEstateDialog.descriptionTextArea = "Just to check if this thing works";
+        realEstateDialog.typeSelect = "HOUSE";
+        realEstateDialog.locationCity = "Novi Sad";
+        realEstateDialog.okButton.click();
+
+
+        realEstateDialog.ensureRealEstateIsAdded(advertiserPage.realEstateList, numberOfRealEstates.jsIsNotABitch);
+   });
     // //
     // it('should successfully add new advertisement and real estate', function () {
     //     login.execLogin();
@@ -290,12 +301,9 @@ describe('Advertiser profile page', function () {
         browser.get('http://localhost:8080/#!/user/2');
 
         advertiserPage.realEstatesTab.click();
+        advertiserPage.getNumberOfRealEstates(numberOfRealEstates);
 
         advertiserPage.realEstateDeleteButton.click();
-
-        advertiserPage.ensureConfirmDeleteIsOpened();
-
-        browser.switchTo().alert().accept();
 
         advertiserPage.ensureRealEstateIsDeleted(numberOfRealEstates);
     });

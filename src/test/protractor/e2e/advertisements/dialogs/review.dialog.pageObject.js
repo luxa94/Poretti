@@ -30,6 +30,16 @@ ReviewDialog.prototype = Object.create({}, {
         get: function() {
             return element(by.id('review-btn-cancel'));
         }
+    },
+
+    ensureReviewIsAdded: {
+        value: function(list, numberOfItemsInList) {
+            browser.wait(function(){
+                return list.count().then(function (newNumberOfReviews) {
+                    return newNumberOfReviews === (numberOfItemsInList + 1);
+                });
+            }, 10000);
+        }
     }
 
 });
