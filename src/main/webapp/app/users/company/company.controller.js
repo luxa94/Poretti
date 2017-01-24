@@ -173,7 +173,6 @@
         function openDialogForReview(ev) {
             dialogService.open(ev, 'ReviewDialogCtrlAs', 'app/advertisements/dialogs/reviewDialog.html')
                 .then(function (review) {
-                    debugger;
                     vm.newReview = review;
                     createReview();
                 }).catch(function (error) {

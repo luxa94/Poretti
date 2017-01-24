@@ -16,7 +16,6 @@
         function report(error) {
             var message = "";
             if (error) {
-                debugger;
                 if (error.data && error.status){
                     sharerrorService.send(error);
                     message = error.data.message ? error.data.message : "Error occurred";

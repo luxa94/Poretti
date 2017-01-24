@@ -12,7 +12,7 @@ exports.config = {
         'users/admin/admin.spec.js',
         'users/advertiser/advertiser.spec.js',
         'users/company/company.spec.js',
-        //'users/verifier/verifier.spec.js'
+        'users/verifier/verifier.spec.js'
     ],
 
     capabilities: {

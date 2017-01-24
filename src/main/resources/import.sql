@@ -10,18 +10,18 @@ INSERT INTO `owner` (`id`, `image_url`, `name`) VALUES (9, '/images/defaultUser.
 INSERT INTO `owner` (`id`, `image_url`, `name`) VALUES (10, '/images/google.png', 'google');
 INSERT INTO `owner` (`id`, `image_url`, `name`) VALUES (11, '/images/chandler.png', 'Chandler Bing');
 
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('admin@admin.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', '', 'SYSTEM_ADMIN', 'admin', 1);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('test@user.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', '', 'USER', 'test_user', 2);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('testtest@user.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', '', 'USER', 'test_test_user', 3);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('test@verifier.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', '', 'VERIFIER', 'test_verifier', 4);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('Rika@someEmail.com', '$2a$10$OrtHnGk8yTIRGVQB5m.6OOdLUj.3Lvr2jw3BKyfN.sbRLlm5uuSFC', '', 'USER', 'Rika', 5);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('adminko2@com.com', '$2a$10$VniRD5kGdzSbSFPzyyNKBObfIentFCPYaUNhn499.3rHYQ9rbLJEi', '', 'SYSTEM_ADMIN', 'adminko2',  6);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('verifiarko2@com.com', '$2a$10$uoxNFe1TnwDVpPjCYxMPMeCFmQN4SCwTdn2/2z.pT4QKm3nVFJer.', '', 'VERIFIER', 'verifiarko2', 7);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('admin@admin.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', TRUE, 'SYSTEM_ADMIN', 'admin', 1);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('test@user.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', TRUE, 'USER', 'test_user', 2);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('testtest@user.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', FALSE, 'USER', 'test_test_user', 3);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('test@verifier.com', '$2a$06$tWabtVmhsP/iUtVODWyeG.tZ6CzyDQhesBCW0cFVHP6oKELIOhm/K', TRUE, 'VERIFIER', 'test_verifier', 4);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('Rika@someEmail.com', '$2a$10$OrtHnGk8yTIRGVQB5m.6OOdLUj.3Lvr2jw3BKyfN.sbRLlm5uuSFC', TRUE, 'USER', 'Rika', 5);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('adminko2@com.com', '$2a$10$VniRD5kGdzSbSFPzyyNKBObfIentFCPYaUNhn499.3rHYQ9rbLJEi', TRUE, 'SYSTEM_ADMIN', 'adminko2',  6);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('verifiarko2@com.com', '$2a$10$uoxNFe1TnwDVpPjCYxMPMeCFmQN4SCwTdn2/2z.pT4QKm3nVFJer.', TRUE, 'VERIFIER', 'verifiarko2', 7);
 
 -- password: asd
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('fluffy@nadamsedanikonemaovajmail.com', '$2a$10$WqTOVKsATsk8KMzdWV9zt.1XvKsh4vsMEkr4fVwjoxkDfaX.oHp5C', '', 'USER', 'fluffy', 8);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('joey@nadamsedanikonemaovajmai.com', '$2a$10$TjwnNm66P.Li1J88f0b3VekYcmL1qp8xrLVFwEbBkQtoKFP906A5W', '', 'USER', 'joey', 9);
-INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('chandler@nadamsedanikonemaovajmail.com', '$2a$10$CbCutaCJH5A5Mn1QXlYaYeAPjTlJpC/KnNA6hbOhVVdH7O43PO2Ue', '', 'USER', 'chandler', 11);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('fluffy@nadamsedanikonemaovajmail.com', '$2a$10$WqTOVKsATsk8KMzdWV9zt.1XvKsh4vsMEkr4fVwjoxkDfaX.oHp5C', TRUE, 'USER', 'fluffy', 8);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('joey@nadamsedanikonemaovajmai.com', '$2a$10$TjwnNm66P.Li1J88f0b3VekYcmL1qp8xrLVFwEbBkQtoKFP906A5W', TRUE, 'USER', 'joey', 9);
+INSERT INTO `user` (`email`, `password`, `registration_confirmed`, `role`, `username`, `id`) VALUES ('chandler@nadamsedanikonemaovajmail.com', '$2a$10$CbCutaCJH5A5Mn1QXlYaYeAPjTlJpC/KnNA6hbOhVVdH7O43PO2Ue', TRUE, 'USER', 'chandler', 11);
 
 INSERT INTO `location` (`id`, `city`, `city_area`, `has_lat_long`, `latitude`, `longitude`, `state`, `street`, `street_number`, `zip_code`) VALUES (1, 'Novi Sad', NULL, '\0', 1, 1, 'Serbia', 'Mileve Maric', '52', NULL);
 INSERT INTO `location` (`id`, `city`, `city_area`, `has_lat_long`, `latitude`, `longitude`, `state`, `street`, `street_number`, `zip_code`) VALUES (2, 'Novi Sad', NULL, '\0', 44.77403648591521, 20.43680191040039, 'Serbia', NULL, NULL, NULL);
@@ -34,12 +34,15 @@ INSERT INTO `real_estate` (`id`, `area`, `description`, `image_url`, `name`, `ty
 INSERT INTO `real_estate` (`id`, `area`, `description`, `image_url`, `name`, `type`, `location_id`, `owner_id`) VALUES (2, 201312325, 'You know what it is.', '/images/bk.jpeg', 'Burj Khalifa', 'HOUSE', 3, 11);
 INSERT INTO `real_estate` (`id`, `area`, `description`, `image_url`, `name`, `type`, `location_id`, `owner_id`) VALUES (3, 18256422, 'We need something bigger. (That\'s what she said)', '/images/palm.jpg', 'Former HQ', 'APARTMENT', 4, 10);
 
-INSERT INTO `advertisement` (`id`, `announced_on`, `currency`, `edited_on`, `ends_on`, `price`, `status`, `title`, `type`, `advertiser_id`, `real_estate_id`) VALUES (1, '2017-01-14 20:07:13', 'RSD', '2017-01-14 20:07:13', '2017-01-14 20:07:13', 3000, 'ACTIVE', 'Advertisement title', 'SALE', 2, 1);
+INSERT INTO `advertisement` (`id`, `announced_on`, `currency`, `edited_on`, `ends_on`, `price`, `status`, `title`, `type`, `advertiser_id`, `real_estate_id`) VALUES (1, '2017-01-14 20:07:13', 'RSD', '2017-01-14 20:07:13', '2017-01-14 20:07:13', 3000, 'PENDING_APPROVAL', 'Advertisement title', 'SALE', 2, 1);
 INSERT INTO `advertisement` (`id`, `announced_on`, `currency`, `edited_on`, `ends_on`, `price`, `status`, `title`, `type`, `advertiser_id`, `real_estate_id`) VALUES (2, '2017-01-14 20:07:13', 'RSD', '2017-01-14 20:07:13', '2017-01-14 20:07:13', 3000, 'ACTIVE', 'New advertisement', 'RENT', 2, 1);
 INSERT INTO `advertisement` (`id`, `announced_on`, `currency`, `edited_on`, `ends_on`, `price`, `status`, `title`, `type`, `advertiser_id`, `real_estate_id`) VALUES (9, '2017-01-17 19:00:43', 'EUR', '2017-01-17 19:00:43', '2018-07-24 00:00:00', 12783518652, 'ACTIVE', 'Penthouse', 'RENT', 11, 2);
 INSERT INTO `advertisement` (`id`, `announced_on`, `currency`, `edited_on`, `ends_on`, `price`, `status`, `title`, `type`, `advertiser_id`, `real_estate_id`) VALUES (10, '2017-01-17 19:42:01', 'EUR', '2017-01-17 19:42:01', '2018-09-11 00:00:00', 1231414, 'ACTIVE', 'Get it while it\'s hot', 'SALE', 10, 3);
 
 INSERT INTO `advertisement_review` (`id`, `comment`, `edited_on`, `rating`, `author_id`, `target_id`) VALUES (2, 'Awesomeeeeeeeee', '2017-01-17 19:44:52', 5, 9, 9);
+
+INSERT INTO poretti.improper_advertisement_report (description, edited_on, reason, advertisement_id, author_id) VALUES ('Reporrrrrrrrrrrrrrt.', '2017-01-22 16:50:05', 'OTHER', 9, 2);
+INSERT INTO poretti.improper_advertisement_report (description, edited_on, reason, advertisement_id, author_id) VALUES ('Second reporrrrrrrrrrrrrrt.', '2017-01-22 16:50:05', 'OTHER', 1, 2);
 
 INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (1, '102da414-847d-4602-8b2d-edca26ab26d7', 1);
 INSERT INTO `authorization` (`id`, `token`, `user_id`) VALUES (2, '102da414-847d-4602-8b2d-edca26ab26d8', 2);

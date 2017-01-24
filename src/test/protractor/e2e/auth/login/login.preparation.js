@@ -1,4 +1,5 @@
 var Login = require("./login.pageObject.js");
+var navBar = require('./../../navbar/navbar.pageObject');
 
 exports.execLogin = function(username, password) {
     var login = new Login();

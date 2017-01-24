@@ -45,7 +45,6 @@
                 var loggedUser = sessionService.getUser();
 
                 if (routeIsIn(restrictedRoutesForLoggedUser, $location.url()) && loggedUser) {
-                    debugger;
                     if (fromParams){
                         from.url = from.url.replace(/:id/gm,fromParams.id);
                     }

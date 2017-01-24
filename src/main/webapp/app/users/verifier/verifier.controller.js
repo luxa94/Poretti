@@ -20,6 +20,8 @@
         vm.changeStatus = changeStatus;
         vm.getReports = getReports;
         vm.goToAdvertisement = goToAdvertisement;
+        vm.approve = approve;
+        vm.invalidate = invalidate;
 
         activate();
 
@@ -74,6 +76,21 @@
             PorettiHandler.report(error);
         }
 
+        function approve() {
+            advertisementService.approve(vm.chosenAdvertisement.id)
+                .then(findReported)
+                .then(function() {
+                    vm.showReports = false;
+                }).catch(handleError);
+        }
+
+        function invalidate() {
+            advertisementService.invalidate(vm.chosenAdvertisement.id)
+                .then(findReported)
+                .then(function() {
+                    vm.showReports = false;
+                }).catch(handleError);
+        }
 
     }
 })(angular);

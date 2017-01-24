@@ -51,7 +51,6 @@
         }
 
         function createAdminOrVerifier() {
-            debugger;
             if (vm.role === "ADMIN") {
                 createAdmin();
             } else if (vm.role === "VERIFIER") {

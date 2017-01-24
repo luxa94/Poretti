@@ -29,9 +29,10 @@
                             <span class="md-headline">{{reportedAdv.title}}</span>
                             <span class="md-subhead">{{reportedAdv.price}}</span>
                             <span class="md-subhead">{{reportedAdv.advertiser.name}}</span>
+                            <span id="verifier-advertisement-status" class="md-subhead">{{reportedAdv.status}}</span>
                             <div layout>
                                 <md-button class="md-primary md-hue-2" ng-click="vm.goToAdvertisement(reportedAdv)">Details</md-button>
-                                <md-button class="md-hue-2 md-warn" ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
+                                <md-button id="verifier-show-reports-{{reportedAdv.status}}" class="md-hue-2 md-warn" ng-click="vm.getReports(reportedAdv)">Show reports</md-button>
                             </div>
                         </div>
                     </div>
@@ -53,7 +54,8 @@
                     </div>
                     <md-divider></md-divider>
                 </div>
-                <md-button class="md-raised md-primary md-hue-2" ng-click="vm.changeStatus()">{{vm.actionBasedOnStatus()}}</md-button>
+                <md-button id="verifier-button-approve" class="md-raised md-primary" ng-click="vm.approve()" ng-if="vm.chosenAdvertisement.status === 'PENDING_APPROVAL'">Approve</md-button>
+                <md-button id="verifier-button-invalidate" class="md-raised md-warn" ng-click="vm.invalidate()">Invalidate</md-button>
             </div>
     </div>
 </div>

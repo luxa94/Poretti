@@ -1,0 +1,1 @@
+var advertisements = require("./../advertisements.pageObject.js");

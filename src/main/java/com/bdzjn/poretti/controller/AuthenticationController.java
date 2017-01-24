@@ -59,7 +59,6 @@ public class AuthenticationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @Transactional
     @DeleteMapping("/logout")
     public ResponseEntity logout(@RequestHeader(name = AuthenticationFilter.AUTHORIZATION) String token) {

@@ -19,12 +19,13 @@
             findReported: findReported,
             createReview: createReview,
             createReport: createReport,
-            changeStatus: changeStatus,
             actionBasedOnStatus: actionBasedOnStatus,
             edit: edit,
             createAdvertisementAndRealEstate: createAdvertisementAndRealEstate,
             reviewCanBeErased: reviewCanBeErased,
-            getLocation: getLocation
+            getLocation: getLocation,
+            approve: approve,
+            invalidate: invalidate
         };
 
         function findAll(params) {
@@ -81,16 +82,8 @@
             return response.data;
         }
 
-        function changeStatus(advertisement) {
-            if (advertisement.status === "INVALID" || advertisement.status === "PENDING_APPROVAL") {
-                return approve(advertisement.id);
-            }else if (advertisement.status === "ACTIVE") {
-                return invalidate(advertisement.id);
-            }
-        }
-
         function approve(advertisementId) {
-            return advertisementDataService.approve(advertisementId)
+            return advertisementDataService.approve(advertisementId);
         }
 
         function invalidate(advertisementId){
