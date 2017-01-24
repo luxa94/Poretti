@@ -79,9 +79,9 @@ AdvertisementDialog.prototype = Object.create({}, {
 
     ensureAdvertisementIsAdded: {
         value: function(list, numberOfItemsInList) {
-            browser.wait(function(){
+            return browser.wait(function(){
                 return list.count().then(function (newNumberOfItems) {
-                    return newNumberOfItems === (numberOfItemsInList + 1);
+                    return newNumberOfItems === (numberOfItemsInList.numberValue + 1);
                 });
             }, 20000);
         }
@@ -90,7 +90,7 @@ AdvertisementDialog.prototype = Object.create({}, {
     ensureEndsOnIsAdded: {
         value: function() {
             var thatEndsOnDatepicker = this.endsOnDatepicker;
-            browser.wait(function(){
+            return browser.wait(function(){
                 return thatEndsOnDatepicker.getText().then(function (text) {
                     return text !== "";
                 });

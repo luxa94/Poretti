@@ -2,40 +2,54 @@
     <div layout="column" flex-gt-md="40" layout-padding>
         <div md-whiteframe="3" layout>
             <div flex>
-                <div layout-fill class="md-media-md">
-                    <img ng-src = "{{vm.company.imageUrl}}?50"/>
+                <div layout-fill class="image-wrapper md-media-md">
+                    <img ng-src = "{{vm.company.imageUrl}}"/>
                 </div>
             </div>
             <div flex>
                 <div layout="column">
-                    <span class="md-headline">{{vm.company.name}}</span>
-                    <span>Phone numbers: {{vm.company.phoneNumbers}}</span>
-                    <span>Contact emails: {{vm.company.contactEmails}}</span>
+                    <span id="company-span-name" class="md-headline">{{vm.company.name}}</span>
+                    <div layout>
+                        <div flex>
+                            <span>Phone numbers:</span>
+                        </div>
+                        <div flex>
+                            <div ng-repeat="phoneNumber in vm.company.phoneNumbers">{{phoneNumber}}</div>
+                        </div>
+                    </div>
+                    <div layout>
+                        <div flex>
+                            <span>Contact emails:</span>
+                        </div>
+                        <div flex>
+                            <div ng-repeat="contactEmail in vm.company.contactEmails">{{contactEmail}}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <md-toolbar class="md-accent">
             <div class="md-toolbar-tools">
-                <md-button ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingCompany($event)">
+                <md-button id="company-btn-edit" ng-show="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingCompany($event)">
                     <md-icon aria-label="Edit company" class="md-primary md-hue-2 md-mini">edit</md-icon>
                 </md-button>
-                <md-button ng-hide="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForReview($event)">
+                <md-button id="company-btn-review" ng-hide="vm.canEdit" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForReview($event)">
                     <md-icon aria-label="Insert comment" class="material-icons">insert_comment</md-icon>
                     <md-tooltip>Create review for company</md-tooltip>
                 </md-button>
-                <md-button ng-show="vm.canAdd" aria-label="Create real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event)">
+                <md-button id="company-btn-realEstate" ng-show="vm.canAdd" aria-label="Create real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event)">
                     <md-icon aria-label="Home" class="material-icons">home</md-icon>
                     <md-tooltip>Create real estate</md-tooltip>
                 </md-button>
-                <md-button ng-show="vm.canAdd" aria-label="Create advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForAdvertisement($event)">
+                <md-button id="company-btn-advertisement" ng-show="vm.canAdd" aria-label="Create advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForAdvertisement($event)">
                     <md-icon aria-label="Announcement" class="material-icons">announcement</md-icon>
                     <md-tooltip>Create advertisement</md-tooltip>
                 </md-button>
-                <md-button ng-if="vm.canJoinCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.createMembership()">
+                <md-button id="company-btn-join" ng-if="vm.canJoinCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.createMembership()">
                     <md-icon aria-label="Person add" class="material-icons">person_add</md-icon>
                     <md-tooltip>Join company</md-tooltip>
                 </md-button>
-                <md-button ng-if="vm.canLeaveCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.leaveCompany()">
+                <md-button id="company-btn-leave" ng-if="vm.canLeaveCompany" class="md-primary md-hue-2 md-mini" ng-click="vm.leaveCompany()">
                     <md-icon aria-label="Person add" class="material-icons">directions_run</md-icon>
                     <md-tooltip>Leave company (run, save yourself)</md-tooltip>
                 </md-button>
@@ -51,19 +65,21 @@
                         <div ng-show = "vm.advertisements.length" layout-padding ng-repeat="advertisement in vm.advertisements">
                             <div layout>
                                 <div flex>
-                                    <div>
-                                        <img layout-fill style="height: 10em; width:20em" ng-src="{{advertisement.realEstate.imageUrl}}"/>
+                                    <div class="image-wrapper">
+                                        <img layout-fill ng-src="{{advertisement.realEstate.imageUrl}}"/>
                                     </div>
                                 </div>
                                 <div flex>
                                     <div layout="column">
                                         <span class="md-headline">{{advertisement.title}}</span>
-                                        <span class="md-subhead">{{advertisement.price}}</span>
                                         <div layout>
-                                            <md-button class="md-primary md-raised md-hue-2" ng-click="vm.goToAdvertisement(advertisement)">Details</md-button>
-                                            <md-button ng-if="vm.canEdit" aria-label="Edit advertisement" class="md-primary md-hue-2 md-mini" ng-click="vm.openDialogForEditingAdvertisement($event, advertisement)">
-                                                <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
+                                            <md-button id="company-btn-details-advertisement" class="md-primary md-raised md-hue-2" ng-click="vm.goToAdvertisement(advertisement)">Details</md-button>
+                                            <md-button id="company-btn-edit-advertisement" ng-show="vm.canEdit" aria-label="Edit advertisement" class="md-raised md-primary md-hue-2 md-warn" ng-click="vm.openDialogForEditingAdvertisement($event, advertisement)">
+                                                Edit
                                                 <md-tooltip>Edit advertisement</md-tooltip>
+                                            </md-button>
+                                            <md-button id="company-btn-delete-advertisement"  ng-show="vm.canEdit" class="md-raised md-warn" ng-click="vm.deleteAdvertisement(advertisement)">Delete
+                                                <md-tooltip>Delete this advertisement</md-tooltip>
                                             </md-button>
                                         </div>
                                     </div>
@@ -79,19 +95,24 @@
                         <div ng-show="vm.realEstates.length" layout-padding ng-repeat="realEstate in vm.realEstates">
                             <div layout>
                                 <div flex>
-                                    <div>
-                                        <img layout-fill style="height: 10em; width:20em" ng-src="{{realEstate.imageUrl}}"/>
+                                    <div class="image-wrapper">
+                                        <img layout-fill  ng-src="{{realEstate.imageUrl}}"/>
                                     </div>
                                 </div>
                                 <div flex>
                                     <div layout="column">
                                         <span class="md-headline">{{realEstate.name}}</span>
-                                        <span class="md-subhead">{{realEstate.area}}</span>
                                         <span class="md-subhead">{{realEstate.type}}</span>
-                                        <md-button ng-if="vm.canEdit" aria-label="Edit real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event, realEstate)">
-                                            <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
-                                            <md-tooltip>Edit real estate</md-tooltip>
-                                        </md-button>
+                                        <div layout>
+                                            <md-button id="company-btn-edit-realEstate" ng-show="vm.canEdit" aria-label="Edit real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.openStandaloneDialogForRealEstate($event, realEstate)">
+                                                <md-icon aria-label="Edit" class="material-icons">edit</md-icon>
+                                                <md-tooltip>Edit real estate</md-tooltip>
+                                            </md-button>
+                                            <md-button id="company-btn-delete-realEstate" ng-show="vm.canEdit" aria-label="Delete real estate" class="md-primary md-hue-2 md-mini" ng-click="vm.deleteRealEstate(realEstate)">
+                                                <md-icon aria-label="Delete" class="material-icons">delete_forever</md-icon>
+                                                <md-tooltip>Delete realEstate</md-tooltip>
+                                            </md-button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +124,7 @@
                 <md-tab label="Company members">
                     <md-content class="md-padding">
                         <div layout>
-                            <md-radio-group ng-model="vm.companyMembersCriteria" layout class="md-primary">
+                            <md-radio-group id="company-radio-membersCriteria" ng-model="vm.companyMembersCriteria" layout class="md-primary">
                                 <md-radio-button value="">All members</md-radio-button>
                                 <md-radio-button value="confirmed">Confirmed</md-radio-button>
                                 <md-radio-button value="notConfirmed">Pending approval</md-radio-button>
@@ -115,8 +136,8 @@
                                 <img ng-src="{{membership.member.imageUrl}}?25" class="md-avatar"/>
                                 <div class="md-list-item-text">
                                     <h3>{{membership.member.name}}</h3>
-                                    <p ng-if="membership.confirmed">Approved by: {{membership.approvedBy.name}}</p>
-                                    <md-button class="md-warn md-hue-1" ng-if="!membership.confirmed && vm.canEdit" ng-click="vm.approveMembership(membership)">Approve user</md-button>
+                                    <p id="company-p-approved" ng-if="membership.confirmed">Approved by: {{membership.approvedBy.name}}</p>
+                                    <md-button id="company-btn-approve" class="md-warn md-hue-1" ng-if="!membership.confirmed && vm.canEdit" ng-click="vm.approveMembership(membership)">Approve user</md-button>
                                 </div>
                                 <md-divider></md-divider>
                             </md-list-item>
@@ -132,7 +153,7 @@
                                     <h3>{{review.author.name}}</h3>
                                     <p>{{review.comment}}</p>
                                     <p>Rating: {{review.rating}}</p>
-                                    <md-button ng-if="review.canBeErased" class="md-primary md-hue-2" ng-click="vm.deleteReview(review)">Delete</md-button>
+                                    <md-button id="company-btn-delete-review" ng-if="review.canBeErased" class="md-primary md-hue-2" ng-click="vm.deleteReview(review)">Delete</md-button>
                                 </div>
                                 <md-divider></md-divider>
                             </md-list-item>

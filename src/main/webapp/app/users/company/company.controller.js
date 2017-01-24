@@ -28,6 +28,8 @@
 
         vm.approveMembership = approveMembership;
         vm.deleteReview = deleteReview;
+        vm.deleteAdvertisement = deleteAdvertisement;
+        vm.deleteRealEstate = deleteRealEstate;
         vm.filteredMemberships = filteredMemberships;
         vm.goToAdvertisement = goToAdvertisement;
         vm.leaveCompany = leaveCompany;
@@ -42,6 +44,7 @@
 
         function activate() {
             var companyId = $stateParams.id;
+            vm.newAdvertisement.endsOn = new Date();
             findCompany(companyId)
                 .then(findMemberships)
                 .then(findAdvertisements)
@@ -63,10 +66,9 @@
         function findMemberships() {
             return companyService.findMemberships(vm.company.id)
                 .then(function (data) {
-                    console.log("executing find memeberships");
                     vm.companyMemberships = data;
                     vm.canJoinCompany = companyService.canJoinCompany(sessionService.getUser(), vm.companyMemberships);
-                    vm.canLeaveCompany = !vm.canJoinCompany;
+                    vm.canLeaveCompany = companyService.canLeaveCompany(sessionService.getUser(), vm.companyMemberships);
                 });
         }
 
@@ -74,6 +76,8 @@
             return companyService.findAdvertisements(vm.company.id)
                 .then(function (response) {
                     vm.newAdvertisement = {};
+                    vm.newAdvertisement.endsOn = new Date();
+                    vm.newRealEstate = {};
                     vm.advertisements = response.data.content;
                 });
         }
@@ -95,7 +99,6 @@
         }
 
         function canEditOrAdd() {
-            console.log("executing can Edit orAdd");
             vm.canAdd = false;
             vm.canEdit = false;
             var membership = companyService.findMembershipForUser(vm.companyMemberships, sessionService.getUser());
@@ -105,11 +108,6 @@
             }
         }
 
-        function deleteReview(review) {
-            ownerReviewService.deleteOne(review.id)
-                .then(findReviews)
-                .catch(handleError);
-        }
 
         function approveMembership(membership) {
             companyService.approveMembership(vm.company, membership)
@@ -313,6 +311,19 @@
             ownerReviewService.deleteOne(review.id)
                 .then(findReviews)
                 .catch(handleError);
+        }
+
+        function deleteAdvertisement(advertisement) {
+            companyService.deleteAdvertisement(vm.company.id, advertisement.id)
+                .then(findAdvertisements)
+                .catch(handleError);
+        }
+
+        function deleteRealEstate(realEstate) {
+            companyService.deleteRealEstate(vm.company.id, realEstate.id)
+                .then(findAdvertisements)
+                .then(findRealEstates)
+                .catch(handleError)
         }
 
         function goToAdvertisement(advertisement) {

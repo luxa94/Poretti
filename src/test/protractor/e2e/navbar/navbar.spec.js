@@ -11,12 +11,6 @@ describe('Navbar', function () {
     });
 
     afterEach(function() {
-        // browser.executeScript(" return window.localStorage.getItem('porettiUser'); ")
-        // .then(function(item) {
-        //     if (item) {
-        //         navbar.loginButton.click();
-        //     }
-        // });
         browser.executeScript('window.localStorage.clear();');
     });
 
@@ -37,6 +31,10 @@ describe('Navbar', function () {
         expect(navbar.registerButton.isPresent()).toBe(false);
     });
 
+    it('should successfully logout user', function () {
+        navbar.logoutButton.click();
 
+        login.execLogout();
+    });
 
 });

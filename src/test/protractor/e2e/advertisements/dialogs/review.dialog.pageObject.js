@@ -34,11 +34,11 @@ ReviewDialog.prototype = Object.create({}, {
 
     ensureReviewIsAdded: {
         value: function(list, numberOfItemsInList) {
-            browser.wait(function(){
+            return browser.wait(function(){
                 return list.count().then(function (newNumberOfReviews) {
-                    return newNumberOfReviews === (numberOfItemsInList + 1);
+                    return newNumberOfReviews === (numberOfItemsInList.numberValue + 1);
                 });
-            }, 10000);
+            }, 20000);
         }
     }
 

@@ -28,7 +28,7 @@ describe('Admin page', function() {
         adminPage.newUserRoleSelect = "ADMIN";
         adminPage.createAdminVerifierButton.click();
 
-        adminPage.ensureAddingFailed("Admin");
+        adminPage.ensureAddingSucceeded("Admin");
     });
 
     it('should successfully create new verifier', function() {
@@ -41,7 +41,7 @@ describe('Admin page', function() {
         adminPage.newUserRoleSelect = "VERIFIER";
         adminPage.createAdminVerifierButton.click();
 
-        adminPage.ensureAddingFailed("Verifier");
+        adminPage.ensureAddingSucceeded("Verifier");
     });
 
     it('should successfully create new company', function() {

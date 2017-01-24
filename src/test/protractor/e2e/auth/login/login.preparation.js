@@ -19,13 +19,11 @@ exports.execLogin = function(username, password) {
 };
 
 exports.execLogout = function() {
-    // var login = Login();
-    //
-    // login.logoutButton.click();
-    //
-    // login.ensureIsSuccessfullyRedirected();
-    //
-    // browser.manage().getCookie('porettiUser').then(function (cookie) {
-    //     expect(cookie).toBeUndefined();
-    // });
+    var login = new Login();
+    login.ensureIsSuccessfullyRedirected();
+    browser.executeScript(" return window.localStorage.getItem('porettiUser'); ").then(function(item) {
+        expect(item).not.toEqual('');
+    }).catch(function(error) {
+        expect(error).not.toBeDefined();
+    });
 };

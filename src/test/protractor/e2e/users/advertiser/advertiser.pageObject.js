@@ -118,7 +118,7 @@ AdvertiserPage.prototype = Object.create({}, {
     
     ensureIsRedirectedToAdvertisement: {
         value: function() {
-            browser.wait(function() {
+            return browser.wait(function() {
                 return browser.getCurrentUrl().then(function(url) {
                    return url.indexOf('http://localhost:8080/#!/advertisement') !== -1;
                 });
@@ -128,7 +128,7 @@ AdvertiserPage.prototype = Object.create({}, {
 
     ensureIsRedirectedToCompany: {
         value: function() {
-            browser.wait(function() {
+            return browser.wait(function() {
                 return browser.getCurrentUrl().then(function(url) {
                     return url.indexOf('http://localhost:8080/#!/company') !== -1;
                 });
@@ -139,9 +139,9 @@ AdvertiserPage.prototype = Object.create({}, {
     ensureReviewIsAdded: {
         value: function (numberOfReviews) {
             var thatReviewList = this.reviewList;
-            browser.wait(function () {
+            return browser.wait(function () {
                 return thatReviewList.count().then(function(newNumberOfReviews){
-                    return newNumberOfReviews === (numberOfReviews + 1);
+                    return newNumberOfReviews === (numberOfReviews.numberValue + 1);
                 });
             }, 10000);
         }
@@ -150,9 +150,9 @@ AdvertiserPage.prototype = Object.create({}, {
     ensureAdvertisementIsDeleted: {
         value: function(numberOfAdvertisements) {
             var thatAdvertisementList = this.advertisementList;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatAdvertisementList.count().then(function(numberOfItems) {
-                    return numberOfItems === (numberOfAdvertisements.jsIsABitch - 1);
+                    return numberOfItems === (numberOfAdvertisements.numberValue - 1);
                 });
             }, 10000);
         }
@@ -161,9 +161,9 @@ AdvertiserPage.prototype = Object.create({}, {
     ensureRealEstateIsDeleted: {
         value: function(numberOfRealEstates) {
             var thatRealEstateList = this.realEstateList;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatRealEstateList.count().then(function(numberOfItems) {
-                    return numberOfItems === (numberOfRealEstates.jsIsNotABitch -1);
+                    return numberOfItems === (numberOfRealEstates.numberValue -1);
                 });
             }, 10000);
         }
@@ -174,7 +174,7 @@ AdvertiserPage.prototype = Object.create({}, {
             var thatAdvertisementList = this.advertisementList;
             return browser.wait(function() {
                 return thatAdvertisementList.count().then(function(numberOfItems) {
-                    numberOfAdvertisements.jsIsABitch = numberOfItems;
+                    numberOfAdvertisements.numberValue = numberOfItems;
                     return numberOfAdvertisements;
                 });
             }, 10000);
@@ -184,9 +184,9 @@ AdvertiserPage.prototype = Object.create({}, {
     getNumberOfRealEstates: {
         value: function(numberOfRealEstates) {
             var thatRealEstateList = this.realEstateList;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatRealEstateList.count().then(function(numberOfItems) {
-                    numberOfRealEstates.jsIsNotABitch = numberOfItems;
+                    numberOfRealEstates.numberValue = numberOfItems;
                     return numberOfRealEstates;
                 });
             }, 10000);
@@ -198,7 +198,7 @@ AdvertiserPage.prototype = Object.create({}, {
             var thatReviewList= this.reviewList;
             return browser.wait(function() {
                 return thatReviewList.count().then(function(numberOfItems) {
-                    numberOfReviews.value = numberOfItems;
+                    numberOfReviews.numberValue = numberOfItems;
                     return numberOfReviews;
                 });
             }, 10000);

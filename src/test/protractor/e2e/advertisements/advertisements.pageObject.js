@@ -117,11 +117,11 @@ AdvertisementsPage.prototype = Object.create({}, {
     },
 
     ensureNumberOfPagesIsGood: {
-        value: function() {
+        value: function(numberOfPages) {
             var thatPageNumberButtons = this.pageNumbersButtons;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatPageNumberButtons.count().then(function(numberOfItems) {
-                    return numberOfItems === 3;
+                    return numberOfItems === numberOfPages.value;
                 });
             }, 10000);
         }
@@ -129,11 +129,10 @@ AdvertisementsPage.prototype = Object.create({}, {
 
     ensureSizePerPageIsGood: {
         value: function(size) {
-            var expectedSize = size ? size: 5;
             var thatAdvertisementList = this.advertisementList;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatAdvertisementList.count().then(function(numberOfItems) {
-                    return numberOfItems === expectedSize;
+                    return numberOfItems === size.numberValue;
                 });
             }, 10000);
         }
@@ -142,17 +141,35 @@ AdvertisementsPage.prototype = Object.create({}, {
     ensureFilterIsExecuted: {
         value: function() {
             var thatAdvertisementList = this.advertisementList;
-            browser.wait(function() {
+            return browser.wait(function() {
                 return thatAdvertisementList.count().then(function(numberOfItems) {
                     return (numberOfItems > 0);
+                });
+            }, 10000);
+        }
+    },
+
+    getNumberOfPages: {
+        value: function(numberOfPages) {
+            var thatPageNumbersButtons = this.pageNumbersButtons;
+            browser.wait(function() {
+                return thatPageNumbersButtons.count().then(function(numberOfItems) {
+                    return numberOfPages.value = numberOfItems;
+                })
+            }, 20000);
+        }
+    },
+
+    getSizePerPage: {
+        value: function(sizePerPage) {
+            var thatAdvertisementList = this.advertisementList;
+            return browser.wait(function() {
+                return thatAdvertisementList.count().then(function(numberOfItems) {
+                    return sizePerPage.numberValue = numberOfItems;
                 });
             }, 20000);
         }
     }
-
-
-
-
 });
 
 module.exports = AdvertisementsPage;

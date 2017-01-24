@@ -46,7 +46,7 @@ AdvertisementPage.prototype = Object.create({}, {
     },
 
     reportList: {
-        get: function() {
+        get: function () {
             return element.all(by.repeater("report in vm.advertisement.reports"));
         }
     },
@@ -54,9 +54,9 @@ AdvertisementPage.prototype = Object.create({}, {
     ensureReportIsAdded: {
         value: function (numberOfReports) {
             var thatReportList = this.reportList;
-            browser.wait(function () {
-                return thatReportList.count().then(function(newNumberOfReports){
-                    return newNumberOfReports === (numberOfReports + 1);
+            return browser.wait(function () {
+                return thatReportList.count().then(function (newNumberOfReports) {
+                    return newNumberOfReports === (numberOfReports.numberValue + 1);
                 });
             }, 10000);
         }
@@ -70,7 +70,7 @@ AdvertisementPage.prototype = Object.create({}, {
     },
 
     reviewList: {
-        get: function() {
+        get: function () {
             return element.all(by.repeater("review in vm.advertisement.reviews"));
         }
     },
@@ -78,16 +78,35 @@ AdvertisementPage.prototype = Object.create({}, {
     ensureReviewIsAdded: {
         value: function (numberOfReviews) {
             var thatReviewList = this.reviewList;
-            browser.wait(function () {
-                return thatReviewList.count().then(function(newNumberOfReviews){
-                    return newNumberOfReviews === (numberOfReviews + 1);
+            return browser.wait(function () {
+                return thatReviewList.count().then(function (newNumberOfReviews) {
+                    return newNumberOfReviews === (numberOfReviews.numberValue + 1);
                 });
             }, 10000);
         }
+    },
+
+    getNumberOfReports: {
+        value: function (numberOfReports) {
+            var thatReportList = this.reportList;
+            return browser.wait(function () {
+                return thatReportList.count().then(function (numberOfItems) {
+                    return numberOfReports.numberValue = numberOfItems;
+                });
+            }, 20000);
+        }
+    },
+
+    getNumberOfReviews: {
+        value: function (numberOfReviews) {
+            var thatReviewList = this.reviewList;
+            return browser.wait(function () {
+                return thatReviewList.count().then(function (numberOfItems) {
+                    return numberOfReviews.numberValue = numberOfItems;
+                });
+            }, 20000);
+        }
     }
-
-
-
 });
 
 module.exports = AdvertisementPage;

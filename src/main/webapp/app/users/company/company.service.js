@@ -32,7 +32,9 @@
             createRealEstate: createRealEstate,
             editRealEstate: editRealEstate,
             editAdvertisement: editAdvertisement,
-            areAllMembershipsUnconfirmed: areAllMembershipsUnconfirmed
+            areAllMembershipsUnconfirmed: areAllMembershipsUnconfirmed,
+            deleteAdvertisement: deleteAdvertisement,
+            deleteRealEsate: deleteRealEstate
         };
 
         function findOne(companyId) {
@@ -63,12 +65,16 @@
         }
 
         function canJoinCompany(user, companyMemberships) {
+            if (!user)
+                return false;
             return !_.some(companyMemberships, function (membership) {
                 return membership.member.id === user.id;
             });
         }
 
         function canLeaveCompany(user, companyMemberships) {
+            if (!user)
+                return false;
             return _.some(companyMemberships, function (membership) {
                 return membership.member.id === user.id;
             });
@@ -83,6 +89,8 @@
         }
 
         function findMembershipForUser(memberships, user) {
+            if (!user)
+                return [];
             return _.find(memberships, function (membership) {
                 return user.id === membership.member.id;
             });
@@ -180,6 +188,14 @@
                     return !membership.confirmed;
                 });
             }
+        }
+
+        function deleteAdvertisement(companyId, advertisementId) {
+            return companyDataService.deleteAdvertisement(companyId, advertisementId);
+        }
+
+        function deleteRealEstate(companyId, realEstateId) {
+            return companyDataService.deleteRealEstate(companyId, realEstateId);
         }
 
 
